@@ -24,9 +24,9 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Hero() {
   return (
-    <section id="top" className="relative w-full px-4 pt-24 pb-10 sm:px-6 md:px-8">
+    <section id="top" className="relative w-full px-4 pt-20 pb-6 md:px-6">
       {/* Outer Flex Container for Split Screen Layout */}
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 md:flex-row md:h-[82vh] md:max-h-[720px]">
+      <div className="flex w-full flex-col gap-5 md:flex-row md:h-[86vh] md:max-h-[850px]">
         
         {/* Left Sidebar (Desktop only) */}
         <motion.div 
@@ -75,9 +75,9 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1504813184591-01592f250dd9?auto=format&fit=crop&w=1200&q=80"
               alt="Vernacular G1 AI Health consultation"
-              className="w-full h-full object-cover select-none brightness-[0.74]"
+              className="w-full h-full object-cover select-none brightness-[0.72]"
             />
           </Parallax>
 
@@ -86,11 +86,7 @@ export function Hero() {
 
           {/* Hero text overlay */}
           <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 md:p-14 text-paper">
-            <FadeIn delay={0.1} y={15}>
-              <span className="inline-block rounded-full bg-accent/25 border border-accent/40 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-accent mb-4">
-                VERNACULAR AI HEALTHCARE
-              </span>
-            </FadeIn>
+
 
             <Parallax offset={-15}>
               <motion.h1
