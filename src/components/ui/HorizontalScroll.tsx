@@ -33,7 +33,7 @@ const CARDS = [
     pixelFill: 'var(--color-b-red)',
     images: [
       'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=200&q=80', // voice assistant spectrum waveform
-      'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=200&q=80', // digital face profile grid
+      'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=200&q=80', // working sound waves mixer
       'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // wireframe portrait with voice waves
       'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=200&q=80', // glowing smart assistant ring
       'https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&w=200&q=80', // audio recording microphone
@@ -83,7 +83,7 @@ const CARDS = [
     pixel: PIXEL.bolt,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=200&q=80', // red caution sign resembling crossed-out wifi warning
+      'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=200&q=80', // working digital warning alert sign representing offline/caution
       'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=200&q=80', // offline browser dinosaur game screen
       'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=200&q=80', // rural villagers outreach checkup
       'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80', // place with no wifi (mountains)
