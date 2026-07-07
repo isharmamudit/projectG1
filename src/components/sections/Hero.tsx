@@ -4,7 +4,6 @@ import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useLanguage } from '@/lib/language'
-import { useTheme } from '@/lib/theme'
 
 const NAV_ITEMS = [
   { label: 'Why G1', href: '#problems' },
@@ -38,14 +37,13 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Hero() {
   const { t } = useLanguage()
-  const { theme, toggleTheme } = useTheme()
 
   return (
     <section id="top" className="relative w-full px-4 pt-24 pb-16 sm:px-6 md:pt-6">
 
       {/* In-page navbar: desktop only — the global Navbar already stays permanently visible on mobile,
           but auto-hides until scroll on desktop, so the hero needs its own static one there. */}
-      <FadeIn className="mx-auto mb-6 hidden max-w-6xl items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
+      <FadeIn className="mb-6 hidden w-full items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
         <a
           href="#top"
           onClick={(e) => handleScrollTo(e, '#top')}
@@ -72,19 +70,11 @@ export function Hero() {
 
         <div className="flex shrink-0 items-center gap-2">
           <LanguageSwitcher variant="icon" drop="down" />
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label="Toggle color theme"
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
-          >
-            <span className="text-base leading-none">{theme === 'light' ? '🌙' : '☀️'}</span>
-          </button>
         </div>
       </FadeIn>
 
       {/* Hero banner: giant headline behind a central figure, floating badges, bottom caption + CTA */}
-      <div className="relative mx-auto min-h-[560px] max-w-6xl overflow-hidden rounded-[32px] bg-ink px-6 pt-10 pb-8 sm:min-h-[620px] sm:px-10 sm:pt-14">
+      <div className="relative min-h-[560px] w-full overflow-hidden rounded-[32px] bg-ink px-6 pt-10 pb-8 sm:min-h-[620px] sm:px-10 sm:pt-14">
 
         {/* Giant headline, sitting behind the figure */}
         <motion.h1
@@ -161,7 +151,7 @@ export function Hero() {
       </div>
 
       {/* Four-color bento row, MediCare-style */}
-      <div className="mx-auto mt-4 grid max-w-6xl grid-cols-2 gap-4 sm:mt-6 lg:grid-cols-4">
+      <div className="mt-4 grid w-full grid-cols-2 gap-4 sm:mt-6 lg:grid-cols-4">
         {TILES.map((tile, i) => {
           const Icon = tile.icon
           return (
