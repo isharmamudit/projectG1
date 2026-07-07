@@ -73,8 +73,8 @@ export function Hero() {
         </div>
       </FadeIn>
 
-      {/* Hero banner: giant headline behind a central figure, floating badges, bottom caption + CTA */}
-      <div className="relative min-h-[560px] w-full overflow-hidden rounded-[32px] bg-ink px-6 pt-10 pb-8 sm:min-h-[620px] sm:px-10 sm:pt-14">
+      {/* Hero banner: frosted glassmorphic panel — giant headline behind a central figure, floating badges, bottom caption + CTA */}
+      <div className="glass-card relative min-h-[560px] w-full overflow-hidden rounded-[32px] border border-white/15 bg-ink/55 px-6 pt-10 pb-8 backdrop-blur-2xl sm:min-h-[620px] sm:px-10 sm:pt-14">
 
         {/* Giant headline, sitting behind the figure */}
         <motion.h1
@@ -105,7 +105,7 @@ export function Hero() {
             delay={0.25 + i * 0.1}
             className={`absolute top-[42%] z-20 hidden md:block ${b.side === 'left' ? 'left-6' : 'right-6'}`}
           >
-            <div className="glass-card flex items-center gap-2 rounded-full bg-surface/90 px-4 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+            <div className="glass-card flex items-center gap-2 rounded-full border border-white/20 bg-surface/60 px-4 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl">
               <span className={`flex size-6 items-center justify-center rounded-full ${b.side === 'left' ? 'bg-tint-rose/25' : 'bg-tint-sage/25'}`}>
                 <ArrowUpRight className="size-3.5 text-fg" strokeWidth={2.5} />
               </span>
