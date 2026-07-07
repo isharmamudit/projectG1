@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, HeartPulse } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight, HeartPulse } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { Parallax } from '@/components/ui/Parallax'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
+import { CoverflowStack } from '@/components/ui/CoverflowStack'
 import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
 
@@ -140,44 +141,52 @@ export function Hero() {
           onMouseLeave={() => (pausedRef.current = false)}
           className="flex-1 relative rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.12)] border border-border-strong spotlight min-h-[500px] md:h-full"
         >
-          {/* Crossfading background images */}
-          <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
-            <div className="relative h-full w-full">
-              {SLIDES.map((slide, i) => (
-                <img
-                  key={slide.img}
-                  src={slide.img}
-                  alt={slide.alt}
-                  className={cn(
-                    'absolute inset-0 h-full w-full object-cover select-none brightness-[0.88] transition-opacity duration-[1200ms] ease-in-out',
-                    i === active ? 'opacity-100' : 'opacity-0',
-                  )}
-                />
-              ))}
-            </div>
+          {/* Coverflow background: fanned stack of capability photos */}
+          <Parallax offset={-25} className="absolute inset-0 h-[120%] w-full">
+            <CoverflowStack slides={SLIDES} active={active} />
           </Parallax>
 
           {/* Premium overlay gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/5 pointer-events-none" />
 
-          {/* Slide progress dots */}
-          <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
-            {SLIDES.map((slide, i) => (
-              <button
-                key={slide.img}
-                type="button"
-                aria-label={`Show slide ${i + 1}`}
-                onClick={() => setActive(i)}
-                className="group/dot flex h-3 items-center px-0.5"
-              >
-                <span
-                  className={cn(
-                    'h-1 rounded-full transition-all duration-300',
-                    i === active ? 'w-6 bg-b-yellow' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
-                  )}
-                />
-              </button>
-            ))}
+          {/* Slide nav: prev/next arrows + progress dots */}
+          <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
+            <button
+              type="button"
+              aria-label="Previous slide"
+              onClick={() => setActive((a) => (a - 1 + SLIDES.length) % SLIDES.length)}
+              className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
+            >
+              <ChevronLeft className="size-4" strokeWidth={2.5} />
+            </button>
+
+            <div className="flex gap-1.5">
+              {SLIDES.map((slide, i) => (
+                <button
+                  key={slide.img}
+                  type="button"
+                  aria-label={`Show slide ${i + 1}`}
+                  onClick={() => setActive(i)}
+                  className="group/dot flex h-3 items-center px-0.5"
+                >
+                  <span
+                    className={cn(
+                      'h-1 rounded-full transition-all duration-300',
+                      i === active ? 'w-6 bg-tint-teal' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
+                    )}
+                  />
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              aria-label="Next slide"
+              onClick={() => setActive((a) => (a + 1) % SLIDES.length)}
+              className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
+            >
+              <ChevronRight className="size-4" strokeWidth={2.5} />
+            </button>
           </div>
 
           {/* Hero text overlay */}
