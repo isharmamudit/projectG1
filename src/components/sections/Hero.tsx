@@ -85,12 +85,11 @@ export function Hero() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 pointer-events-none" />
 
           {/* Hero text overlay */}
-          <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 md:p-14 text-paper">
-
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-12 text-paper bg-black/20">
 
             <Parallax offset={-15}>
               <motion.h1
-                className="font-display text-[clamp(2.4rem,6vw,4.8rem)] leading-[0.92] tracking-tight uppercase"
+                className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl"
                 initial="hidden"
                 animate="visible"
                 variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
@@ -111,20 +110,20 @@ export function Hero() {
               </motion.h1>
             </Parallax>
 
-            <FadeIn delay={0.35} className="mt-5 max-w-xl">
-              <p className="text-sm font-medium text-paper/85 leading-relaxed sm:text-base">
+            <FadeIn delay={0.35} className="mt-5 max-w-2xl mx-auto">
+              <p className="text-sm font-semibold text-paper/90 leading-relaxed sm:text-lg">
                 Ask in your dialect. Speak your symptoms. Photo a prescription. G1 translates clinical complexity into native Indian tongues instantly.
               </p>
             </FadeIn>
 
-            <FadeIn delay={0.5} className="mt-8 flex flex-wrap gap-4 items-center">
-              <Button href="#problems" variant="primary" className="rounded-full px-7 py-3 text-sm font-bold bg-accent text-paper hover:scale-105 transition-transform shrink-0">
+            <FadeIn delay={0.5} className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <Button href="#problems" variant="primary" className="rounded-full px-8 py-3.5 text-sm font-bold bg-accent text-paper hover:scale-105 transition-transform shrink-0">
                 Start Consultation ↗
               </Button>
               <a 
                 href="#problems" 
                 onClick={(e) => handleScrollTo(e, '#problems')}
-                className="text-xs font-bold text-paper/80 uppercase tracking-widest hover:text-paper transition-colors py-2"
+                className="text-xs font-bold text-paper/85 uppercase tracking-widest hover:text-paper transition-colors py-2"
               >
                 Explore features ↓
               </a>
