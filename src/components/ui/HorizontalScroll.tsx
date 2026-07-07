@@ -15,11 +15,11 @@ const CARDS = [
     pixel: PIXEL.chat,
     pixelFill: 'var(--color-b-green)',
     images: [
-      'https://images.unsplash.com/photo-1675557009875-436f09780264?auto=format&fit=crop&w=200&q=80', // chatgpt interface
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=200&q=80', // getting report document
-      'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=200&q=80', // phone chat translation
-      'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=200&q=80', // analytics / clinical report
-      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=200&q=80', // ai hand assistant
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // chat assistant graphic
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=200&q=80', // chat messenger interface
+      'https://images.unsplash.com/photo-1675557009875-436f09780264?auto=format&fit=crop&w=200&q=80', // chatgpt text console
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=200&q=80', // digital AI node hand
+      'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=200&q=80', // writing translation sheet
     ],
   },
   {
@@ -32,11 +32,11 @@ const CARDS = [
     pixel: PIXEL.mic,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=200&q=80', // voice agent speaking
-      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=200&q=80', // talk to voice doctor
-      'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=200&q=80', // smart speaker / audio circle
-      'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=200&q=80', // medical voice checkup
-      'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=200&q=80', // audio sound waves
+      'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=200&q=80', // glowing AI voice assistant gradient circle
+      'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=200&q=80', // glowing assistant orb
+      'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=200&q=80', // sound waves spectrum lines
+      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=200&q=80', // telehealth conversation
+      'https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&w=200&q=80', // recording microphone
     ],
   },
   {
@@ -49,11 +49,11 @@ const CARDS = [
     pixel: PIXEL.camera,
     pixelFill: 'var(--color-b-yellow)',
     images: [
-      'https://images.unsplash.com/photo-1608248597481-496100c80836?auto=format&fit=crop&w=200&q=80', // skin rash check
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&q=80', // computer vision scan lines
-      'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80', // clinical scan x-ray
-      'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=200&q=80', // scanner camera lens
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // cv bounding boxes
+      'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80', // brain CT/MRI scans list
+      'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=200&q=80', // doctor looking at scan screens
+      'https://images.unsplash.com/photo-1608248597481-496100c80836?auto=format&fit=crop&w=200&q=80', // dermatological check
+      'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=200&q=80', // glowing clinic xray scanner
+      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&q=80', // visual computer vision scanning
     ],
   },
   {
@@ -66,11 +66,11 @@ const CARDS = [
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=200&q=80', // laser dots / pose estimation
-      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // coordinates skeletal network
-      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=200&q=80', // yoga stretch tracking
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&q=80', // body joints grid
-      'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=200&q=80', // alignment pose
+      'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=200&q=80', // dots / coordinates laser tracker
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // skeletal joint lines network
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=200&q=80', // yoga pose stretch
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&q=80', // joint grid mapping
+      'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=200&q=80', // pose alignment
     ],
   },
   {
@@ -83,11 +83,11 @@ const CARDS = [
     pixel: PIXEL.bolt,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=200&q=80', // poor village healthcare outreach
-      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80', // remote place (no signal)
-      'https://images.unsplash.com/photo-1548345680-f5475ea5df84?auto=format&fit=crop&w=200&q=80', // disconnected map symbol
-      'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=200&q=80', // rural India fields
-      'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80', // local storage lock
+      'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=200&q=80', // poor village healthcare outreach checkup
+      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80', // remote place (no signal/wifi)
+      'https://images.unsplash.com/photo-1548345680-f5475ea5df84?auto=format&fit=crop&w=200&q=80', // no wifi signal alert/symbol
+      'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=200&q=80', // rural India village farms
+      'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80', // offline lock data
     ],
   },
   {
@@ -100,14 +100,15 @@ const CARDS = [
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-b-yellow)',
     images: [
-      'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=200&q=80', // calendar timeline logs
-      'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=200&q=80', // llm reports saved folders
-      'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80', // timeline records
-      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // database memory connections
-      'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=200&q=80', // digitized notes saved
+      'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=200&q=80', // calendar timeline logs (saved timeline)
+      'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=200&q=80', // stack of medical files/llm reports saved
+      'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80', // stored timeline logs binder
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // connected health nodes memory
+      'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=200&q=80', // digitalized notes database
     ],
   },
 ]
+
 
 
 
