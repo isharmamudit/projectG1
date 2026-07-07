@@ -33,39 +33,51 @@ export function Hero() {
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[220px] bg-paper border border-border-strong rounded-3xl p-5 shrink-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+          className="hidden md:flex flex-col justify-between w-[250px] bg-paper border border-border-strong rounded-3xl p-5 shrink-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
         >
           {/* Logo */}
-          <div className="flex items-center gap-2 text-fg">
-            <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
-            <span className="font-display text-base font-black leading-none tracking-tight">
-              projectG1<span className="text-accent">.</span>
+          <div className="flex flex-col gap-0.5">
+            <div className="flex items-center gap-2 text-fg">
+              <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
+              <span className="font-display text-base font-black leading-none tracking-tight">
+                projectG1<span className="text-accent">.</span>
+              </span>
+            </div>
+            <span className="text-[9px] font-black tracking-widest text-fg-muted uppercase pl-7">
+              VERNACULAR AI HEALTH
             </span>
           </div>
 
-          {/* Navigation Tiles List */}
-          <div className="flex flex-col gap-2.5 my-6">
+          {/* Navigation Tiles List (Grid style matching the units. cards layout) */}
+          <div className="grid grid-cols-2 gap-2 my-5">
             {TILES.map((t) => (
               <a
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex items-center justify-between p-3.5 rounded-xl border border-ink/5 transition-all duration-300 hover:scale-[1.04] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-3.5 h-24 rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.04] text-ink ${t.bg}`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="font-display text-xs font-black opacity-45">{t.n}</span>
-                  <span className="text-xs font-black tracking-tight">{t.label}</span>
+                <div className="flex justify-between items-start w-full">
+                  <span className="font-display text-[10px] font-black opacity-55">{t.n}</span>
+                  <ArrowUpRight className="size-3.5 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
                 </div>
-                <ArrowUpRight className="size-3.5 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
+                <span className="text-xs font-black tracking-tight leading-none text-left mb-1">{t.label}</span>
               </a>
             ))}
           </div>
 
           {/* Footer controls */}
-          <div className="flex flex-col gap-3">
-            <button className="flex items-center justify-center gap-1.5 w-full rounded-xl border border-border-strong bg-surface-2 text-[11px] font-bold text-fg py-2 px-3 transition-colors hover:bg-surface">
+          <div className="flex flex-col gap-2">
+            <a 
+              href="#problems" 
+              onClick={(e) => handleScrollTo(e, '#problems')}
+              className="flex items-center justify-center w-full rounded-xl bg-accent text-paper text-xs font-bold py-2.5 px-3 transition-transform hover:scale-[1.02] shadow-[0_4px_12px_rgba(var(--color-accent-rgb),0.2)]"
+            >
+              Consult G1 ↗
+            </a>
+            <button className="flex items-center justify-center gap-2 w-full rounded-xl bg-black border border-neutral-800 text-[11px] font-black text-white py-2.5 px-3 transition-colors hover:bg-neutral-900">
               <span>English</span>
-              <span className="opacity-60">🌐</span>
+              <span className="opacity-70 text-xs">🌐</span>
             </button>
           </div>
         </motion.div>
