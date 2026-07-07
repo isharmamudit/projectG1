@@ -10,8 +10,8 @@ export function ChatbotStub() {
   return (
     <motion.button
       type="button"
-      title="Chat with Saathi — coming soon"
-      aria-label="Chat with Saathi, coming soon"
+      title="Chat with G1 — coming soon"
+      aria-label="Chat with G1, coming soon"
       initial={{ opacity: 0, scale: 0.6 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1.6, type: 'spring', stiffness: 260, damping: 18 }}

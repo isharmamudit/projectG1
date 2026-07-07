@@ -9,7 +9,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-const STORAGE_KEY = 'saathi-theme'
+const STORAGE_KEY = 'projectg1-theme'
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light'

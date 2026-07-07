@@ -83,10 +83,10 @@ const CARDS = [
     pixel: PIXEL.bolt,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=200&q=80', // working digital warning alert sign representing offline/caution
-      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=200&q=80', // offline browser dinosaur game screen
+      'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=200&q=80', // red warning sign offline
+      'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=200&q=80', // rural village pathway
       'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=200&q=80', // rural local clinical consultation
-      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80', // place with no wifi (mountains)
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80', // place with no wifi (mountains)
       'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=200&q=80', // rural India clay huts
     ],
   },
