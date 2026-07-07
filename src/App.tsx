@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/lib/theme'
+import { LanguageProvider } from '@/lib/language'
 import { SmoothScroll } from '@/components/layout/SmoothScroll'
 import { Navbar } from '@/components/layout/Navbar'
 import { ChatbotStub } from '@/components/layout/ChatbotStub'
@@ -28,6 +29,7 @@ const FEATURES = [
 function App() {
   return (
     <ThemeProvider>
+      <LanguageProvider>
       <Splash />
       <SmoothCursor />
       <SmoothScroll>
@@ -63,6 +65,7 @@ function App() {
         <Footer />
         <ChatbotStub />
       </SmoothScroll>
+      </LanguageProvider>
     </ThemeProvider>
   )
 }
