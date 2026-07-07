@@ -26,7 +26,7 @@ export function Hero() {
   return (
     <section id="top" className="relative w-full px-4 pt-20 pb-6 md:px-6">
       {/* Outer Flex Container for Split Screen Layout */}
-      <div className="flex w-full flex-col gap-5 md:flex-row md:h-[86vh] md:max-h-[850px]">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 md:flex-row md:h-[86vh] md:max-h-[850px]">
         
         {/* Left Sidebar (Desktop only) */}
         <motion.div 
@@ -75,9 +75,9 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1504813184591-01592f250dd9?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80"
               alt="Vernacular G1 AI Health consultation"
-              className="w-full h-full object-cover select-none brightness-[0.72]"
+              className="w-full h-full object-cover select-none brightness-[0.74]"
             />
           </Parallax>
 
