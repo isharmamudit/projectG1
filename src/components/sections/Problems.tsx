@@ -53,18 +53,49 @@ export function Problems() {
                     {t.problems.tabProblems} → {t.problems.badgeSolutions}
                   </span>
 
-                  <h2 className="font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-black uppercase leading-[0.9] tracking-tight">
+                  <motion.h2
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '0px 0px -60px 0px' }}
+                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+                    className="perspective-[1000px] font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-black uppercase leading-[0.9] tracking-tight"
+                  >
                     {code === 'en' ? (
                       <>
-                        What every <br />
-                        health app <br />
-                        gets{' '}
-                        <ScrambleText text="wrong." trigger="mount" duration={1000} className="text-tint-rose" />
+                        {['What every', 'health app'].map((line) => (
+                          <motion.span
+                            key={line}
+                            className="block"
+                            variants={{
+                              hidden: { opacity: 0, y: 26, rotateX: 25 },
+                              visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+                            }}
+                          >
+                            {line}
+                          </motion.span>
+                        ))}
+                        <motion.span
+                          className="block"
+                          variants={{
+                            hidden: { opacity: 0, y: 26, rotateX: 25 },
+                            visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+                          }}
+                        >
+                          gets <ScrambleText text="wrong." trigger="mount" duration={1000} className="text-tint-rose" />
+                        </motion.span>
                       </>
                     ) : (
-                      t.problems.heading
+                      <motion.span
+                        className="block"
+                        variants={{
+                          hidden: { opacity: 0, y: 26 },
+                          visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                        }}
+                      >
+                        {t.problems.heading}
+                      </motion.span>
                     )}
-                  </h2>
+                  </motion.h2>
 
                   <p className="mt-6 text-xs sm:text-sm font-semibold opacity-85 leading-relaxed max-w-md">
                     {t.problems.subhead}

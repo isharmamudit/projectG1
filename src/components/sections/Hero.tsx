@@ -18,43 +18,44 @@ const TILES = [
   { n: '06', label: 'Scan', href: '#problems', bg: 'bg-tint-rose/12 border border-tint-rose/25', brief: 'Photo your symptoms' },
 ]
 
-// One slide per sidebar tile — image, headline and subtitle rotate together.
+// One slide per sidebar tile — image + a short caption that surfaces only
+// while that slide is centered in the carousel.
 const SLIDES = [
   {
     img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80',
     alt: 'Doctor holding a phone during a consultation',
-    words: ['Your', 'health,', 'understood.'],
-    sub: 'Ask in your dialect. Speak your symptoms. Photo a prescription. G1 translates clinical complexity into native Indian tongues instantly.',
+    title: 'Chat',
+    caption: 'Ask in your dialect, get clinical answers back.',
   },
   {
     img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person on a video consultation call',
-    words: ['Just', 'speak,', 'we listen.'],
-    sub: 'Talk in your dialect. G1 asks the right questions and turns your voice into a clinical report your doctor can use.',
+    title: 'Voice',
+    caption: 'Speak your symptoms — G1 turns it into a doctor report.',
   },
   {
     img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person practicing yoga at sunrise',
-    words: ['Move well,', 'heal', 'better.'],
-    sub: 'Real-time posture coaching guides you through recovery and everyday wellness routines.',
+    title: 'Yoga',
+    caption: 'Real-time posture coaching, right from your camera.',
   },
   {
     img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person using a phone in a rural setting',
-    words: ['No signal,', 'no', 'problem.'],
-    sub: 'Your blood group, allergies and medicines — always available, even without the internet.',
+    title: 'Offline',
+    caption: 'Blood group, allergies and medicines, even with no signal.',
   },
   {
     img: 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?auto=format&fit=crop&w=1400&q=80',
     alt: 'Notebook and records laid out on a desk',
-    words: ['Every visit,', 'always', 'remembered.'],
-    sub: 'Reports, symptoms and prescriptions connected across years, not scattered across apps.',
+    title: 'Memory',
+    caption: 'Every report and visit connected across years.',
   },
   {
     img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person taking a photo with a smartphone',
-    words: ['One photo,', 'clear', 'answers.'],
-    sub: 'Photograph a rash, a prescription, or an X-ray. G1 reads it instantly and tells you what matters.',
+    title: 'Scan',
+    caption: 'Photograph a rash or prescription — instant answers.',
   },
 ]
 
@@ -81,11 +82,6 @@ export function Hero() {
     }, SLIDE_MS)
     return () => clearInterval(id)
   }, [])
-
-  // English gets the full rotating headline/sub; other languages keep the
-  // translated hero copy fixed while only the background image rotates.
-  const words = code === 'en' ? SLIDES[active].words : t.heroWords
-  const sub = code === 'en' ? SLIDES[active].sub : t.heroSubtitle
 
   return (
     <section id="top" className="relative w-full pt-8 pb-4">
@@ -135,117 +131,120 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Right Main Hero Panel */}
-        <div
-          onMouseEnter={() => (pausedRef.current = true)}
-          onMouseLeave={() => (pausedRef.current = false)}
-          className="flex-1 relative rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.12)] border border-border-strong spotlight min-h-[500px] md:h-full"
-        >
-          {/* Coverflow background: fanned stack of capability photos */}
-          <Parallax offset={-25} className="absolute inset-0 h-[120%] w-full">
-            <CoverflowStack slides={SLIDES} active={active} />
-          </Parallax>
+        {/* Right column: text first, carousel below */}
+        <div className="flex flex-1 flex-col gap-6 md:h-full">
 
-          {/* Premium overlay gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/5 pointer-events-none" />
-
-          {/* Slide nav: prev/next arrows + progress dots */}
-          <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
-            <button
-              type="button"
-              aria-label="Previous slide"
-              onClick={() => setActive((a) => (a - 1 + SLIDES.length) % SLIDES.length)}
-              className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
+          {/* Text block */}
+          <div className="px-2 pt-2 text-center sm:px-6">
+            <motion.h1
+              initial="hidden"
+              animate="visible"
+              className="font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.95] tracking-tighter uppercase font-black text-fg"
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
             >
-              <ChevronLeft className="size-4" strokeWidth={2.5} />
-            </button>
-
-            <div className="flex gap-1.5">
-              {SLIDES.map((slide, i) => (
-                <button
-                  key={slide.img}
-                  type="button"
-                  aria-label={`Show slide ${i + 1}`}
-                  onClick={() => setActive(i)}
-                  className="group/dot flex h-3 items-center px-0.5"
+              {t.heroWords.map((w, index) => (
+                <motion.span
+                  key={index}
+                  className="inline-block mr-[0.18em] last:mr-0 will-change-transform"
+                  style={index === 1 ? { color: 'var(--color-tint-amber)' } : {}}
+                  variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+                  }}
                 >
-                  <span
-                    className={cn(
-                      'h-1 rounded-full transition-all duration-300',
-                      i === active ? 'w-6 bg-tint-teal' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
-                    )}
-                  />
-                </button>
+                  {w}
+                </motion.span>
               ))}
-            </div>
+            </motion.h1>
 
-            <button
-              type="button"
-              aria-label="Next slide"
-              onClick={() => setActive((a) => (a + 1) % SLIDES.length)}
-              className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
-            >
-              <ChevronRight className="size-4" strokeWidth={2.5} />
-            </button>
-          </div>
-
-          {/* Hero text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-12 text-paper bg-black/10">
-
-            <Parallax offset={-15}>
-              <AnimatePresence mode="wait">
-                <motion.h1
-                  key={words.join('-')}
-                  className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl drop-shadow-[0_6px_20px_rgba(0,0,0,0.65)]"
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
-                >
-                  {words.map((w, index) => (
-                    <motion.span
-                      key={index}
-                      className="inline-block mr-[0.18em] last:mr-0 will-change-transform"
-                      style={index === 1 ? { color: 'var(--color-b-yellow)' } : {}}
-                      variants={{
-                        hidden: { opacity: 0, y: 35 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] } },
-                      }}
-                    >
-                      {w}
-                    </motion.span>
-                  ))}
-                </motion.h1>
-              </AnimatePresence>
-            </Parallax>
-
-            <FadeIn delay={0.35} className="mt-5 max-w-2xl mx-auto">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={sub}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.35 }}
-                  className="text-sm font-bold text-paper leading-relaxed sm:text-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
-                >
-                  {sub}
-                </motion.p>
-              </AnimatePresence>
+            <FadeIn delay={0.3} className="mx-auto mt-4 max-w-xl">
+              <p className="text-sm font-medium text-fg-muted sm:text-base">{t.heroSubtitle}</p>
             </FadeIn>
 
-            <FadeIn delay={0.5} className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
-              <Button href="#problems" variant="primary" className="rounded-full px-8 py-3.5 text-sm font-bold bg-black text-white hover:bg-neutral-900 hover:scale-105 transition-all shadow-[0_8px_24px_rgba(0,0,0,0.35)] border border-neutral-800 shrink-0">
+            <FadeIn delay={0.42} className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Button href="#problems" variant="primary" className="rounded-full px-8 py-3.5 text-sm font-bold shrink-0">
                 {t.startConsultation} ↗
               </Button>
               <a
                 href="#problems"
                 onClick={(e) => handleScrollTo(e, '#problems')}
-                className="text-xs font-bold text-paper/85 uppercase tracking-widest hover:text-paper transition-colors py-2"
+                className="text-xs font-bold uppercase tracking-widest text-fg-muted transition-colors hover:text-fg py-2"
               >
                 {t.exploreFeatures} ↓
               </a>
             </FadeIn>
+          </div>
+
+          {/* Carousel */}
+          <div
+            onMouseEnter={() => (pausedRef.current = true)}
+            onMouseLeave={() => (pausedRef.current = false)}
+            className="relative min-h-[360px] flex-1 overflow-hidden rounded-3xl border border-border-strong shadow-[0_16px_40px_rgba(0,0,0,0.12)] spotlight"
+          >
+            <Parallax offset={-25} className="absolute inset-0 h-[120%] w-full">
+              <CoverflowStack slides={SLIDES} active={active} />
+            </Parallax>
+
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+            {/* Slide nav: prev/next arrows + progress dots */}
+            <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
+              <button
+                type="button"
+                aria-label="Previous slide"
+                onClick={() => setActive((a) => (a - 1 + SLIDES.length) % SLIDES.length)}
+                className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
+              >
+                <ChevronLeft className="size-4" strokeWidth={2.5} />
+              </button>
+
+              <div className="flex gap-1.5">
+                {SLIDES.map((slide, i) => (
+                  <button
+                    key={slide.img}
+                    type="button"
+                    aria-label={`Show slide ${i + 1}`}
+                    onClick={() => setActive(i)}
+                    className="group/dot flex h-3 items-center px-0.5"
+                  >
+                    <span
+                      className={cn(
+                        'h-1 rounded-full transition-all duration-300',
+                        i === active ? 'w-6 bg-tint-teal' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                aria-label="Next slide"
+                onClick={() => setActive((a) => (a + 1) % SLIDES.length)}
+                className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
+              >
+                <ChevronRight className="size-4" strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Per-slide caption: only the active feature's copy is shown */}
+            {code === 'en' && (
+              <div className="absolute inset-x-4 bottom-4 z-10 flex justify-center sm:inset-x-8 sm:bottom-6">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="glass-card max-w-md rounded-2xl px-5 py-3 text-center backdrop-blur-xl"
+                  >
+                    <p className="font-display text-xs font-black uppercase tracking-widest text-tint-amber">{SLIDES[active].title}</p>
+                    <p className="mt-1 text-xs font-semibold text-paper sm:text-sm">{SLIDES[active].caption}</p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
 
