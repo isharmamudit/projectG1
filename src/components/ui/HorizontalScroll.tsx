@@ -32,10 +32,10 @@ const CARDS = [
     pixel: PIXEL.mic,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=200&q=80', // voice assistant spectrum waveform
+      'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=200&q=80', // professional recording microphone
       'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=200&q=80', // working sound waves mixer
       'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=200&q=80', // audio waves scanner
-      'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=200&q=80', // glowing smart assistant ring
+      'https://images.unsplash.com/photo-1516280440614-37939bbacd6a?auto=format&fit=crop&w=200&q=80', // vocal recording consult screen
       'https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&w=200&q=80', // audio recording microphone
     ],
   },
