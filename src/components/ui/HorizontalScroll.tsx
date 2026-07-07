@@ -15,11 +15,11 @@ const CARDS = [
     pixel: PIXEL.chat,
     pixelFill: 'var(--color-b-green)',
     images: [
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // chat assistant graphic
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=200&q=80', // chat messenger interface
-      'https://images.unsplash.com/photo-1675557009875-436f09780264?auto=format&fit=crop&w=200&q=80', // chatgpt text console
-      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=200&q=80', // digital AI node hand
-      'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=200&q=80', // writing translation sheet
+      'https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=200&q=80', // friendly robot chatbot mascot
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // human facing machine colorful abstract
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80', // doctor patient clinical consultation
+      'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=200&q=80', // Indian scripts text reference
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=200&q=80', // chat messaging screen ui
     ],
   },
   {
