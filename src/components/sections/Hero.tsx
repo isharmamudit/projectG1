@@ -33,41 +33,41 @@ export function Hero() {
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[230px] py-1 shrink-0"
+          className="hidden md:flex flex-col justify-between w-[280px] py-2 shrink-0"
         >
           {/* Logo */}
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-2 text-fg">
-              <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
-              <span className="font-display text-base font-black leading-none tracking-tight">
+              <HeartPulse className="size-6 text-accent" strokeWidth={2.5} />
+              <span className="font-display text-2xl font-black leading-none tracking-tight">
                 projectG1<span className="text-accent">.</span>
               </span>
             </div>
-            <span className="text-[9px] font-black tracking-widest text-fg-muted uppercase pl-7">
+            <span className="text-[10px] font-black tracking-widest text-fg-muted uppercase pl-8">
               VERNACULAR AI HEALTH
             </span>
           </div>
 
           {/* Navigation Tiles List (Single-column vertical stack matching units.) */}
-          <div className="flex flex-col gap-2.5 my-3">
+          <div className="flex flex-col gap-2.5 my-4">
             {TILES.map((t) => (
               <a
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex flex-col justify-between p-3.5 h-[82px] rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-4 h-[96px] rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
               >
                 <div className="flex justify-between items-start w-full">
-                  <span className="font-display text-[10px] font-black opacity-55">{t.n}</span>
-                  <ArrowUpRight className="size-3.5 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
+                  <span className="font-display text-xs font-black opacity-55">{t.n}</span>
+                  <ArrowUpRight className="size-4 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
                 </div>
-                <span className="text-[13px] font-black tracking-tight leading-none text-left mb-0.5">{t.label}</span>
+                <span className="text-sm font-black tracking-tight leading-none text-left mb-0.5">{t.label}</span>
               </a>
             ))}
           </div>
 
           {/* Footer controls */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             <a 
               href="#problems" 
               onClick={(e) => handleScrollTo(e, '#problems')}
