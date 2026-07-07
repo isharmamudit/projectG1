@@ -18,8 +18,6 @@ const PROBLEMS = [
   { n: '04', title: 'Weak emergency readiness', detail: 'Emergency info not instantly accessible offline.', bg: 'bg-b-orange' },
   { n: '05', title: 'Doctor visit prep is missing', detail: 'Patients forget questions and history during consultations.', bg: 'bg-b-red' },
   { n: '06', title: 'No caregiver workflow', detail: 'Children managing parents still rely on WhatsApp calls.', bg: 'bg-b-orange' },
-  { n: '07', title: 'No multimodal understanding', detail: "Can't handle reports, prescriptions, voice, and images together.", bg: 'bg-b-red' },
-  { n: '08', title: 'AI is mostly a chatbot', detail: 'It answers questions but never completes actions for you.', bg: 'bg-b-orange' },
 ]
 
 const SOLUTIONS = [
@@ -131,7 +129,7 @@ export function Problems() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="w-full rounded-3xl border border-border-strong p-6 bg-surface-2 flex flex-col justify-center min-h-[500px] lg:min-h-[580px] overflow-hidden relative"
+                className="w-full rounded-3xl border border-border-strong p-6 bg-surface-2 flex flex-col items-stretch justify-stretch min-h-[500px] lg:min-h-[580px] overflow-hidden relative"
               >
 
               {/* Subtle background blueprint grid */}
@@ -151,12 +149,12 @@ export function Problems() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98, y: -15 }}
                     transition={{ duration: 0.25 }}
-                    className="grid gap-2 sm:grid-cols-2 h-full items-stretch"
+                    className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 flex-1 h-full items-stretch justify-items-stretch"
                   >
                     {PROBLEMS.map((prob) => (
                       <SpotlightTilt
                         key={prob.title}
-                        className={`group relative rounded-2xl ${prob.bg} p-4 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
+                        className={`group relative rounded-2xl ${prob.bg} p-5 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
                         spotlightColor="rgba(0,0,0,0.1)"
                       >
 
@@ -184,7 +182,7 @@ export function Problems() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98, y: -15 }}
                     transition={{ duration: 0.25 }}
-                    className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 h-full items-stretch"
+                    className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 flex-1 h-full items-stretch justify-items-stretch"
                   >
                     {SOLUTIONS.map((sol, i) => (
                       <motion.div
@@ -193,7 +191,7 @@ export function Problems() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.05 }}
                         whileHover={{ y: -3 }}
-                        className={`rounded-2xl ${sol.color} p-4 text-ink flex flex-col justify-between cursor-default`}
+                        className={`rounded-2xl ${sol.color} p-5 text-ink flex flex-col justify-between cursor-default`}
                       >
                         <div className="flex items-start justify-between">
                           <span className="font-display text-[10px] font-black opacity-45">{sol.n}</span>
