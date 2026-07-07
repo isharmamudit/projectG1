@@ -36,15 +36,10 @@ export function Hero() {
           className="hidden md:flex flex-col justify-between w-[280px] py-1 shrink-0"
         >
           {/* Logo */}
-          <div className="flex flex-col gap-0.5">
-            <div className="flex items-center gap-2 text-fg">
-              <HeartPulse className="size-6 text-accent" strokeWidth={2.5} />
-              <span className="font-display text-2xl font-black leading-none tracking-tight">
-                projectG1<span className="text-accent">.</span>
-              </span>
-            </div>
-            <span className="text-[10px] font-black tracking-widest text-fg-muted uppercase pl-8">
-              VERNACULAR AI HEALTH
+          <div className="flex items-center gap-2 text-fg">
+            <HeartPulse className="size-6 text-accent" strokeWidth={2.5} />
+            <span className="font-display text-2xl font-black leading-none tracking-tight">
+              projectG1<span className="text-accent">.</span>
             </span>
           </div>
 
