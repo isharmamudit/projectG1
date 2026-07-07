@@ -24,16 +24,16 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Hero() {
   return (
-    <section id="top" className="relative w-full pt-16 pb-4">
+    <section id="top" className="relative w-full pt-8 pb-4">
       {/* Outer Flex Container for Split Screen Layout */}
-      <div className="flex w-full flex-col gap-4 md:flex-row md:h-[88vh] px-4 md:px-5">
+      <div className="flex w-full flex-col gap-4 md:flex-row md:h-[90vh] px-4 md:px-5">
         
         {/* Left Sidebar (Desktop only) */}
         <motion.div 
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[280px] py-2 shrink-0"
+          className="hidden md:flex flex-col justify-between w-[280px] py-1 shrink-0"
         >
           {/* Logo */}
           <div className="flex flex-col gap-0.5">
@@ -49,13 +49,13 @@ export function Hero() {
           </div>
 
           {/* Navigation Tiles List (Single-column vertical stack matching units.) */}
-          <div className="flex flex-col gap-2.5 my-4">
+          <div className="flex flex-col gap-2.5 my-3">
             {TILES.map((t) => (
               <a
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex flex-col justify-between p-4 h-[92px] rounded-[22px] transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-4 h-[105px] rounded-[22px] transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
               >
                 <div className="flex justify-between items-start w-full">
                   <span className="font-display text-xs font-black opacity-55">{t.n}</span>
