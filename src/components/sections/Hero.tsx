@@ -11,10 +11,10 @@ import { cn } from '@/lib/utils'
 const TILES = [
   { n: '01', label: 'Chat', href: '#problems', bg: 'bg-b-blue', brief: 'Consult in 12+ dialects' },
   { n: '02', label: 'Voice', href: '#voice', bg: 'bg-b-orange', brief: 'Get clinical reports' },
-  { n: '03', label: 'Scan', href: '#problems', bg: 'bg-b-red', brief: 'Photo your symptoms' },
-  { n: '04', label: 'Yoga', href: '#problems', bg: 'bg-b-green', brief: 'Posture coaching' },
-  { n: '05', label: 'Offline', href: '#problems', bg: 'bg-b-purple', brief: 'Works without signal' },
-  { n: '06', label: 'Memory', href: '#problems', bg: 'bg-b-yellow', brief: 'Your full history' },
+  { n: '03', label: 'Yoga', href: '#problems', bg: 'bg-b-green', brief: 'Posture coaching' },
+  { n: '04', label: 'Offline', href: '#problems', bg: 'bg-b-purple', brief: 'Works without signal' },
+  { n: '05', label: 'Memory', href: '#problems', bg: 'bg-b-yellow', brief: 'Your full history' },
+  { n: '06', label: 'Scan', href: '#problems', bg: 'bg-b-red', brief: 'Photo your symptoms' },
 ]
 
 // One slide per sidebar tile — image, headline and subtitle rotate together.
@@ -30,12 +30,6 @@ const SLIDES = [
     alt: 'Person on a video consultation call',
     words: ['Just', 'speak,', 'we listen.'],
     sub: 'Talk in your dialect. G1 asks the right questions and turns your voice into a clinical report your doctor can use.',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&w=1400&q=80',
-    alt: 'Person taking a photo with a smartphone',
-    words: ['One photo,', 'clear', 'answers.'],
-    sub: 'Photograph a rash, a prescription, or an X-ray. G1 reads it instantly and tells you what matters.',
   },
   {
     img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1400&q=80',
@@ -54,6 +48,12 @@ const SLIDES = [
     alt: 'Notebook and records laid out on a desk',
     words: ['Every visit,', 'always', 'remembered.'],
     sub: 'Reports, symptoms and prescriptions connected across years, not scattered across apps.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Person taking a photo with a smartphone',
+    words: ['One photo,', 'clear', 'answers.'],
+    sub: 'Photograph a rash, a prescription, or an X-ray. G1 reads it instantly and tells you what matters.',
   },
 ]
 
@@ -96,7 +96,7 @@ export function Hero() {
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[280px] py-1 shrink-0"
+          className="hidden md:flex flex-col justify-between w-[280px] py-1 shrink-0 overflow-y-auto"
         >
           {/* Logo */}
           <div className="flex items-center gap-2 text-fg">
@@ -130,13 +130,6 @@ export function Hero() {
 
           {/* Footer controls */}
           <div className="flex flex-col gap-2.5">
-            <a
-              href="#problems"
-              onClick={(e) => handleScrollTo(e, '#problems')}
-              className="flex items-center justify-center w-full rounded-xl bg-accent text-paper text-xs font-bold py-2.5 px-3 transition-transform hover:scale-[1.02] shadow-[0_4px_12px_rgba(var(--color-accent-rgb),0.2)]"
-            >
-              {t.consultG1} ↗
-            </a>
             <LanguageSwitcher />
           </div>
         </motion.div>
