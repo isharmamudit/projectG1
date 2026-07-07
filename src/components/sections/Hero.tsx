@@ -24,9 +24,9 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Hero() {
   return (
-    <section id="top" className="relative w-full px-4 pt-20 pb-6 md:px-6">
+    <section id="top" className="relative w-full pt-16 pb-4">
       {/* Outer Flex Container for Split Screen Layout */}
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 md:flex-row md:h-[86vh] md:max-h-[850px]">
+      <div className="flex w-full flex-col gap-4 md:flex-row md:h-[88vh] px-4 md:px-5">
         
         {/* Left Sidebar (Desktop only) */}
         <motion.div 
