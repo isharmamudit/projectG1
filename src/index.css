@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Inter", system-ui, "Segoe UI", sans-serif;
+  --font-display: "Archivo Black", "Inter", system-ui, sans-serif;
+
+  /* Brand block colors (Units-style): identical in both themes, always with near-black ink. */
+  --color-b-blue: #1d6ff2;
+  --color-b-orange: #ff8a00;
+  --color-b-red: #e8452c;
+  --color-b-green: #12a150;
+  --color-b-purple: #a06cf8;
+  --color-b-yellow: #ffc21a;
+  --color-ink: #0b0b0b;
+  --color-paper: #f4efe7;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-warm: var(--warm);
+  --color-warm-fg: var(--warm-fg);
+
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+  --color-glass-highlight: var(--glass-highlight);
+
+  --color-ring: var(--accent);
+
+  --animate-bob: bob 3s ease-in-out infinite;
+}
+
+/*
+  Semantic tokens, ported from the furrow-eight base/light/dark model:
+  one shared base + a light and dark set of the same variable names.
+  Nothing downstream ever references a raw color -- only these.
+*/
+:root {
+  --bg: #f4efe7;
+  --surface: #ffffff;
+  --surface-2: #f2f1ec;
+  --fg: #12181a;
+  --fg-muted: #52616b;
+  --fg-subtle: #8a969d;
+  --border: #e5e3db;
+  --border-strong: #d3d0c4;
+
+  --accent: #0d7377;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(13, 115, 119, 0.1);
+  --warm: #e0703f;
+  --warm-fg: #ffffff;
+
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-highlight: rgba(255, 255, 255, 0.8);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0a0e10;
+  --surface: #10161a;
+  --surface-2: #161d21;
+  --fg: #eef2f2;
+  --fg-muted: #97a5aa;
+  --fg-subtle: #627075;
+  --border: #212a2e;
+  --border-strong: #2c383d;
+
+  --accent: #17b8ae;
+  --accent-fg: #06201f;
+  --accent-soft: rgba(23, 184, 174, 0.14);
+  --warm: #ff9166;
+  --warm-fg: #241207;
+
+  --glass-bg: rgba(16, 22, 26, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.14);
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body,
+  #root {
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    transition:
+      background-color 300ms ease,
+      color 300ms ease;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+}
+
+@layer utilities {
+  /*
+    No `position` here on purpose: this class is combined with Tailwind
+    position utilities (relative/fixed/absolute) at each call site. Setting
+    position here would collide with those utilities in the cascade layer
+    (same specificity, and this file's rule comes after Tailwind's in
+    source order, so it would silently win over e.g. `fixed`).
+  */
+  .glass {
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-glass-border);
+  }
+
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      180deg,
+      var(--color-glass-highlight) 0%,
+      transparent 40%,
+      transparent 60%,
+      var(--color-glass-highlight) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ===== Marquee band ===== */
+.marquee {
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ===== Splash wipe (Creative Studio pattern) ===== */
+@keyframes splash-up {
+  to {
+    transform: translateY(-101%);
+  }
+}
+@keyframes splash-down {
+  to {
+    transform: translateY(101%);
+  }
+}
+
+/* ===== Spotlight hover (React Bits SpotlightCard, tokenized) ===== */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(255, 255, 255, 0.35);
+}
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    var(--spotlight-color),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.spotlight:hover::after,
+.spotlight:focus-within::after {
+  opacity: 1;
+}
+
+/* ===== Blueprint grid (footer / cards backdrop) ===== */
+.grid-paper {
+  background-image:
+    linear-gradient(var(--color-border-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-strong) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
