@@ -21,17 +21,30 @@ function scrollTo(selector: string, setVisible: (v: boolean) => void) {
 
 export function Navbar() {
   const { theme, toggleTheme } = useTheme()
-  const [visible, setVisible]   = useState(true)
+  const [visible, setVisible]   = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const lastY = useRef(0)
 
   useEffect(() => {
+    const initialY = window.scrollY
+    const isMobile = window.innerWidth < 768
+    setVisible(isMobile || initialY > 300)
+    setScrolled(initialY > 20)
+
     function onScroll() {
       const y = window.scrollY
+      const isMobile = window.innerWidth < 768
       setScrolled(y > 20)
-      if (y < 80)              setVisible(true)
-      else if (y > lastY.current + 8) setVisible(false)   // scrolling DOWN  → hide
-      else if (y < lastY.current - 4) setVisible(true)    // scrolling UP    → show
+      
+      if (!isMobile && y < 350) {
+        setVisible(false)
+      } else if (isMobile && y < 80) {
+        setVisible(true)
+      } else if (y > lastY.current + 8) {
+        setVisible(false)   // scrolling DOWN  → hide
+      } else if (y < lastY.current - 4) {
+        setVisible(true)    // scrolling UP    → show
+      }
       lastY.current = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })
