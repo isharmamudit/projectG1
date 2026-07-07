@@ -1,4 +1,4 @@
-import { useRef, useState, MouseEvent } from 'react'
+import { useRef, useState, type MouseEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface TrailImage {
