@@ -9,6 +9,7 @@ interface FadeInProps {
   x?: number
   y?: number
   className?: string
+  style?: React.CSSProperties
 }
 
 const EASE = [0.25, 0.1, 0.25, 1] as const
@@ -21,12 +22,14 @@ export function FadeIn({
   x = 0,
   y = 30,
   className,
+  style,
 }: FadeInProps) {
   const Comp = motion.create(as) as ElementType<HTMLMotionProps<'div'>>
 
   return (
     <Comp
       className={className}
+      style={style}
       initial={{ opacity: 0, x, y }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -50px 0px' }}
