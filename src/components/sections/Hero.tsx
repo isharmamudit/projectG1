@@ -55,7 +55,7 @@ export function Hero() {
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex flex-col justify-between p-4 h-[96px] rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-4 h-[92px] rounded-[22px] transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
               >
                 <div className="flex justify-between items-start w-full">
                   <span className="font-display text-xs font-black opacity-55">{t.n}</span>
@@ -87,7 +87,7 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80"
               alt="Vernacular G1 AI Health consultation"
               className="w-full h-full object-cover select-none brightness-[0.88]"
             />
@@ -129,7 +129,7 @@ export function Hero() {
             </FadeIn>
 
             <FadeIn delay={0.5} className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
-              <Button href="#problems" variant="primary" className="rounded-full px-8 py-3.5 text-sm font-bold bg-accent text-paper hover:scale-105 transition-transform shrink-0">
+              <Button href="#problems" variant="primary" className="rounded-full px-8 py-3.5 text-sm font-bold bg-black text-white hover:bg-neutral-900 hover:scale-105 transition-all shadow-[0_8px_24px_rgba(0,0,0,0.35)] border border-neutral-800 shrink-0">
                 Start Consultation ↗
               </Button>
               <a 
