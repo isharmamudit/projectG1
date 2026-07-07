@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { Parallax } from '@/components/ui/Parallax'
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { CoverflowStack } from '@/components/ui/CoverflowStack'
 import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
@@ -72,57 +71,25 @@ export function Hero() {
 
   return (
     <section id="top" className="relative w-full pt-8 pb-4">
-      {/* Outer Flex Container for Split Screen Layout */}
-      <div className="flex w-full flex-col gap-4 md:flex-row md:h-[90vh] px-4 md:px-5">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 px-4 md:px-5">
 
-        {/* Left Sidebar (Desktop only) */}
-        <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[280px] py-1 shrink-0 overflow-y-auto"
-        >
-          {/* Logo */}
-          <div className="flex items-center gap-2 text-fg">
-            <HeartPulse className="size-6 text-accent" strokeWidth={2.5} />
-            <span className="font-display text-2xl font-black leading-none tracking-tight">
-              projectG1<span className="text-accent">.</span>
-            </span>
-          </div>
-
-          {/* Navigation Tiles List (Single-column vertical stack matching units.) */}
-          <div className="flex flex-col gap-2.5 my-3">
-            {TILES.map((tile, i) => (
-              <a
-                key={tile.n}
-                href={tile.href}
-                onClick={(e) => handleScrollTo(e, tile.href)}
-                onMouseEnter={() => setActive(i)}
-                className={`glass-card group flex flex-col justify-between p-4 h-[105px] rounded-[22px] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg text-fg ${tile.bg}`}
-              >
-                <div className="flex justify-between items-start w-full">
-                  <span className="font-display text-xs font-black opacity-50">{tile.n}</span>
-                  <ArrowUpRight className="size-4 opacity-70 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" strokeWidth={2.5} />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-black tracking-tight leading-none">{tile.label}</span>
-                  <span className="text-[10px] font-bold text-fg-muted leading-snug mt-1">{tile.brief}</span>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          {/* Footer controls */}
-          <div className="flex flex-col gap-2.5">
-            <LanguageSwitcher />
-          </div>
-        </motion.div>
-
-        {/* Right column: text first, carousel below */}
-        <div className="flex flex-1 flex-col gap-6 md:h-full">
+        {/* Right column: logo, text, carousel — all centered */}
+        <div className="flex w-full flex-1 flex-col items-center gap-6">
 
           {/* Text block */}
-          <div className="px-2 pt-2 text-center sm:px-6">
+          <div className="flex flex-col items-center px-2 pt-2 text-center sm:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+              className="mb-5 flex items-center gap-2 text-fg"
+            >
+              <HeartPulse className="size-6 text-accent" strokeWidth={2.5} />
+              <span className="font-display text-2xl font-black leading-none tracking-tight">
+                projectG1<span className="text-accent">.</span>
+              </span>
+            </motion.div>
+
             <motion.h1
               initial="hidden"
               animate="visible"
@@ -166,7 +133,7 @@ export function Hero() {
           <div
             onMouseEnter={() => (pausedRef.current = true)}
             onMouseLeave={() => (pausedRef.current = false)}
-            className="relative min-h-[360px] flex-1 overflow-hidden rounded-3xl border border-border-strong shadow-[0_16px_40px_rgba(0,0,0,0.12)] spotlight"
+            className="relative min-h-[360px] w-full flex-1 overflow-hidden rounded-3xl border border-border-strong shadow-[0_16px_40px_rgba(0,0,0,0.12)] spotlight"
           >
             <Parallax offset={-25} className="absolute inset-0 h-[120%] w-full">
               <CoverflowStack slides={SLIDES} active={active} />
@@ -216,24 +183,25 @@ export function Hero() {
 
       </div>
 
-      {/* Mobile-only Navigation Tiles Grid (renders below the main panel on small screens) */}
-      <div className="mx-auto max-w-6xl mt-6 md:hidden">
+      {/* Navigation Tiles Grid: centered, below the carousel on every breakpoint */}
+      <div className="mx-auto max-w-5xl mt-8 px-4 text-center md:px-5">
         <p className="text-[10px] font-black uppercase tracking-widest text-fg-muted mb-3.5">
           {t.tapToExplore}
         </p>
-        <div className="grid grid-cols-2 gap-3">
-          {TILES.map((tile) => (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+          {TILES.map((tile, i) => (
             <a
               key={tile.n}
               href={tile.href}
               onClick={(e) => handleScrollTo(e, tile.href)}
-              className={`glass-card group flex flex-col justify-between p-4 rounded-2xl backdrop-blur-xl text-fg min-h-[96px] transition-transform active:scale-[0.98] ${tile.bg}`}
+              onMouseEnter={() => setActive(i)}
+              className={`glass-card group flex flex-col justify-between p-4 rounded-2xl backdrop-blur-xl text-fg min-h-[96px] transition-transform hover:-translate-y-1 active:scale-[0.98] ${tile.bg}`}
             >
               <div className="flex justify-between items-start">
                 <span className="font-display text-sm font-black opacity-55">{tile.n}</span>
                 <ArrowUpRight className="size-4 opacity-75" />
               </div>
-              <span className="text-xs font-black tracking-tight leading-none mt-4">{tile.label}</span>
+              <span className="text-xs font-black tracking-tight leading-none mt-4 text-left">{tile.label}</span>
             </a>
           ))}
         </div>
