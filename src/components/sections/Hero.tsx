@@ -1,9 +1,7 @@
-import { useState } from 'react'
-import { ArrowUpRight, Plus, MessageCircle, Share2, Globe2, ArrowRight, HeartPulse } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, HeartPulse, MessageCircle, Mic, PersonStanding, WifiOff } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
-import { CountUp } from '@/components/ui/CountUp'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useLanguage } from '@/lib/language'
 import { useTheme } from '@/lib/theme'
@@ -15,30 +13,19 @@ const NAV_ITEMS = [
   { label: 'Trust', href: '#trust' },
 ]
 
+// The four bento cards below the hero banner — solid theme-invariant pastels, like MediCare's colored tile row.
 const TILES = [
-  { n: '01', label: 'Chat', href: '#problems', bg: 'bg-tint-blue/12 border border-tint-blue/25', brief: 'Consult in 12+ dialects' },
-  { n: '02', label: 'Voice', href: '#voice', bg: 'bg-tint-amber/12 border border-tint-amber/25', brief: 'Get clinical reports' },
-  { n: '03', label: 'Yoga', href: '#problems', bg: 'bg-tint-sage/12 border border-tint-sage/25', brief: 'Posture coaching' },
-  { n: '04', label: 'Offline', href: '#problems', bg: 'bg-tint-violet/12 border border-tint-violet/25', brief: 'Works without signal' },
-  { n: '05', label: 'Memory', href: '#problems', bg: 'bg-tint-teal/12 border border-tint-teal/25', brief: 'Your full history' },
-  { n: '06', label: 'Scan', href: '#problems', bg: 'bg-tint-rose/12 border border-tint-rose/25', brief: 'Photo your symptoms' },
+  { n: '01', title: 'Instant Chat Consults', brief: 'Reply within 60 secs', href: '#problems', bg: 'bg-pastel-amber', icon: MessageCircle },
+  { n: '02', title: 'Voice & Reports', brief: 'Speak, we transcribe', href: '#voice', bg: 'bg-pastel-sage', icon: Mic },
+  { n: '03', title: 'Yoga & Posture', brief: 'Guided daily coaching', href: '#problems', bg: 'bg-pastel-rose', icon: PersonStanding },
+  { n: '04', title: 'Works Offline', brief: 'No signal, no problem', href: '#problems', bg: 'bg-pastel-blue', icon: WifiOff },
 ]
 
-// The four floating callouts that ring the central visual on desktop.
-const CALLOUTS = [
-  { label: 'Chat Consults', side: 'left' as const, top: '14%' },
-  { label: 'Voice Reports', side: 'left' as const, top: '58%' },
-  { label: 'Symptom Scan', side: 'right' as const, top: '14%' },
-  { label: 'Offline Records', side: 'right' as const, top: '58%' },
+// The two floating pill badges flanking the central figure.
+const BADGES = [
+  { label: 'Ask in your dialect', side: 'left' as const },
+  { label: 'No clinic visit needed', side: 'right' as const },
 ]
-
-const AVATARS = [
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80',
-]
-
-const SPARK_POINTS = '0,32 14,26 28,29 42,18 56,21 70,10 84,13 100,2'
 
 function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   e.preventDefault()
@@ -52,14 +39,13 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 export function Hero() {
   const { t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
-  const [email, setEmail] = useState('')
 
   return (
-    <section id="top" className="relative w-full overflow-hidden px-4 pt-24 pb-20 sm:px-6 md:pt-6">
+    <section id="top" className="relative w-full px-4 pt-24 pb-16 sm:px-6 md:pt-6">
 
       {/* In-page navbar: desktop only — the global Navbar already stays permanently visible on mobile,
           but auto-hides until scroll on desktop, so the hero needs its own static one there. */}
-      <FadeIn className="mx-auto mb-14 hidden max-w-6xl items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
+      <FadeIn className="mx-auto mb-6 hidden max-w-6xl items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
         <a
           href="#top"
           onClick={(e) => handleScrollTo(e, '#top')}
@@ -97,35 +83,24 @@ export function Hero() {
         </div>
       </FadeIn>
 
-      {/* Headline block */}
-      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-2 text-center">
-        <FadeIn className="relative">
-          <div className="absolute -top-8 right-0 hidden items-center sm:flex">
-            <div className="flex -space-x-2.5">
-              {AVATARS.map((src) => (
-                <img key={src} src={src} alt="" className="size-9 rounded-full border-2 border-surface object-cover" />
-              ))}
-              <span className="flex size-9 items-center justify-center rounded-full border-2 border-surface bg-tint-sage/25 text-xs font-black text-fg">
-                +
-              </span>
-            </div>
-          </div>
-        </FadeIn>
+      {/* Hero banner: giant headline behind a central figure, floating badges, bottom caption + CTA */}
+      <div className="relative mx-auto min-h-[560px] max-w-6xl overflow-hidden rounded-[32px] bg-ink px-6 pt-10 pb-8 sm:min-h-[620px] sm:px-10 sm:pt-14">
 
+        {/* Giant headline, sitting behind the figure */}
         <motion.h1
           initial="hidden"
           animate="visible"
-          className="font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.95] tracking-tighter uppercase font-black text-fg"
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
+          className="pointer-events-none relative z-0 max-w-full [overflow-wrap:anywhere] select-none text-center font-display text-[clamp(2rem,9vw,8rem)] leading-[0.85] font-black tracking-tight text-paper/90 uppercase"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
         >
           {t.heroWords.map((w, index) => (
             <motion.span
               key={index}
-              className="inline-block mr-[0.18em] last:mr-0 will-change-transform"
+              className="inline-block mr-[0.15em] last:mr-0"
               style={index === 1 ? { color: 'var(--color-tint-amber)' } : {}}
               variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+                hidden: { opacity: 0, y: 40 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
               }}
             >
               {w}
@@ -133,141 +108,86 @@ export function Hero() {
           ))}
         </motion.h1>
 
-        <FadeIn delay={0.3} className="mx-auto mt-4 max-w-xl">
-          <p className="text-sm font-medium text-fg-muted sm:text-base">{t.heroSubtitle}</p>
-        </FadeIn>
-      </div>
-
-      {/* Central visual: glow + image + floating feature callouts */}
-      <div className="relative mx-auto mt-14 flex h-[380px] max-w-3xl items-center justify-center sm:h-[440px]">
-        {/* Radial glow */}
-        <div
-          className="absolute size-[320px] rounded-full opacity-60 blur-3xl sm:size-[420px]"
-          style={{ background: 'radial-gradient(circle, var(--color-tint-sage) 0%, transparent 70%)' }}
-        />
-
-        {/* Feature callouts (desktop only) */}
-        {CALLOUTS.map((c) => (
+        {/* Floating badges flanking the figure */}
+        {BADGES.map((b, i) => (
           <FadeIn
-            key={c.label}
-            delay={0.2}
-            className="absolute hidden md:block"
-            style={{ top: c.top, [c.side]: '0%' }}
+            key={b.label}
+            delay={0.25 + i * 0.1}
+            className={`absolute top-[42%] z-20 hidden md:block ${b.side === 'left' ? 'left-6' : 'right-6'}`}
           >
-            <div className={`glass-card flex items-center gap-2 rounded-full px-3 py-2 ${c.side === 'left' ? 'flex-row' : 'flex-row-reverse'}`}>
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-tint-amber/25 text-fg">
-                <Plus className="size-3.5" strokeWidth={2.5} />
+            <div className="glass-card flex items-center gap-2 rounded-full bg-surface/90 px-4 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+              <span className={`flex size-6 items-center justify-center rounded-full ${b.side === 'left' ? 'bg-tint-rose/25' : 'bg-tint-sage/25'}`}>
+                <ArrowUpRight className="size-3.5 text-fg" strokeWidth={2.5} />
               </span>
-              <span className="text-xs font-bold text-fg">{c.label}</span>
+              <span className="text-xs font-bold whitespace-nowrap text-fg">{b.label}</span>
             </div>
           </FadeIn>
         ))}
 
-        {/* Central image */}
+        {/* Central figure, in front of the headline text */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative z-10 size-[240px] overflow-hidden rounded-full border-4 border-surface shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)] sm:size-[300px]"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+          className="relative z-10 mx-auto -mt-8 h-[300px] w-[220px] overflow-hidden rounded-t-[110px] sm:h-[380px] sm:w-[280px]"
         >
           <img
-            src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80"
-            alt="Person practicing yoga at sunrise"
+            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
+            alt="Doctor holding a phone during a consultation"
             className="h-full w-full select-none object-cover"
           />
         </motion.div>
 
-        {/* Email capture bar, bleeding over the visual's bottom edge */}
-        <FadeIn delay={0.35} className="absolute -bottom-4 left-1/2 z-20 w-full max-w-md -translate-x-1/2 px-4 sm:-bottom-6">
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="glass-card flex items-center gap-2 rounded-full border border-border-strong bg-surface p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.15)]"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm font-medium text-fg placeholder:text-fg-muted focus:outline-none"
-            />
-            <Button type="submit" variant="primary" className="shrink-0 rounded-full px-5 py-2.5 text-xs font-bold">
+        {/* Bottom caption + CTA */}
+        <div className="relative z-20 mt-8 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <FadeIn delay={0.35} className="max-w-xs">
+            <p className="text-[11px] font-bold tracking-wide text-paper/70 uppercase">{t.heroSubtitle}</p>
+          </FadeIn>
+
+          <FadeIn delay={0.42} className="flex shrink-0 items-center gap-3">
+            <a
+              href="#problems"
+              onClick={(e) => handleScrollTo(e, '#problems')}
+              aria-label={t.exploreFeatures}
+              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-tint-rose/25 text-paper transition-colors hover:bg-tint-rose/35"
+            >
+              <ArrowUpRight className="size-4" strokeWidth={2.5} />
+            </a>
+            <Button href="#problems" variant="primary" className="rounded-full px-6 py-3 text-xs font-bold">
               {t.startConsultation}
             </Button>
-          </form>
-        </FadeIn>
+          </FadeIn>
+        </div>
       </div>
 
-      {/* Join community + social row */}
-      <FadeIn delay={0.4} className="mx-auto mt-14 max-w-md text-center sm:mt-10">
-        <p className="text-xs font-semibold text-fg-muted">
-          Join our community and stay updated with everyday health tips.
-        </p>
-        <div className="mt-4 flex items-center justify-center gap-3">
-          {[MessageCircle, Share2, Globe2].map((Icon, i) => (
-            <a
-              key={i}
-              href="#top"
-              aria-label="Social link"
-              className="glass-card flex size-9 items-center justify-center rounded-full text-fg-muted transition-colors hover:text-fg"
-            >
-              <Icon className="size-4" strokeWidth={2} />
-            </a>
-          ))}
-        </div>
-      </FadeIn>
-
-      {/* Floating stat cards (large screens only) */}
-      <FadeIn delay={0.5} className="absolute bottom-6 left-4 hidden w-[220px] lg:block">
-        <div className="glass-card rounded-2xl border border-border p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-black uppercase tracking-wide text-fg">Growing With You</p>
-            <ArrowUpRight className="size-3.5 text-fg-muted" />
-          </div>
-          <p className="mt-3 font-display text-2xl font-black text-tint-sage">
-            <CountUp to={92} suffix="%" duration={1200} />
-          </p>
-          <p className="mt-1 text-[10px] font-semibold text-fg-muted">Consult satisfaction, 2026</p>
-          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-fg/10">
-            <div className="h-full w-[92%] rounded-full bg-tint-sage" />
-          </div>
-        </div>
-      </FadeIn>
-
-      <FadeIn delay={0.55} className="absolute right-4 bottom-6 hidden w-[220px] lg:block">
-        <div className="glass-card rounded-2xl border border-border p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-black uppercase tracking-wide text-fg">Care That Understands</p>
-            <ArrowUpRight className="size-3.5 text-fg-muted" />
-          </div>
-          <svg viewBox="0 0 100 36" className="mt-3 h-10 w-full overflow-visible">
-            <polyline points={SPARK_POINTS} fill="none" stroke="var(--color-tint-amber)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <p className="mt-1 text-[10px] font-semibold text-fg-muted">12M+ Indians, 12+ dialects</p>
-        </div>
-      </FadeIn>
-
-      {/* Navigation Tiles Grid: mobile fallback for the desktop callouts */}
-      <div className="mx-auto mt-14 max-w-5xl px-2 text-center md:hidden">
-        <p className="text-[10px] font-black uppercase tracking-widest text-fg-muted mb-3.5">
-          {t.tapToExplore}
-        </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {TILES.map((tile) => (
-            <a
+      {/* Four-color bento row, MediCare-style */}
+      <div className="mx-auto mt-4 grid max-w-6xl grid-cols-2 gap-4 sm:mt-6 lg:grid-cols-4">
+        {TILES.map((tile, i) => {
+          const Icon = tile.icon
+          return (
+            <motion.a
               key={tile.n}
               href={tile.href}
               onClick={(e) => handleScrollTo(e, tile.href)}
-              className={`glass-card group flex flex-col justify-between p-4 rounded-2xl backdrop-blur-xl text-fg min-h-[96px] transition-transform hover:-translate-y-1 active:scale-[0.98] ${tile.bg}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+              className={`group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl p-6 text-ink ${tile.bg} transition-transform hover:-translate-y-1`}
             >
-              <div className="flex justify-between items-start">
-                <span className="font-display text-sm font-black opacity-55">{tile.n}</span>
-                <ArrowRight className="size-4 opacity-75" />
+              <div>
+                <p className="font-display text-lg leading-tight font-black">{tile.title}</p>
+                <p className="mt-2 text-xs font-semibold opacity-70">{tile.brief}</p>
               </div>
-              <span className="text-xs font-black tracking-tight leading-none mt-4 text-left">{tile.label}</span>
-            </a>
-          ))}
-        </div>
+
+              <Icon className="absolute right-4 bottom-4 size-16 opacity-20" strokeWidth={1.5} />
+
+              <span className="relative z-10 flex size-9 items-center justify-center rounded-full bg-ink/85 text-paper transition-transform group-hover:-translate-x-0.5">
+                <ArrowLeft className="size-4" strokeWidth={2.5} />
+              </span>
+            </motion.a>
+          )
+        })}
       </div>
     </section>
   )
