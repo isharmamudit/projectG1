@@ -37,7 +37,7 @@ export function Hero() {
             animate="visible"
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
           >
-            {(['Your', 'health,', 'understood.'] as const).map((w, i) => (
+            {(['Your', 'health,', 'understood.'] as const).map((w) => (
               <motion.span
                 key={w}
                 className="inline-block mr-[0.18em] last:mr-0 will-change-transform"

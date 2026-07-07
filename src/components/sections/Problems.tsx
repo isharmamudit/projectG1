@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FadeIn } from '@/components/ui/FadeIn'
-import { ClipReveal } from '@/components/ui/ClipReveal'
 import { SpotlightTilt } from '@/components/ui/SpotlightTilt'
 import { ScrambleText } from '@/components/ui/ScrambleText'
 import { CountUp } from '@/components/ui/CountUp'
@@ -35,7 +33,6 @@ const SOLUTIONS = [
 
 export function Problems() {
   const [activeTab, setActiveTab] = useState<'problems' | 'solutions'>('problems')
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
     <section id="problems" className="overflow-hidden px-4 py-24 sm:px-8 sm:py-32">
@@ -156,14 +153,13 @@ export function Problems() {
                     transition={{ duration: 0.25 }}
                     className="grid gap-2 sm:grid-cols-2 h-full items-stretch"
                   >
-                    {PROBLEMS.map((prob, i) => (
+                    {PROBLEMS.map((prob) => (
                       <SpotlightTilt
                         key={prob.title}
-                        onMouseEnter={() => setHoveredIndex(i)}
-                        onMouseLeave={() => setHoveredIndex(null)}
                         className={`group relative rounded-2xl ${prob.bg} p-4 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
                         spotlightColor="rgba(0,0,0,0.1)"
                       >
+
                         <div className="flex items-start justify-between">
                           <span className="font-display text-[10px] font-black opacity-40">{prob.n}</span>
                           <span className="inline-flex size-5 items-center justify-center rounded-full bg-ink/15 font-black text-ink text-[10px] leading-none">

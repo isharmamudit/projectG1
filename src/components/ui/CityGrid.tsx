@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 /* ─── city data (8 cities, arranged around the 3×3 grid) ─── */
@@ -84,7 +84,7 @@ export function CityGrid() {
 
       {/* ── 3×3 CSS grid ── */}
       <div className="relative grid grid-cols-3 gap-3 auto-rows-[110px]">
-        {slots.map((city, idx) => {
+        {slots.map((city) => {
           if (city === null) {
             /* ── G1 hub ── */
             return (

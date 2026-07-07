@@ -379,7 +379,7 @@ export function VoiceGrid() {
                     <div className="border-t border-border px-5 py-3">
                       <p className="text-xs font-bold text-fg-muted mb-1.5">Sequential questions</p>
                       <div className="flex gap-1.5 flex-wrap">
-                        {QUESTIONS.slice(0, 5).map((q, i) => (
+                        {QUESTIONS.slice(0, 5).map((_, i) => (
                           <button
                             key={i}
                             onClick={() => setActiveQ(i)}

@@ -22,7 +22,6 @@ export function ScrambleText({
   className,
   trigger = 'hover',
   duration = 900,
-  scramblePasses = 8,
 }: ScrambleTextProps) {
   const [display, setDisplay] = useState(text)
   const frameRef = useRef<number | null>(null)
