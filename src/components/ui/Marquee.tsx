@@ -6,7 +6,7 @@ interface MarqueeProps {
   className?: string
 }
 
-/** Units-style scrolling feature band: red strip, yellow chunky type, bolt separators. */
+/** Units-style scrolling feature band: dark strip, amber chunky type, bolt separators. */
 export function Marquee({ items, className }: MarqueeProps) {
   const row = (
     <>
@@ -20,7 +20,7 @@ export function Marquee({ items, className }: MarqueeProps) {
   )
 
   return (
-    <div className={cn('marquee bg-b-red py-3 text-b-yellow sm:py-4', className)} aria-hidden>
+    <div className={cn('marquee bg-ink py-3 text-tint-amber sm:py-4', className)} aria-hidden>
       <div className="marquee-track motion-reduce:animate-none">
         {row}
         {row}
