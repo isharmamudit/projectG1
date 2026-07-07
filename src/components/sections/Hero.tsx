@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/Button'
 import { Parallax } from '@/components/ui/Parallax'
 
 const TILES = [
-  { n: '01', label: 'Chat', href: '#problems', bg: 'bg-b-blue' },
-  { n: '02', label: 'Voice', href: '#voice', bg: 'bg-b-orange' },
-  { n: '03', label: 'Scan', href: '#problems', bg: 'bg-b-red' },
-  { n: '04', label: 'Yoga', href: '#problems', bg: 'bg-b-green' },
-  { n: '05', label: 'Offline', href: '#problems', bg: 'bg-b-purple' },
-  { n: '06', label: 'Memory', href: '#problems', bg: 'bg-b-yellow' },
+  { n: '01', label: 'Chat', href: '#problems', bg: 'bg-b-blue', brief: 'Consult in 12+ dialects' },
+  { n: '02', label: 'Voice', href: '#voice', bg: 'bg-b-orange', brief: 'Get clinical reports' },
+  { n: '03', label: 'Scan', href: '#problems', bg: 'bg-b-red', brief: 'Photo your symptoms' },
+  { n: '04', label: 'Yoga', href: '#problems', bg: 'bg-b-green', brief: 'Posture coaching' },
+  { n: '05', label: 'Offline', href: '#problems', bg: 'bg-b-purple', brief: 'Works without signal' },
+  { n: '06', label: 'Memory', href: '#problems', bg: 'bg-b-yellow', brief: 'Your full history' },
 ]
 
 function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -55,13 +55,16 @@ export function Hero() {
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex flex-col justify-between p-4 h-[105px] rounded-[22px] transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-4 h-[105px] rounded-[22px] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg text-ink ${t.bg} hover:text-white`}
               >
                 <div className="flex justify-between items-start w-full">
-                  <span className="font-display text-xs font-black opacity-55">{t.n}</span>
-                  <ArrowUpRight className="size-4 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
+                  <span className="font-display text-xs font-black opacity-55 transition-colors group-hover:text-white group-hover:opacity-85">{t.n}</span>
+                  <ArrowUpRight className="size-4 opacity-75 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 group-hover:text-white" strokeWidth={2.5} />
                 </div>
-                <span className="text-sm font-black tracking-tight leading-none text-left mb-0.5">{t.label}</span>
+                <div className="flex flex-col text-left">
+                  <span className="text-sm font-black tracking-tight leading-none transition-colors group-hover:text-white">{t.label}</span>
+                  <span className="text-[10px] font-bold text-ink/65 leading-snug mt-1 transition-colors group-hover:text-white/80">{t.brief}</span>
+                </div>
               </a>
             ))}
           </div>
