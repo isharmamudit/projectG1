@@ -70,7 +70,7 @@ const CARDS = [
       'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // joints skeletal dots
       'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=200&q=80', // woman doing yoga lotus pose
       'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=200&q=80', // smartwatch tracking stretch
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&q=80', // points joint grid
+      'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=200&q=80', // yoga posture stretch pose
     ],
   },
   {
