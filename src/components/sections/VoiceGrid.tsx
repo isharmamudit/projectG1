@@ -93,7 +93,7 @@ const FEATURES_DEEP = [
     name: 'Chatbot',
     title: 'Chat in your language. Any dialect.',
     description: 'Hindi, Bhojpuri, Tamil, Hinglish — ask G1 anything in the language you think in. It translates, simplifies medical terms, and responds instantly.',
-    colorClass: 'bg-b-blue',
+    colorClass: 'bg-pastel-blue',
   },
   {
     id: 'voice',
@@ -101,7 +101,7 @@ const FEATURES_DEEP = [
     name: 'Voice AI',
     title: 'Talk to a doctor. Get a report.',
     description: 'Speak your symptoms out loud. G1 walks through 10 sequential clinical questions, compiles a structured doctor report, and schedules next steps.',
-    colorClass: 'bg-b-orange',
+    colorClass: 'bg-pastel-amber',
   },
   {
     id: 'scan',
@@ -109,7 +109,7 @@ const FEATURES_DEEP = [
     name: 'Scan AI',
     title: 'Photo your symptoms. Scan reports.',
     description: 'Photograph skin issues, upload heart scans and X-rays, or scan printed prescriptions. G1 classifies anomalies and formats them for your profile.',
-    colorClass: 'bg-b-red',
+    colorClass: 'bg-pastel-rose',
   },
   {
     id: 'yoga',
@@ -117,7 +117,7 @@ const FEATURES_DEEP = [
     name: 'Yoga Pose',
     title: 'Real-time posture coaching.',
     description: 'Track and correct your form live through your phone camera. G1 evaluates pose coordinates, scores alignment accuracy, and guides hold timers.',
-    colorClass: 'bg-b-green',
+    colorClass: 'bg-pastel-sage',
   },
   {
     id: 'offline',
@@ -125,7 +125,7 @@ const FEATURES_DEEP = [
     name: 'Offline-First',
     title: 'Works entirely without internet.',
     description: 'On-device models search your local medical library, compile offline answers, and sync automatically as soon as a connection is detected.',
-    colorClass: 'bg-b-purple',
+    colorClass: 'bg-pastel-violet',
   },
   {
     id: 'memory',
@@ -133,7 +133,7 @@ const FEATURES_DEEP = [
     name: 'Timeline',
     title: 'Your health history, remembered.',
     description: 'A longitudinal, linked health timeline. Connect symptoms, drug prescriptions, and clinical files across months and years automatically.',
-    colorClass: 'bg-b-yellow',
+    colorClass: 'bg-pastel-teal',
   },
 ]
 
@@ -222,7 +222,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'chat' && (
                 <>
                   {/* BOX 1: Dialect Wheel */}
-                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-b-blue text-ink sm:h-80 p-6">
+                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-pastel-blue text-ink sm:h-80 p-6">
                     <Sparkles className="absolute top-4 right-4 size-5 opacity-40 animate-pulse" />
                     <p className="font-display text-xs tracking-widest uppercase opacity-65 mb-4">Choose Dialect</p>
                     <div className="flex flex-wrap justify-center gap-2 max-w-xs">
@@ -249,16 +249,16 @@ export function VoiceGrid() {
                   {/* BOX 2: Live Translation Feed */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80">
                     <div className="flex items-center gap-2 border-b border-border px-5 py-3">
-                      <MessageSquare className="size-4 text-b-blue" />
+                      <MessageSquare className="size-4 text-tint-blue" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Dialect Engine Feed</span>
                     </div>
                     <div className="flex-1 overflow-hidden px-5 py-4 space-y-3">
                       {CHAT_MOCK.map((line, i) => (
                         <div key={i} className={`flex gap-2 ${line.role === 'ai' ? '' : 'flex-row-reverse'}`}>
-                          <div className={`size-5 shrink-0 rounded-full text-[9px] font-black flex items-center justify-center mt-0.5 ${line.role === 'ai' ? 'bg-accent text-accent-fg' : 'bg-b-blue text-ink'}`}>
+                          <div className={`size-5 shrink-0 rounded-full text-[9px] font-black flex items-center justify-center mt-0.5 ${line.role === 'ai' ? 'bg-accent text-accent-fg' : 'bg-pastel-blue text-ink'}`}>
                             {line.role === 'ai' ? 'G1' : 'U'}
                           </div>
-                          <p className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs font-medium leading-snug ${line.role === 'ai' ? 'bg-surface-2 text-fg-muted' : 'bg-b-blue text-ink'}`}>
+                          <p className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs font-medium leading-snug ${line.role === 'ai' ? 'bg-surface-2 text-fg-muted' : 'bg-pastel-blue text-ink'}`}>
                             {line.text}
                           </p>
                         </div>
@@ -267,7 +267,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3: Standardization Index */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-green text-ink sm:h-80 p-5">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-sage text-ink sm:h-80 p-5">
                     <div className="flex items-center gap-2 pb-3 border-b border-ink/10">
                       <Activity className="size-4" />
                       <span className="font-display text-xs uppercase font-black">Standardization Index</span>
@@ -289,7 +289,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 4: Bottom-Right Trigger View */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-purple p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-violet p-6 text-ink sm:h-80">
                     <span className="font-display text-xs uppercase font-black opacity-60">Integration Layout</span>
                     <p className="text-xs font-medium opacity-70">
                       Expand the dialect selector instantly by tapping the bottom-right bubble on any screen.
@@ -316,7 +316,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'voice' && (
                 <>
                   {/* BOX 1 — AI Orb */}
-                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-b-orange text-ink sm:h-80">
+                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-pastel-amber text-ink sm:h-80">
                     {[80, 120, 160, 200].map((size, i) => (
                       <motion.div
                         key={size}
@@ -353,7 +353,7 @@ export function VoiceGrid() {
                   {/* BOX 2 — Live Transcript */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80">
                     <div className="flex items-center gap-2 border-b border-border px-5 py-3">
-                      <div className="size-2 animate-pulse rounded-full bg-b-green" />
+                      <div className="size-2 animate-pulse rounded-full bg-pastel-sage" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Live Transcript</span>
                     </div>
                     <div className="flex-1 overflow-hidden px-5 py-3 space-y-3">
@@ -366,10 +366,10 @@ export function VoiceGrid() {
                             transition={{ duration: 0.3, delay: i * 0.12 }}
                             className={`flex gap-2 ${line.role === 'ai' ? '' : 'flex-row-reverse'}`}
                           >
-                            <div className={`size-5 shrink-0 rounded-full text-[9px] font-black flex items-center justify-center mt-0.5 ${line.role === 'ai' ? 'bg-accent text-accent-fg' : 'bg-b-orange text-ink'}`}>
+                            <div className={`size-5 shrink-0 rounded-full text-[9px] font-black flex items-center justify-center mt-0.5 ${line.role === 'ai' ? 'bg-accent text-accent-fg' : 'bg-pastel-amber text-ink'}`}>
                               {line.role === 'ai' ? 'G1' : 'U'}
                             </div>
-                            <p className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs font-medium leading-snug ${line.role === 'ai' ? 'bg-surface-2 text-fg-muted' : 'bg-b-orange text-ink'}`}>
+                            <p className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs font-medium leading-snug ${line.role === 'ai' ? 'bg-surface-2 text-fg-muted' : 'bg-pastel-amber text-ink'}`}>
                               {line.text}
                             </p>
                           </motion.div>
@@ -395,7 +395,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3 — Report Generation */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-green text-ink sm:h-80">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-sage text-ink sm:h-80">
                     <div className="flex items-center gap-2 px-5 py-3">
                       <FileText className="size-5" strokeWidth={2.5} />
                       <span className="font-display text-sm uppercase font-black">Doctor Report</span>
@@ -409,10 +409,10 @@ export function VoiceGrid() {
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.35 }}
-                          className={`flex items-start justify-between border-b border-ink/20 pb-2 ${accent ? 'text-b-red' : ''}`}
+                          className={`flex items-start justify-between border-b border-ink/20 pb-2 ${accent ? 'text-pastel-rose' : ''}`}
                         >
                           <span className="text-xs font-bold opacity-70 shrink-0 mr-3">{label}</span>
-                          <span className={`text-xs font-black text-right ${accent ? 'text-b-red font-black' : ''}`}>{value}</span>
+                          <span className={`text-xs font-black text-right ${accent ? 'text-pastel-rose font-black' : ''}`}>{value}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -423,7 +423,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 4 — Actions */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-purple p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-violet p-6 text-ink sm:h-80">
                     <div className="flex items-center gap-2">
                       <Send className="size-5" strokeWidth={2.5} />
                       <span className="font-display text-sm uppercase font-black">Send & Schedule</span>
@@ -453,7 +453,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'scan' && (
                 <>
                   {/* BOX 1: Camera Scan Viewfinder */}
-                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-b-red text-ink sm:h-80 p-6">
+                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-pastel-rose text-ink sm:h-80 p-6">
                     <Camera className="absolute top-4 right-4 size-5 opacity-40" />
                     <div className="relative h-44 w-60 rounded-xl border-2 border-dashed border-ink/40 flex flex-col items-center justify-center overflow-hidden">
                       {/* Scanning Laser Line */}
@@ -473,7 +473,7 @@ export function VoiceGrid() {
                   {/* BOX 2: Detection List */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80 p-5">
                     <div className="flex items-center gap-2 border-b border-border pb-3">
-                      <div className="size-2 rounded-full bg-b-red" />
+                      <div className="size-2 rounded-full bg-pastel-rose" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Model Confidence Output</span>
                     </div>
                     <div className="flex-1 space-y-3 pt-4">
@@ -487,7 +487,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3: Extracted Metadata */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-green text-ink sm:h-80 p-5">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-sage text-ink sm:h-80 p-5">
                     <div className="flex items-center gap-2 pb-3 border-b border-ink/10">
                       <FileText className="size-4" />
                       <span className="font-display text-xs uppercase font-black">Extracted Metadata</span>
@@ -503,13 +503,13 @@ export function VoiceGrid() {
                       </div>
                       <div>
                         <p className="text-[10px] uppercase font-bold opacity-60">Anomaly Check</p>
-                        <p className="text-xs font-black text-b-red">⚠ Potential drug interaction flagged</p>
+                        <p className="text-xs font-black text-pastel-rose">⚠ Potential drug interaction flagged</p>
                       </div>
                     </div>
                   </div>
 
                   {/* BOX 4: Quick Actions */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-purple p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-violet p-6 text-ink sm:h-80">
                     <span className="font-display text-xs uppercase font-black opacity-60">Record Syncing</span>
                     <p className="text-xs font-medium opacity-70">
                       Add the processed scan to your history or share it instantly with the clinic.
@@ -532,7 +532,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'yoga' && (
                 <>
                   {/* BOX 1: Stick Skeleton Viewfinder */}
-                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-b-green text-ink sm:h-80 p-6">
+                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-pastel-sage text-ink sm:h-80 p-6">
                     <Heart className="absolute top-4 right-4 size-5 opacity-40" />
                     <div className="relative h-40 w-44 rounded-full border-4 border-ink/30 flex items-center justify-center bg-ink/5">
                       <svg viewBox="0 0 100 100" className="h-28 w-28 text-ink">
@@ -553,7 +553,7 @@ export function VoiceGrid() {
                   {/* BOX 2: Pose List & Completed Poses */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80 p-5">
                     <div className="flex items-center gap-2 border-b border-border pb-3">
-                      <CheckCircle2 className="size-4 text-b-green" />
+                      <CheckCircle2 className="size-4 text-tint-sage" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Session Routine</span>
                     </div>
                     <div className="flex-1 space-y-3 pt-4">
@@ -561,7 +561,7 @@ export function VoiceGrid() {
                         <div key={pose.name} className="flex justify-between border-b border-border pb-2 items-center">
                           <span className="text-xs font-bold text-fg-muted">{pose.name}</span>
                           <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                            pose.status === 'Done' ? 'bg-b-green text-ink' : pose.status === 'Active' ? 'bg-b-orange text-ink animate-pulse' : 'bg-surface-3 text-fg-subtle'
+                            pose.status === 'Done' ? 'bg-pastel-sage text-ink' : pose.status === 'Active' ? 'bg-pastel-amber text-ink animate-pulse' : 'bg-surface-3 text-fg-subtle'
                           }`}>{pose.status}</span>
                         </div>
                       ))}
@@ -569,7 +569,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3: Feedback Stats */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-orange text-ink sm:h-80 p-5">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-amber text-ink sm:h-80 p-5">
                     <div className="flex items-center gap-2 pb-3 border-b border-ink/10">
                       <TrendingUp className="size-4" />
                       <span className="font-display text-xs uppercase font-black">Live Performance Stats</span>
@@ -585,13 +585,13 @@ export function VoiceGrid() {
                       </div>
                       <div>
                         <p className="text-[10px] uppercase font-bold opacity-60">Hold Timer</p>
-                        <p className="text-xs font-black text-b-red animate-pulse">8s remaining</p>
+                        <p className="text-xs font-black text-pastel-rose animate-pulse">8s remaining</p>
                       </div>
                     </div>
                   </div>
 
                   {/* BOX 4: Coach Settings */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-purple p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-violet p-6 text-ink sm:h-80">
                     <span className="font-display text-xs uppercase font-black opacity-60">Coaching Controls</span>
                     <p className="text-xs font-medium opacity-70">
                       Adjust voice commands or output a posture alignment summary of your daily stretches.
@@ -614,7 +614,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'offline' && (
                 <>
                   {/* BOX 1: Signal strength bars */}
-                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-b-purple text-ink sm:h-80 p-6">
+                  <div className="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-3xl bg-pastel-violet text-ink sm:h-80 p-6">
                     <WifiOff className="absolute top-4 right-4 size-5 opacity-40" />
                     <div className="flex items-end gap-2.5 h-20 mb-6">
                       {[15, 30, 48, 65, 85].map((height, idx) => (
@@ -625,14 +625,14 @@ export function VoiceGrid() {
                         />
                       ))}
                     </div>
-                    <span className="text-sm font-black uppercase text-b-red animate-pulse">No Network Connection</span>
+                    <span className="text-sm font-black uppercase text-pastel-rose animate-pulse">No Network Connection</span>
                     <span className="text-xs font-bold opacity-60 mt-1">Local Processing Enabled</span>
                   </div>
 
                   {/* BOX 2: Local RAG search mock */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80 p-5">
                     <div className="flex items-center gap-2 border-b border-border pb-3">
-                      <Database className="size-4 text-b-purple" />
+                      <Database className="size-4 text-tint-violet" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Local Health Database</span>
                     </div>
                     <div className="flex-1 space-y-3 pt-4">
@@ -648,7 +648,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3: Emergency Card Offline Payload */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-orange text-ink sm:h-80 p-5">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-amber text-ink sm:h-80 p-5">
                     <div className="flex items-center gap-2 pb-3 border-b border-ink/10">
                       <FileText className="size-4" />
                       <span className="font-display text-xs uppercase font-black">Encrypted offline card</span>
@@ -664,7 +664,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 4: Sync control */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-yellow p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-teal p-6 text-ink sm:h-80">
                     <span className="font-display text-xs uppercase font-black opacity-60">Sync Operations</span>
                     <p className="text-xs font-medium opacity-70">
                       All local notes, queries and classifications automatically backup to the cloud once a network signal is recovered.
@@ -683,7 +683,7 @@ export function VoiceGrid() {
               {currentFeature.id === 'memory' && (
                 <>
                   {/* BOX 1: Timeline Map */}
-                  <div className="relative flex h-72 flex-col overflow-hidden rounded-3xl bg-b-yellow text-ink sm:h-80 p-6">
+                  <div className="relative flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-teal text-ink sm:h-80 p-6">
                     <Calendar className="absolute top-4 right-4 size-5 opacity-40" />
                     <p className="font-display text-xs tracking-widest uppercase opacity-65 mb-4">Patient Journey Map</p>
                     <div className="flex-1 flex flex-col justify-between relative pl-4 border-l border-ink/20">
@@ -700,7 +700,7 @@ export function VoiceGrid() {
                   {/* BOX 2: Connected Node Map */}
                   <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-surface border border-border-strong sm:h-80 p-5">
                     <div className="flex items-center gap-2 border-b border-border pb-3">
-                      <Layers className="size-4 text-b-yellow" />
+                      <Layers className="size-4 text-tint-teal" />
                       <span className="text-xs font-bold text-fg-muted uppercase tracking-wider">Connected Symptoms Index</span>
                     </div>
                     <div className="flex-1 space-y-3 pt-4">
@@ -716,7 +716,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 3: Medication Record */}
-                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-b-blue text-ink sm:h-80 p-5">
+                  <div className="flex h-72 flex-col overflow-hidden rounded-3xl bg-pastel-blue text-ink sm:h-80 p-5">
                     <div className="flex items-center gap-2 pb-3 border-b border-ink/10">
                       <Activity className="size-4" />
                       <span className="font-display text-xs uppercase font-black">Medication Tracker</span>
@@ -734,7 +734,7 @@ export function VoiceGrid() {
                   </div>
 
                   {/* BOX 4: Export Options */}
-                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-b-purple p-6 text-ink sm:h-80">
+                  <div className="flex h-72 flex-col gap-3 rounded-3xl bg-pastel-violet p-6 text-ink sm:h-80">
                     <span className="font-display text-xs uppercase font-black opacity-60">Records Integration</span>
                     <p className="text-xs font-medium opacity-70">
                       Unify with official governmental healthcare profiles or print records securely.

@@ -7,27 +7,27 @@ import { Parallax } from '@/components/ui/Parallax'
 import { useLanguage } from '@/lib/language'
 
 const STAT_META = [
-  { to: 800, suffix: 'M+', color: 'text-b-red' },
-  { to: 92, suffix: '%', color: 'text-b-orange' },
-  { to: 12, suffix: 'M+', color: 'text-ink' }, // changed color to ink for dark visibility
+  { to: 800, suffix: 'M+', color: 'text-tint-rose' },
+  { to: 92, suffix: '%', color: 'text-tint-amber' },
+  { to: 12, suffix: 'M+', color: 'text-fg' },
 ]
 
 const PROBLEM_META = [
-  { n: '01', bg: 'bg-b-red' },
-  { n: '02', bg: 'bg-b-orange' },
-  { n: '03', bg: 'bg-b-red' },
-  { n: '04', bg: 'bg-b-orange' },
-  { n: '05', bg: 'bg-b-red' },
-  { n: '06', bg: 'bg-b-orange' },
+  { n: '01', bg: 'bg-tint-rose/12 border border-tint-rose/25' },
+  { n: '02', bg: 'bg-tint-amber/12 border border-tint-amber/25' },
+  { n: '03', bg: 'bg-tint-violet/12 border border-tint-violet/25' },
+  { n: '04', bg: 'bg-tint-blue/12 border border-tint-blue/25' },
+  { n: '05', bg: 'bg-tint-sage/12 border border-tint-sage/25' },
+  { n: '06', bg: 'bg-tint-teal/12 border border-tint-teal/25' },
 ]
 
 const SOLUTION_META = [
-  { n: '01', color: 'bg-b-blue' },
-  { n: '02', color: 'bg-b-orange' },
-  { n: '03', color: 'bg-b-green' },
-  { n: '04', color: 'bg-b-purple' },
-  { n: '05', color: 'bg-b-red' },
-  { n: '06', color: 'bg-b-yellow' },
+  { n: '01', color: 'bg-tint-blue/12 border border-tint-blue/25' },
+  { n: '02', color: 'bg-tint-amber/12 border border-tint-amber/25' },
+  { n: '03', color: 'bg-tint-sage/12 border border-tint-sage/25' },
+  { n: '04', color: 'bg-tint-violet/12 border border-tint-violet/25' },
+  { n: '05', color: 'bg-tint-rose/12 border border-tint-rose/25' },
+  { n: '06', color: 'bg-tint-teal/12 border border-tint-teal/25' },
 ]
 
 export function Problems() {
@@ -79,21 +79,21 @@ export function Problems() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="w-full rounded-3xl bg-b-yellow p-8 sm:p-10 text-ink flex flex-col justify-between min-h-[500px] lg:min-h-[580px] shadow-sm relative overflow-hidden"
+                className="glass-card w-full rounded-3xl bg-tint-teal/10 border border-tint-teal/22 backdrop-blur-xl p-8 sm:p-10 text-fg flex flex-col justify-between min-h-[500px] lg:min-h-[580px] relative overflow-hidden"
               >
                 {/* Top content */}
                 <div>
-                  <span className="inline-block border border-ink rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-6">
+                  <span className="inline-block border border-fg/25 rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-6">
                     {activeTab === 'problems' ? t.problems.tabProblems : t.problems.badgeSolutions}
                   </span>
-                  
+
                   <h2 className="font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-black uppercase leading-[0.9] tracking-tight">
                     {code === 'en' ? (
                       <>
                         What every <br />
                         health app <br />
                         gets{' '}
-                        <ScrambleText text="wrong." trigger="mount" duration={1000} className="text-b-red" />
+                        <ScrambleText text="wrong." trigger="mount" duration={1000} className="text-tint-rose" />
                       </>
                     ) : (
                       t.problems.heading
@@ -106,7 +106,7 @@ export function Problems() {
                 </div>
 
                 {/* Stats Counters Grid inside Left Card */}
-                <div className="grid grid-cols-3 gap-2 mt-auto pt-6 border-t border-ink/10">
+                <div className="grid grid-cols-3 gap-2 mt-auto pt-6 border-t border-fg/10">
                   {STAT_META.map(({ to, suffix, color }, i) => (
                     <div key={i} className="text-left">
                       <p className={`font-display text-xl sm:text-2xl font-black leading-none ${color}`}>
@@ -131,7 +131,7 @@ export function Problems() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="w-full rounded-3xl border border-border-strong p-6 bg-surface-2 flex flex-col items-stretch justify-stretch min-h-[500px] lg:min-h-[580px] overflow-hidden relative"
+                className="glass-card w-full rounded-3xl border border-border backdrop-blur-xl bg-surface/40 p-6 flex flex-col items-stretch justify-stretch min-h-[500px] lg:min-h-[580px] overflow-hidden relative"
               >
 
               {/* Subtle background blueprint grid */}
@@ -156,13 +156,13 @@ export function Problems() {
                     {PROBLEM_META.map(({ n, bg }, i) => (
                       <SpotlightTilt
                         key={n}
-                        className={`group relative rounded-2xl ${bg} p-5 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
-                        spotlightColor="rgba(0,0,0,0.1)"
+                        className={`glass-card group relative rounded-2xl backdrop-blur-xl ${bg} p-5 text-fg flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
+                        spotlightColor="rgba(255,255,255,0.25)"
                       >
 
                         <div className="flex items-start justify-between">
                           <span className="font-display text-[10px] font-black opacity-40">{n}</span>
-                          <span className="inline-flex size-5 items-center justify-center rounded-full bg-ink/15 font-black text-ink text-[10px] leading-none">
+                          <span className="inline-flex size-5 items-center justify-center rounded-full bg-fg/10 font-black text-fg text-[10px] leading-none">
                             ✕
                           </span>
                         </div>
@@ -193,11 +193,11 @@ export function Problems() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.05 }}
                         whileHover={{ y: -3 }}
-                        className={`rounded-2xl ${color} p-5 text-ink flex flex-col justify-between cursor-default`}
+                        className={`glass-card rounded-2xl backdrop-blur-xl ${color} p-5 text-fg flex flex-col justify-between cursor-default`}
                       >
                         <div className="flex items-start justify-between">
                           <span className="font-display text-[10px] font-black opacity-45">{n}</span>
-                          <span className="inline-flex size-5 items-center justify-center rounded-full bg-ink/15 font-black text-ink text-[10px] leading-none">
+                          <span className="inline-flex size-5 items-center justify-center rounded-full bg-fg/10 font-black text-fg text-[10px] leading-none">
                             ✓
                           </span>
                         </div>

@@ -22,9 +22,9 @@ const LANGUAGES = [
 ]
 
 const STATS = [
-  { value: '12+', label: 'Languages & dialects', bg: 'bg-b-purple' },
-  { value: '2G/3G', label: 'Runs on slower networks', bg: 'bg-b-yellow' },
-  { value: '28', label: 'States, one companion', bg: 'bg-b-green' },
+  { value: '12+', label: 'Languages & dialects', bg: 'bg-tint-violet/12 border border-tint-violet/25' },
+  { value: '2G/3G', label: 'Runs on slower networks', bg: 'bg-tint-teal/12 border border-tint-teal/25' },
+  { value: '28', label: 'States, one companion', bg: 'bg-tint-sage/12 border border-tint-sage/25' },
 ]
 
 export function India() {
@@ -47,7 +47,7 @@ export function India() {
         <div className="grid items-stretch gap-4 lg:grid-cols-2">
           <div className="flex">
             <Parallax offset={-25} className="w-full">
-              <SpotlightTilt className="h-full rounded-3xl bg-b-orange p-7 text-ink sm:p-10">
+              <SpotlightTilt className="glass-card h-full rounded-3xl backdrop-blur-xl bg-tint-amber/12 border border-tint-amber/25 p-7 text-fg sm:p-10">
                 <AnimatedTitle
                   lines={[t.india.cardLine1, t.india.cardLine2]}
                   className="!justify-start text-left font-display text-[clamp(2rem,5.5vw,3.75rem)] leading-[0.95] tracking-tight uppercase [&>div]:justify-start"
@@ -73,7 +73,7 @@ export function India() {
             <div className="grid grid-cols-3 gap-4">
               {STATS.map(({ value, label, bg }, i) => (
                 <FadeIn key={label} delay={0.25 + i * 0.08} y={24}>
-                  <div className={`h-full rounded-2xl ${bg} p-4 text-ink transition-transform duration-300 hover:-translate-y-1`}>
+                  <div className={`glass-card h-full rounded-2xl backdrop-blur-xl ${bg} p-4 text-fg transition-transform duration-300 hover:-translate-y-1`}>
                     <p className="font-display text-xl sm:text-3xl">{value}</p>
                     <p className="mt-1 text-[11px] leading-tight font-bold sm:text-xs">{label}</p>
                   </div>

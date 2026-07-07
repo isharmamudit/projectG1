@@ -14,6 +14,27 @@
   --color-ink: #0b0b0b;
   --color-paper: #f4efe7;
 
+  /* Muted glass tints: soothing hue set for card washes, replacing the flat
+     saturated blocks above. Same six slots (blue/amber/rose/sage/violet/teal)
+     so existing per-card color assignments map over 1:1. */
+  --color-tint-blue: var(--tint-blue);
+  --color-tint-amber: var(--tint-amber);
+  --color-tint-rose: var(--tint-rose);
+  --color-tint-sage: var(--tint-sage);
+  --color-tint-violet: var(--tint-violet);
+  --color-tint-teal: var(--tint-teal);
+
+  /* Theme-invariant pastel set, for self-contained "device screen" mockups
+     (VoiceGrid) that need to stay legible with fixed dark ink text
+     regardless of the page's light/dark mode -- same soothing hue family,
+     just always light, like --color-paper/--color-ink already are. */
+  --color-pastel-blue: #d3e0f4;
+  --color-pastel-amber: #f2ddb8;
+  --color-pastel-rose: #f3d6da;
+  --color-pastel-sage: #d3e9db;
+  --color-pastel-violet: #ddd7f0;
+  --color-pastel-teal: #cbe9e6;
+
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -63,6 +84,13 @@
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-highlight: rgba(255, 255, 255, 0.8);
 
+  --tint-blue: #3d6fb4;
+  --tint-amber: #b9812f;
+  --tint-rose: #b85c6e;
+  --tint-sage: #4c8c68;
+  --tint-violet: #7a6cbf;
+  --tint-teal: #16807c;
+
   color-scheme: light;
 }
 
@@ -85,6 +113,13 @@
   --glass-bg: rgba(16, 22, 26, 0.45);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-highlight: rgba(255, 255, 255, 0.14);
+
+  --tint-blue: #7aa8e8;
+  --tint-amber: #e0a855;
+  --tint-rose: #e0899a;
+  --tint-sage: #7fca9e;
+  --tint-violet: #ab9fe8;
+  --tint-teal: #4dd0c7;
 
   color-scheme: dark;
 }
@@ -157,6 +192,41 @@
     mask-composite: exclude;
     pointer-events: none;
     opacity: 0.5;
+  }
+
+  /*
+    Frosted card surface: pair with a Tailwind bg-tint-*/NN + border-tint-*/NN
+    at the call site for the color wash. This class only supplies the blur,
+    soft shadow, and the same gradient-highlight edge as .glass, so every
+    tinted card reads as one consistent glass material.
+  */
+  .glass-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.25);
+  }
+
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      160deg,
+      var(--color-glass-highlight) 0%,
+      transparent 45%,
+      transparent 60%,
+      var(--color-glass-highlight) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.4;
   }
 }
 

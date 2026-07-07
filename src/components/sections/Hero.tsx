@@ -9,12 +9,12 @@ import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
 
 const TILES = [
-  { n: '01', label: 'Chat', href: '#problems', bg: 'bg-b-blue', brief: 'Consult in 12+ dialects' },
-  { n: '02', label: 'Voice', href: '#voice', bg: 'bg-b-orange', brief: 'Get clinical reports' },
-  { n: '03', label: 'Yoga', href: '#problems', bg: 'bg-b-green', brief: 'Posture coaching' },
-  { n: '04', label: 'Offline', href: '#problems', bg: 'bg-b-purple', brief: 'Works without signal' },
-  { n: '05', label: 'Memory', href: '#problems', bg: 'bg-b-yellow', brief: 'Your full history' },
-  { n: '06', label: 'Scan', href: '#problems', bg: 'bg-b-red', brief: 'Photo your symptoms' },
+  { n: '01', label: 'Chat', href: '#problems', bg: 'bg-tint-blue/12 border border-tint-blue/25', brief: 'Consult in 12+ dialects' },
+  { n: '02', label: 'Voice', href: '#voice', bg: 'bg-tint-amber/12 border border-tint-amber/25', brief: 'Get clinical reports' },
+  { n: '03', label: 'Yoga', href: '#problems', bg: 'bg-tint-sage/12 border border-tint-sage/25', brief: 'Posture coaching' },
+  { n: '04', label: 'Offline', href: '#problems', bg: 'bg-tint-violet/12 border border-tint-violet/25', brief: 'Works without signal' },
+  { n: '05', label: 'Memory', href: '#problems', bg: 'bg-tint-teal/12 border border-tint-teal/25', brief: 'Your full history' },
+  { n: '06', label: 'Scan', href: '#problems', bg: 'bg-tint-rose/12 border border-tint-rose/25', brief: 'Photo your symptoms' },
 ]
 
 // One slide per sidebar tile — image, headline and subtitle rotate together.
@@ -114,15 +114,15 @@ export function Hero() {
                 href={tile.href}
                 onClick={(e) => handleScrollTo(e, tile.href)}
                 onMouseEnter={() => setActive(i)}
-                className={`group flex flex-col justify-between p-4 h-[105px] rounded-[22px] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg text-ink ${tile.bg} hover:text-white`}
+                className={`glass-card group flex flex-col justify-between p-4 h-[105px] rounded-[22px] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg text-fg ${tile.bg}`}
               >
                 <div className="flex justify-between items-start w-full">
-                  <span className="font-display text-xs font-black opacity-55 transition-colors group-hover:text-white group-hover:opacity-85">{tile.n}</span>
-                  <ArrowUpRight className="size-4 opacity-75 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 group-hover:text-white" strokeWidth={2.5} />
+                  <span className="font-display text-xs font-black opacity-50">{tile.n}</span>
+                  <ArrowUpRight className="size-4 opacity-70 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" strokeWidth={2.5} />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="text-sm font-black tracking-tight leading-none transition-colors group-hover:text-white">{tile.label}</span>
-                  <span className="text-[10px] font-bold text-ink/65 leading-snug mt-1 transition-colors group-hover:text-white/80">{tile.brief}</span>
+                  <span className="text-sm font-black tracking-tight leading-none">{tile.label}</span>
+                  <span className="text-[10px] font-bold text-fg-muted leading-snug mt-1">{tile.brief}</span>
                 </div>
               </a>
             ))}
@@ -253,7 +253,7 @@ export function Hero() {
               key={tile.n}
               href={tile.href}
               onClick={(e) => handleScrollTo(e, tile.href)}
-              className={`group flex flex-col justify-between p-4 rounded-2xl border border-ink/5 text-ink min-h-[96px] transition-transform active:scale-[0.98] ${tile.bg}`}
+              className={`glass-card group flex flex-col justify-between p-4 rounded-2xl backdrop-blur-xl text-fg min-h-[96px] transition-transform active:scale-[0.98] ${tile.bg}`}
             >
               <div className="flex justify-between items-start">
                 <span className="font-display text-sm font-black opacity-55">{tile.n}</span>

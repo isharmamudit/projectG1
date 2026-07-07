@@ -7,13 +7,13 @@ import { CursorImageTrail } from '@/components/ui/CursorImageTrail'
 const CARDS = [
   {
     n: '01',
-    bg: 'bg-b-blue',
+    bg: 'bg-tint-blue/12 border border-tint-blue/25',
     title: 'Chat',
     sub: 'In your language, your dialect',
     body: 'Hindi, Bhojpuri, Tamil, Hinglish — ask G1 anything in the language you think in. Expands from the bottom right corner.',
     tag: 'Language',
     pixel: PIXEL.chat,
-    pixelFill: 'var(--color-b-green)',
+    pixelFill: 'var(--color-tint-blue)',
     images: [
       'https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=200&q=80', // friendly robot chatbot mascot
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // human facing machine colorful abstract
@@ -24,13 +24,13 @@ const CARDS = [
   },
   {
     n: '02',
-    bg: 'bg-b-orange',
+    bg: 'bg-tint-amber/12 border border-tint-amber/25',
     title: 'Voice',
     sub: 'Talk — get a doctor report',
     body: 'Speak your symptoms out loud. G1 asks 10 clinical questions, generates a structured report, and sends it to your doctor.',
     tag: 'Consultation',
     pixel: PIXEL.mic,
-    pixelFill: 'var(--color-b-red)',
+    pixelFill: 'var(--color-tint-rose)',
     images: [
       'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=200&q=80', // microphone on stand
       'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=200&q=80', // sound waves mixer
@@ -41,13 +41,13 @@ const CARDS = [
   },
   {
     n: '03',
-    bg: 'bg-b-green',
+    bg: 'bg-tint-sage/12 border border-tint-sage/25',
     title: 'Scan',
     sub: 'Photo your symptoms',
     body: 'Photograph a rash, burn, hair issue or upload an X-ray. G1 reads it and flags what needs attention.',
     tag: 'Visual AI',
     pixel: PIXEL.camera,
-    pixelFill: 'var(--color-b-yellow)',
+    pixelFill: 'var(--color-tint-teal)',
     images: [
       'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=200&q=80', // futuristic iris scanner
       'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80', // brain CT/MRI scans list
@@ -58,13 +58,13 @@ const CARDS = [
   },
   {
     n: '04',
-    bg: 'bg-b-purple',
+    bg: 'bg-tint-violet/12 border border-tint-violet/25',
     title: 'Yoga',
     sub: 'Real-time posture coaching',
     body: 'Hold a pose in front of your camera. G1 watches your form in real time and tells you when to move to the next.',
     tag: 'Movement',
     pixel: PIXEL.heart,
-    pixelFill: 'var(--color-b-red)',
+    pixelFill: 'var(--color-tint-rose)',
     images: [
       'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=200&q=80', // robot doing yoga
       'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=200&q=80', // yoga pose balance calibration
@@ -75,13 +75,13 @@ const CARDS = [
   },
   {
     n: '05',
-    bg: 'bg-b-yellow',
+    bg: 'bg-tint-teal/12 border border-tint-teal/25',
     title: 'Offline',
     sub: 'Works without internet',
     body: 'Blood group, allergies, current medications — all instantly accessible even without a signal, on any phone.',
     tag: 'Access',
     pixel: PIXEL.bolt,
-    pixelFill: 'var(--color-b-red)',
+    pixelFill: 'var(--color-tint-rose)',
     images: [
       'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=200&q=80', // red warning sign offline
       'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=200&q=80', // rural village pathway
@@ -92,13 +92,13 @@ const CARDS = [
   },
   {
     n: '06',
-    bg: 'bg-b-red',
+    bg: 'bg-tint-rose/12 border border-tint-rose/25',
     title: 'Memory',
     sub: 'Your health, remembered',
     body: 'Every report, symptom, medicine and doctor visit — linked across time so your full story is ready at every appointment.',
     tag: 'Record',
     pixel: PIXEL.heart,
-    pixelFill: 'var(--color-b-yellow)',
+    pixelFill: 'var(--color-tint-amber)',
     images: [
       'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=200&q=80', // glowing blue brain network lobes
       'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // LLM memory cortex data nodes
@@ -179,14 +179,14 @@ export function HorizontalScroll() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.55, delay: i * 0.05 }}
                 className={cn(
-                  'relative flex-1 flex flex-col justify-between p-7 text-ink spotlight w-full h-full',
+                  'glass-card relative flex-1 flex flex-col justify-between p-7 text-fg spotlight backdrop-blur-xl w-full h-full',
                   bg,
                 )}
                 style={{ '--spotlight-color': 'rgba(255,255,255,0.25)' } as React.CSSProperties}
               >
                 {/* Pixel icon */}
                 <div className="absolute top-6 right-6 w-28 opacity-80">
-                  <PixelIcon pattern={pixel} fill={pixelFill} className="w-full text-ink/20" />
+                  <PixelIcon pattern={pixel} fill={pixelFill} className="w-full text-fg/15" />
                 </div>
 
                 {/* Watermark number */}
@@ -199,7 +199,7 @@ export function HorizontalScroll() {
 
                 {/* Top badge */}
                 <div className="flex items-start">
-                  <span className="inline-flex items-center rounded-full border border-ink/30 px-3 py-1 text-[11px] font-black uppercase tracking-widest">
+                  <span className="inline-flex items-center rounded-full border border-fg/25 px-3 py-1 text-[11px] font-black uppercase tracking-widest">
                     {tag}
                   </span>
                 </div>
