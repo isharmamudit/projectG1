@@ -15,14 +15,14 @@ import { Trust } from '@/components/sections/Trust'
 import { CTA } from '@/components/sections/CTA'
 
 const FEATURES = [
-  'Multilingual Chatbot · Gemini',
-  'Voice AI · Vapi · 11labs',
-  'Image Classification · CV',
-  'Yoga Pose Estimator · YOLO',
-  'Local RAG · Ollama',
-  'Living Health Record',
-  '12+ Indian dialects',
-  'Doctor report generation',
+  'Chat in 12+ Indian languages',
+  'Talk to G1 — get a doctor report',
+  'Scan symptoms with your camera',
+  'Real-time yoga coaching',
+  'Works without internet',
+  'Your full health history, one place',
+  'Speaks Hindi, Tamil, Bhojpuri & more',
+  'Send reports directly to your doctor',
 ]
 
 function App() {

@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react'
+
 
 // Scattered accent cells on the blueprint grid, Units-footer style.
 const CELLS = [
@@ -13,29 +13,6 @@ export function Footer() {
   return (
     <footer className="px-4 pt-8 pb-8 sm:px-8">
       <div className="mx-auto max-w-6xl">
-        {/* Newsletter row */}
-        <form
-          className="flex flex-col gap-3 sm:flex-row"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <span className="flex items-center justify-center rounded-full bg-b-red px-8 py-4 font-display text-base whitespace-nowrap text-paper uppercase sm:text-lg">
-            Join our newsletter
-          </span>
-          <input
-            type="email"
-            required
-            placeholder="Your email here"
-            aria-label="Email address"
-            className="min-w-0 flex-1 rounded-full bg-b-yellow px-8 py-4 text-center font-bold text-ink placeholder:text-ink/60 focus:outline-2 focus:outline-offset-2 focus:outline-accent"
-          />
-          <button
-            type="submit"
-            aria-label="Subscribe"
-            className="group flex items-center justify-center rounded-2xl bg-ink px-8 py-4 text-paper transition-transform hover:scale-105 sm:rounded-3xl"
-          >
-            <ArrowUpRight className="size-7 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
-          </button>
-        </form>
 
         {/* Giant wordmark on blueprint grid */}
         <div className="grid-paper relative mt-6 overflow-hidden rounded-3xl border border-border-strong">

@@ -1,34 +1,37 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Moon, Sun, HeartPulse } from 'lucide-react'
+import { HeartPulse } from 'lucide-react'
 import { useTheme } from '@/lib/theme'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { label: 'Memory', href: '#memory' },
-  { label: 'Capabilities', href: '#capabilities' },
-  { label: 'India', href: '#india' },
-  { label: 'Trust', href: '#trust' },
+  { label: 'Why G1',   href: '#problems' },
+  { label: 'Features', href: '#voice' },
+  { label: 'India',    href: '#india' },
+  { label: 'Trust',    href: '#trust' },
 ]
 
-/** Floating glass pill nav: hides on scroll down, reappears on scroll up (Zentry Navbar pattern). */
+function scrollTo(selector: string, setVisible: (v: boolean) => void) {
+  const el = document.querySelector(selector)
+  if (!el) return
+  const y = el.getBoundingClientRect().top + window.scrollY - 88
+  window.scrollTo({ top: y, behavior: 'smooth' })
+  setVisible(true)
+}
+
 export function Navbar() {
   const { theme, toggleTheme } = useTheme()
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible]   = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const lastY = useRef(0)
 
   useEffect(() => {
     function onScroll() {
       const y = window.scrollY
-      setScrolled(y > 8)
-      if (y < 80) {
-        setVisible(true)
-      } else if (y > lastY.current) {
-        setVisible(false)
-      } else {
-        setVisible(true)
-      }
+      setScrolled(y > 20)
+      if (y < 80)              setVisible(true)
+      else if (y > lastY.current + 8) setVisible(false)   // scrolling DOWN  → hide
+      else if (y < lastY.current - 4) setVisible(true)    // scrolling UP    → show
       lastY.current = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -37,42 +40,54 @@ export function Navbar() {
 
   return (
     <motion.header
-      animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
-      className="fixed inset-x-0 top-4 z-50 sm:top-5"
+      animate={{ y: visible ? 0 : -110, opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <nav
+      <div
         className={cn(
-          'relative mx-auto flex max-w-3xl items-center justify-between gap-4 rounded-full px-4 py-2.5 transition-colors sm:px-6',
-          scrolled ? 'glass shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)]' : 'bg-transparent',
+          'mx-auto mt-4 flex max-w-5xl items-center justify-between rounded-2xl px-5 py-3 transition-all duration-300',
+          scrolled
+            ? 'bg-paper/80 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.18)] backdrop-blur-xl border border-border'
+            : 'bg-paper border border-border',
         )}
       >
-        <a href="#top" className="flex items-center gap-2 text-fg">
+        {/* Logo */}
+        <button
+          type="button"
+          onClick={() => scrollTo('#top', setVisible)}
+          className="flex items-center gap-2 text-fg"
+        >
           <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
-          <span className="font-display text-lg leading-none tracking-tight">projectG1.</span>
-        </a>
+          <span className="font-display text-[17px] font-black leading-none tracking-tight">
+            projectG1<span className="text-accent">.</span>
+          </span>
+        </button>
 
-        <div className="hidden items-center gap-6 md:flex">
+        {/* Nav links */}
+        <nav className="hidden items-center gap-1 md:flex">
           {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-fg-muted transition-colors hover:text-fg"
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => scrollTo(item.href, setVisible)}
+              className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
             >
               {item.label}
-            </a>
+            </button>
           ))}
-        </div>
+        </nav>
 
+        {/* Theme toggle */}
         <button
           type="button"
           onClick={toggleTheme}
           aria-label="Toggle color theme"
-          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border text-fg transition-colors hover:bg-surface-2"
+          className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
         >
-          {theme === 'light' ? <Moon className="size-4" /> : <Sun className="size-4" />}
+          <span className="text-base leading-none">{theme === 'light' ? '🌙' : '☀️'}</span>
         </button>
-      </nav>
+      </div>
     </motion.header>
   )
 }

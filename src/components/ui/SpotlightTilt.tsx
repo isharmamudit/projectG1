@@ -5,6 +5,7 @@ interface SpotlightTiltProps {
   children: ReactNode
   className?: string
   spotlightColor?: string
+  onClick?: () => void
 }
 
 /**
@@ -12,7 +13,7 @@ interface SpotlightTiltProps {
  * (Zentry) plus SpotlightCard's cursor-tracking radial highlight (React
  * Bits). Merged so a card doesn't pay for two mousemove listeners.
  */
-export function SpotlightTilt({ children, className, spotlightColor = 'rgba(255,255,255,0.35)' }: SpotlightTiltProps) {
+export function SpotlightTilt({ children, className, spotlightColor = 'rgba(255,255,255,0.35)', onClick }: SpotlightTiltProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [transform, setTransform] = useState('')
 
@@ -36,6 +37,7 @@ export function SpotlightTilt({ children, className, spotlightColor = 'rgba(255,
       style={{ transform }}
       onMouseMove={onMouseMove}
       onMouseLeave={() => setTransform('')}
+      onClick={onClick}
       className={cn('spotlight transition-transform duration-200 ease-out will-change-transform', className)}
     >
       {children}
