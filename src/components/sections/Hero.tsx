@@ -1,10 +1,19 @@
 import { useState } from 'react'
-import { ArrowUpRight, Plus, MessageCircle, Share2, Globe2, ArrowRight } from 'lucide-react'
+import { ArrowUpRight, Plus, MessageCircle, Share2, Globe2, ArrowRight, HeartPulse } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { CountUp } from '@/components/ui/CountUp'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useLanguage } from '@/lib/language'
+import { useTheme } from '@/lib/theme'
+
+const NAV_ITEMS = [
+  { label: 'Why G1', href: '#problems' },
+  { label: 'Features', href: '#voice' },
+  { label: 'India', href: '#india' },
+  { label: 'Trust', href: '#trust' },
+]
 
 const TILES = [
   { n: '01', label: 'Chat', href: '#problems', bg: 'bg-tint-blue/12 border border-tint-blue/25', brief: 'Consult in 12+ dialects' },
@@ -42,10 +51,51 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 
 export function Hero() {
   const { t } = useLanguage()
+  const { theme, toggleTheme } = useTheme()
   const [email, setEmail] = useState('')
 
   return (
-    <section id="top" className="relative w-full overflow-hidden px-4 pt-16 pb-20 sm:px-6 md:pt-8">
+    <section id="top" className="relative w-full overflow-hidden px-4 pt-24 pb-20 sm:px-6 md:pt-6">
+
+      {/* In-page navbar: desktop only — the global Navbar already stays permanently visible on mobile,
+          but auto-hides until scroll on desktop, so the hero needs its own static one there. */}
+      <FadeIn className="mx-auto mb-14 hidden max-w-6xl items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
+        <a
+          href="#top"
+          onClick={(e) => handleScrollTo(e, '#top')}
+          className="flex items-center gap-2 text-fg"
+        >
+          <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
+          <span className="font-display text-[17px] font-black leading-none tracking-tight">
+            projectG1<span className="text-accent">.</span>
+          </span>
+        </a>
+
+        <nav className="hidden items-center gap-1 md:flex">
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={(e) => handleScrollTo(e, item.href)}
+              className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
+            >
+              {t.navItems[item.label] ?? item.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex shrink-0 items-center gap-2">
+          <LanguageSwitcher variant="icon" drop="down" />
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle color theme"
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
+          >
+            <span className="text-base leading-none">{theme === 'light' ? '🌙' : '☀️'}</span>
+          </button>
+        </div>
+      </FadeIn>
 
       {/* Headline block */}
       <div className="relative mx-auto flex max-w-4xl flex-col items-center px-2 text-center">
