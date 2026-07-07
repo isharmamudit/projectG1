@@ -1,4 +1,4 @@
-
+import { useLanguage } from '@/lib/language'
 
 // Scattered accent cells on the blueprint grid, Units-footer style.
 const CELLS = [
@@ -10,6 +10,8 @@ const CELLS = [
 ]
 
 export function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="px-4 pt-8 pb-8 sm:px-8">
       <div className="mx-auto max-w-6xl">
@@ -31,8 +33,8 @@ export function Footer() {
 
         {/* Legal line */}
         <div className="mt-6 flex flex-col gap-4 pr-20 text-xs font-medium text-fg-muted sm:flex-row sm:items-center sm:justify-between sm:pr-0">
-          <p className="font-bold text-fg">© {new Date().getFullYear()} ProjectG1. Made for India.</p>
-          <p>Not a substitute for professional medical advice.</p>
+          <p className="font-bold text-fg">© {new Date().getFullYear()} ProjectG1. {t.footer.tagline}</p>
+          <p>{t.footer.disclaimer}</p>
           <div className="flex gap-2">
             {['FAQs', 'Privacy Policy', 'Data & Consent'].map((l) => (
               <a

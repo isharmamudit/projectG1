@@ -2,6 +2,7 @@ import { AnimatedTitle } from '@/components/ui/AnimatedTitle'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { SpotlightTilt } from '@/components/ui/SpotlightTilt'
 import { PixelIcon, PIXEL } from '@/components/ui/PixelIcon'
+import { useLanguage } from '@/lib/language'
 
 const CARDS = [
   {
@@ -25,12 +26,14 @@ const CARDS = [
 ]
 
 export function Trust() {
+  const { t } = useLanguage()
+
   return (
     <section id="trust" className="px-4 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-between">
           <AnimatedTitle
-            lines={['Trust, built in —', 'not bolted on.']}
+            lines={[t.trust.line1, t.trust.line2]}
             className="text-center font-display text-[clamp(2rem,6vw,4.5rem)] leading-[0.95] tracking-tight text-fg uppercase lg:text-left lg:[&>div]:justify-start"
           />
           <FadeIn delay={0.2} className="hidden w-32 shrink-0 lg:block">

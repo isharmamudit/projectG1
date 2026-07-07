@@ -86,8 +86,8 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80"
-              alt="Vernacular G1 AI Health consultation"
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80"
+              alt="Community health consultation in India"
               className="w-full h-full object-cover select-none brightness-[0.88]"
             />
           </Parallax>

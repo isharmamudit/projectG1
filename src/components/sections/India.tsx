@@ -4,6 +4,7 @@ import { SplitFlap } from '@/components/ui/SplitFlap'
 import { CityGrid } from '@/components/ui/CityGrid'
 import { SpotlightTilt } from '@/components/ui/SpotlightTilt'
 import { Parallax } from '@/components/ui/Parallax'
+import { useLanguage } from '@/lib/language'
 
 const LANGUAGES = [
   'HINDI',
@@ -27,17 +28,19 @@ const STATS = [
 ]
 
 export function India() {
+  const { t } = useLanguage()
+
   return (
     <section id="india" className="overflow-hidden px-4 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-6xl">
-        
+
         {/* Section Header */}
         <div className="text-center mb-14">
           <p className="text-xs font-semibold tracking-[0.25em] text-fg-muted uppercase sm:text-sm">
-            Regional Access
+            {t.india.eyebrow}
           </p>
           <h2 className="mt-4 font-display text-[clamp(2rem,7vw,4.5rem)] leading-[0.95] tracking-tight text-fg uppercase">
-            No household left behind.
+            {t.india.heading}
           </h2>
         </div>
 
@@ -46,14 +49,13 @@ export function India() {
             <Parallax offset={-25} className="w-full">
               <SpotlightTilt className="h-full rounded-3xl bg-b-orange p-7 text-ink sm:p-10">
                 <AnimatedTitle
-                  lines={['Every corner', 'of India.']}
+                  lines={[t.india.cardLine1, t.india.cardLine2]}
                   className="!justify-start text-left font-display text-[clamp(2rem,5.5vw,3.75rem)] leading-[0.95] tracking-tight uppercase [&>div]:justify-start"
                 />
                 <p className="mt-6 max-w-md text-sm font-medium opacity-80 sm:text-base">
-                  Built for the semi-urban and rural households most health apps design around, not for. Low
-                  bandwidth, modest phones, and a dialect that isn&apos;t English — all assumed from day one.
+                  {t.india.cardBody}
                 </p>
-                <p className="mt-10 mb-3 font-display text-xs tracking-widest uppercase">Ask G1 in</p>
+                <p className="mt-10 mb-3 font-display text-xs tracking-widest uppercase">{t.india.askIn}</p>
                 <SplitFlap words={LANGUAGES} />
               </SpotlightTilt>
             </Parallax>

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { HeartPulse } from 'lucide-react'
 import { useTheme } from '@/lib/theme'
+import { useLanguage } from '@/lib/language'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
@@ -21,6 +23,7 @@ function scrollTo(selector: string, setVisible: (v: boolean) => void) {
 
 export function Navbar() {
   const { theme, toggleTheme } = useTheme()
+  const { t } = useLanguage()
   const [visible, setVisible]   = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const lastY = useRef(0)
@@ -86,20 +89,24 @@ export function Navbar() {
               onClick={() => scrollTo(item.href, setVisible)}
               className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
             >
-              {item.label}
+              {t.navItems[item.label] ?? item.label}
             </button>
           ))}
         </nav>
 
-        {/* Theme toggle */}
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label="Toggle color theme"
-          className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
-        >
-          <span className="text-base leading-none">{theme === 'light' ? '🌙' : '☀️'}</span>
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <LanguageSwitcher variant="icon" drop="down" />
+
+          {/* Theme toggle */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle color theme"
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
+          >
+            <span className="text-base leading-none">{theme === 'light' ? '🌙' : '☀️'}</span>
+          </button>
+        </div>
       </div>
     </motion.header>
   )

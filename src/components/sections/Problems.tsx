@@ -4,6 +4,7 @@ import { SpotlightTilt } from '@/components/ui/SpotlightTilt'
 import { ScrambleText } from '@/components/ui/ScrambleText'
 import { CountUp } from '@/components/ui/CountUp'
 import { Parallax } from '@/components/ui/Parallax'
+import { useLanguage } from '@/lib/language'
 
 const STATS = [
   { to: 800, suffix: 'M+', label: 'Underserved Indians', color: 'text-b-red' },
@@ -31,6 +32,7 @@ const SOLUTIONS = [
 
 export function Problems() {
   const [activeTab, setActiveTab] = useState<'problems' | 'solutions'>('problems')
+  const { code, t } = useLanguage()
 
   return (
     <section id="problems" className="overflow-hidden px-4 py-24 sm:px-8 sm:py-32">
@@ -39,7 +41,7 @@ export function Problems() {
         {/* Centered Segmented Control Toggle above columns */}
         <div className="mb-8 flex flex-col items-center justify-center gap-3">
           <p className="text-[10px] font-black uppercase tracking-[0.25em] text-fg-muted">
-            Explore what's
+            {t.problems.eyebrow}
           </p>
           <div className="inline-flex rounded-full bg-surface border border-border-strong p-1 shadow-sm">
             <button
@@ -50,7 +52,7 @@ export function Problems() {
                   : 'text-fg-muted hover:text-fg'
               }`}
             >
-              Competitor Gaps
+              {t.problems.tabProblems}
             </button>
             <button
               onClick={() => setActiveTab('solutions')}
@@ -60,7 +62,7 @@ export function Problems() {
                   : 'text-fg-muted hover:text-fg'
               }`}
             >
-              G1 Solutions
+              {t.problems.tabSolutions}
             </button>
           </div>
         </div>
@@ -86,20 +88,20 @@ export function Problems() {
                   </span>
                   
                   <h2 className="font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-black uppercase leading-[0.9] tracking-tight">
-                    What every <br />
-                    health app <br />
-                    gets{' '}
-                    <ScrambleText
-                      text="wrong."
-                      trigger="mount"
-                      duration={1000}
-                      className="text-b-red"
-                    />
+                    {code === 'en' ? (
+                      <>
+                        What every <br />
+                        health app <br />
+                        gets{' '}
+                        <ScrambleText text="wrong." trigger="mount" duration={1000} className="text-b-red" />
+                      </>
+                    ) : (
+                      t.problems.heading
+                    )}
                   </h2>
 
                   <p className="mt-6 text-xs sm:text-sm font-semibold opacity-85 leading-relaxed max-w-md">
-                    Existing apps were built for English-speaking, urban, tech-fluent users. 
-                    ProjectG1 was built for everyone else. Compare competitor failures to G1 answers.
+                    {t.problems.subhead}
                   </p>
                 </div>
 

@@ -1,7 +1,10 @@
 import { ArrowUpRight, ArrowDown } from 'lucide-react'
 import { FadeIn } from '@/components/ui/FadeIn'
+import { useLanguage } from '@/lib/language'
 
 export function CTA() {
+  const { t } = useLanguage()
+
   return (
     <section className="px-4 pb-8 sm:px-8">
       <FadeIn>
@@ -11,7 +14,7 @@ export function CTA() {
         >
           <ArrowDown className="hidden size-7 text-b-yellow transition-transform duration-300 group-hover:translate-y-1 sm:block" strokeWidth={2.5} />
           <span className="text-center font-display text-[clamp(1.25rem,4vw,2.75rem)] leading-none tracking-tight uppercase">
-            Start your health story
+            {t.ctaText}
           </span>
           <ArrowUpRight
             className="size-7 shrink-0 text-b-yellow transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 sm:size-10"
