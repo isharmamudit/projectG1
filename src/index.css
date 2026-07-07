@@ -195,38 +195,48 @@
   }
 
   /*
-    Frosted card surface: pair with a Tailwind bg-tint-*/NN + border-tint-*/NN
+    Frosted card surface: pair with a Tailwind bg-tint-{hue}/NN + border-tint-{hue}/NN
     at the call site for the color wash. This class only supplies the blur,
-    soft shadow, and the same gradient-highlight edge as .glass, so every
-    tinted card reads as one consistent glass material.
+    layered depth (drop shadow + inset sheen), and crisp top/left highlight
+    lines, so every tinted card reads as one consistent glass material.
   */
   .glass-card {
     position: relative;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.25);
+    box-shadow:
+      0 24px 48px -28px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 var(--color-glass-highlight),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.04);
   }
 
+  /* Crisp top-edge highlight line, like light catching the top rim of glass. */
   .glass-card::before {
     content: "";
     position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
+    inset: 0 0 auto 0;
+    height: 1px;
     background: linear-gradient(
-      160deg,
-      var(--color-glass-highlight) 0%,
-      transparent 45%,
-      transparent 60%,
-      var(--color-glass-highlight) 100%
+      90deg,
+      transparent,
+      var(--color-glass-highlight),
+      transparent
     );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.4;
+  }
+
+  /* Softer left-edge highlight line, fading down the side. */
+  .glass-card::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      var(--color-glass-highlight),
+      transparent 60%
+    );
+    pointer-events: none;
   }
 }
 
