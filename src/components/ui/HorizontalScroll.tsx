@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { PixelIcon, PIXEL } from '@/components/ui/PixelIcon'
@@ -115,12 +115,35 @@ const CARDS = [
 /** Units.-style horizontal scroll: vertical scroll drives translateX strip */
 export function HorizontalScroll() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [distance, setDistance] = useState(0)
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-72%'])
+  // The track shifts by its actual overflow in pixels, not a fixed percentage
+  // of its own width — a fixed percent covers a very different number of
+  // cards depending on how wide each card is relative to the viewport
+  // (84vw on mobile vs 490px on desktop).
+  useEffect(() => {
+    function measure() {
+      if (trackRef.current) {
+        setDistance(trackRef.current.scrollWidth - window.innerWidth)
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    const ro = new ResizeObserver(measure)
+    if (trackRef.current) ro.observe(trackRef.current)
+    return () => {
+      window.removeEventListener('resize', measure)
+      ro.disconnect()
+    }
+  }, [])
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, -distance])
 
   return (
     <div ref={containerRef} className="relative" style={{ height: `${CARDS.length * 110}vh` }}>
@@ -136,6 +159,7 @@ export function HorizontalScroll() {
 
         {/* Horizontal track */}
         <motion.div
+          ref={trackRef}
           style={{ x }}
           className="flex gap-4 pl-4 sm:pl-8 will-change-transform"
         >

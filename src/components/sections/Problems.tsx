@@ -6,28 +6,28 @@ import { CountUp } from '@/components/ui/CountUp'
 import { Parallax } from '@/components/ui/Parallax'
 import { useLanguage } from '@/lib/language'
 
-const STATS = [
-  { to: 800, suffix: 'M+', label: 'Underserved Indians', color: 'text-b-red' },
-  { to: 92, suffix: '%', label: 'Excluded Dialects', color: 'text-b-orange' },
-  { to: 12, suffix: 'M+', label: 'Lost Records', color: 'text-ink' }, // changed color to ink for dark visibility
+const STAT_META = [
+  { to: 800, suffix: 'M+', color: 'text-b-red' },
+  { to: 92, suffix: '%', color: 'text-b-orange' },
+  { to: 12, suffix: 'M+', color: 'text-ink' }, // changed color to ink for dark visibility
 ]
 
-const PROBLEMS = [
-  { n: '01', title: 'Reports become dead PDFs', detail: 'Stored but never connected or compared over time.', bg: 'bg-b-red' },
-  { n: '02', title: 'No longitudinal timeline', detail: "Can't see how your health changed over months or years.", bg: 'bg-b-orange' },
-  { n: '03', title: 'No relationship between data', detail: 'Medicines, reports, symptoms, doctors — all isolated silos.', bg: 'bg-b-red' },
-  { n: '04', title: 'Weak emergency readiness', detail: 'Emergency info not instantly accessible offline.', bg: 'bg-b-orange' },
-  { n: '05', title: 'Doctor visit prep is missing', detail: 'Patients forget questions and history during consultations.', bg: 'bg-b-red' },
-  { n: '06', title: 'No caregiver workflow', detail: 'Children managing parents still rely on WhatsApp calls.', bg: 'bg-b-orange' },
+const PROBLEM_META = [
+  { n: '01', bg: 'bg-b-red' },
+  { n: '02', bg: 'bg-b-orange' },
+  { n: '03', bg: 'bg-b-red' },
+  { n: '04', bg: 'bg-b-orange' },
+  { n: '05', bg: 'bg-b-red' },
+  { n: '06', bg: 'bg-b-orange' },
 ]
 
-const SOLUTIONS = [
-  { n: '01', headline: 'Built for rural India', sub: 'Low bandwidth, any phone, any dialect — G1 works where others don\'t.', color: 'bg-b-blue' },
-  { n: '02', headline: 'Every report stays alive', sub: 'Upload once, query forever. Your records grow smarter over time.', color: 'bg-b-orange' },
-  { n: '03', headline: 'A health timeline that thinks', sub: 'Symptoms, medicines and visits — connected across months and years.', color: 'bg-b-green' },
-  { n: '04', headline: 'Your whole family, one place', sub: 'Manage health for parents, children and yourself without switching apps.', color: 'bg-b-purple' },
-  { n: '05', headline: 'One record, all providers', sub: 'From Practo to Apollo to the local clinic — G1 unifies everything.', color: 'bg-b-red' },
-  { n: '06', headline: 'Works without internet', sub: 'Blood group, allergies, medications — always available, even offline.', color: 'bg-b-yellow' },
+const SOLUTION_META = [
+  { n: '01', color: 'bg-b-blue' },
+  { n: '02', color: 'bg-b-orange' },
+  { n: '03', color: 'bg-b-green' },
+  { n: '04', color: 'bg-b-purple' },
+  { n: '05', color: 'bg-b-red' },
+  { n: '06', color: 'bg-b-yellow' },
 ]
 
 export function Problems() {
@@ -84,7 +84,7 @@ export function Problems() {
                 {/* Top content */}
                 <div>
                   <span className="inline-block border border-ink rounded-full px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-6">
-                    {activeTab === 'problems' ? 'Competitor Gaps' : 'G1 Answers'}
+                    {activeTab === 'problems' ? t.problems.tabProblems : t.problems.badgeSolutions}
                   </span>
                   
                   <h2 className="font-display text-[clamp(2.2rem,5.5vw,3.6rem)] font-black uppercase leading-[0.9] tracking-tight">
@@ -107,13 +107,13 @@ export function Problems() {
 
                 {/* Stats Counters Grid inside Left Card */}
                 <div className="grid grid-cols-3 gap-2 mt-auto pt-6 border-t border-ink/10">
-                  {STATS.map(({ to, suffix, label, color }) => (
-                    <div key={label} className="text-left">
+                  {STAT_META.map(({ to, suffix, color }, i) => (
+                    <div key={i} className="text-left">
                       <p className={`font-display text-xl sm:text-2xl font-black leading-none ${color}`}>
                         <CountUp to={to} suffix={suffix} duration={1200} />
                       </p>
                       <p className="text-[10px] font-black uppercase tracking-tight opacity-75 mt-2 leading-none">
-                        {label}
+                        {t.problems.statsLabels[i]}
                       </p>
                     </div>
                   ))}
@@ -153,25 +153,25 @@ export function Problems() {
                     transition={{ duration: 0.25 }}
                     className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 flex-1 h-full items-stretch justify-items-stretch"
                   >
-                    {PROBLEMS.map((prob) => (
+                    {PROBLEM_META.map(({ n, bg }, i) => (
                       <SpotlightTilt
-                        key={prob.title}
-                        className={`group relative rounded-2xl ${prob.bg} p-5 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
+                        key={n}
+                        className={`group relative rounded-2xl ${bg} p-5 text-ink flex flex-col justify-between overflow-hidden cursor-default transition-all duration-300`}
                         spotlightColor="rgba(0,0,0,0.1)"
                       >
 
                         <div className="flex items-start justify-between">
-                          <span className="font-display text-[10px] font-black opacity-40">{prob.n}</span>
+                          <span className="font-display text-[10px] font-black opacity-40">{n}</span>
                           <span className="inline-flex size-5 items-center justify-center rounded-full bg-ink/15 font-black text-ink text-[10px] leading-none">
                             ✕
                           </span>
                         </div>
                         <div className="mt-3">
                           <p className="font-display text-[13px] font-black uppercase leading-snug">
-                            <ScrambleText text={prob.title} trigger="hover" duration={600} />
+                            <ScrambleText text={t.problems.cards[i].title} trigger="hover" duration={600} />
                           </p>
                           <p className="mt-1 text-[10px] font-semibold opacity-75 leading-relaxed">
-                            {prob.detail}
+                            {t.problems.cards[i].detail}
                           </p>
                         </div>
                       </SpotlightTilt>
@@ -186,27 +186,27 @@ export function Problems() {
                     transition={{ duration: 0.25 }}
                     className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 flex-1 h-full items-stretch justify-items-stretch"
                   >
-                    {SOLUTIONS.map((sol, i) => (
+                    {SOLUTION_META.map(({ n, color }, i) => (
                       <motion.div
-                        key={sol.n}
+                        key={n}
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.05 }}
                         whileHover={{ y: -3 }}
-                        className={`rounded-2xl ${sol.color} p-5 text-ink flex flex-col justify-between cursor-default`}
+                        className={`rounded-2xl ${color} p-5 text-ink flex flex-col justify-between cursor-default`}
                       >
                         <div className="flex items-start justify-between">
-                          <span className="font-display text-[10px] font-black opacity-45">{sol.n}</span>
+                          <span className="font-display text-[10px] font-black opacity-45">{n}</span>
                           <span className="inline-flex size-5 items-center justify-center rounded-full bg-ink/15 font-black text-ink text-[10px] leading-none">
                             ✓
                           </span>
                         </div>
                         <div className="mt-3">
                           <p className="font-display text-[13px] font-black uppercase leading-snug">
-                            <ScrambleText text={sol.headline} trigger="hover" duration={500} />
+                            <ScrambleText text={t.problems.solutions[i].headline} trigger="hover" duration={500} />
                           </p>
                           <p className="mt-1 text-[10px] font-semibold opacity-70 leading-relaxed">
-                            {sol.sub}
+                            {t.problems.solutions[i].sub}
                           </p>
                         </div>
                       </motion.div>

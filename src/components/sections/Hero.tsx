@@ -32,8 +32,8 @@ const SLIDES = [
     sub: 'Talk in your dialect. G1 asks the right questions and turns your voice into a clinical report your doctor can use.',
   },
   {
-    img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1400&q=80',
-    alt: 'Close-up of a photo being taken for diagnosis',
+    img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Person taking a photo with a smartphone',
     words: ['One photo,', 'clear', 'answers.'],
     sub: 'Photograph a rash, a prescription, or an X-ray. G1 reads it instantly and tells you what matters.',
   },
