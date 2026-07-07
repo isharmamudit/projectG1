@@ -1,10 +1,12 @@
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, HeartPulse } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { Parallax } from '@/components/ui/Parallax'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useLanguage } from '@/lib/language'
+import { cn } from '@/lib/utils'
 
 const TILES = [
   { n: '01', label: 'Chat', href: '#problems', bg: 'bg-b-blue', brief: 'Consult in 12+ dialects' },
@@ -14,6 +16,48 @@ const TILES = [
   { n: '05', label: 'Offline', href: '#problems', bg: 'bg-b-purple', brief: 'Works without signal' },
   { n: '06', label: 'Memory', href: '#problems', bg: 'bg-b-yellow', brief: 'Your full history' },
 ]
+
+// One slide per sidebar tile — image, headline and subtitle rotate together.
+const SLIDES = [
+  {
+    img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Doctor holding a phone during a consultation',
+    words: ['Your', 'health,', 'understood.'],
+    sub: 'Ask in your dialect. Speak your symptoms. Photo a prescription. G1 translates clinical complexity into native Indian tongues instantly.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Person on a video consultation call',
+    words: ['Just', 'speak,', 'we listen.'],
+    sub: 'Talk in your dialect. G1 asks the right questions and turns your voice into a clinical report your doctor can use.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Close-up of a photo being taken for diagnosis',
+    words: ['One photo,', 'clear', 'answers.'],
+    sub: 'Photograph a rash, a prescription, or an X-ray. G1 reads it instantly and tells you what matters.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Person practicing yoga at sunrise',
+    words: ['Move well,', 'heal', 'better.'],
+    sub: 'Real-time posture coaching guides you through recovery and everyday wellness routines.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Person using a phone in a rural setting',
+    words: ['No signal,', 'no', 'problem.'],
+    sub: 'Your blood group, allergies and medicines — always available, even without the internet.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?auto=format&fit=crop&w=1400&q=80',
+    alt: 'Notebook and records laid out on a desk',
+    words: ['Every visit,', 'always', 'remembered.'],
+    sub: 'Reports, symptoms and prescriptions connected across years, not scattered across apps.',
+  },
+]
+
+const SLIDE_MS = 4000
 
 function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
   e.preventDefault()
@@ -25,7 +69,22 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 }
 
 export function Hero() {
-  const { t } = useLanguage()
+  const { t, code } = useLanguage()
+  const [active, setActive] = useState(0)
+  const pausedRef = useRef(false)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(() => {
+      if (!pausedRef.current) setActive((a) => (a + 1) % SLIDES.length)
+    }, SLIDE_MS)
+    return () => clearInterval(id)
+  }, [])
+
+  // English gets the full rotating headline/sub; other languages keep the
+  // translated hero copy fixed while only the background image rotates.
+  const words = code === 'en' ? SLIDES[active].words : t.heroWords
+  const sub = code === 'en' ? SLIDES[active].sub : t.heroSubtitle
 
   return (
     <section id="top" className="relative w-full pt-8 pb-4">
@@ -49,11 +108,12 @@ export function Hero() {
 
           {/* Navigation Tiles List (Single-column vertical stack matching units.) */}
           <div className="flex flex-col gap-2.5 my-3">
-            {TILES.map((tile) => (
+            {TILES.map((tile, i) => (
               <a
                 key={tile.n}
                 href={tile.href}
                 onClick={(e) => handleScrollTo(e, tile.href)}
+                onMouseEnter={() => setActive(i)}
                 className={`group flex flex-col justify-between p-4 h-[105px] rounded-[22px] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg text-ink ${tile.bg} hover:text-white`}
               >
                 <div className="flex justify-between items-start w-full">
@@ -82,50 +142,94 @@ export function Hero() {
         </motion.div>
 
         {/* Right Main Hero Panel */}
-        <div className="flex-1 relative rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.12)] border border-border-strong spotlight min-h-[500px] md:h-full">
-          {/* Parallax Background Image */}
+        <div
+          onMouseEnter={() => (pausedRef.current = true)}
+          onMouseLeave={() => (pausedRef.current = false)}
+          className="flex-1 relative rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.12)] border border-border-strong spotlight min-h-[500px] md:h-full"
+        >
+          {/* Crossfading background images */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
-            <img
-              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80"
-              alt="Community health consultation in India"
-              className="w-full h-full object-cover select-none brightness-[0.88]"
-            />
+            <div className="relative h-full w-full">
+              {SLIDES.map((slide, i) => (
+                <img
+                  key={slide.img}
+                  src={slide.img}
+                  alt={slide.alt}
+                  className={cn(
+                    'absolute inset-0 h-full w-full object-cover select-none brightness-[0.88] transition-opacity duration-[1200ms] ease-in-out',
+                    i === active ? 'opacity-100' : 'opacity-0',
+                  )}
+                />
+              ))}
+            </div>
           </Parallax>
 
           {/* Premium overlay gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/5 pointer-events-none" />
 
+          {/* Slide progress dots */}
+          <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+            {SLIDES.map((slide, i) => (
+              <button
+                key={slide.img}
+                type="button"
+                aria-label={`Show slide ${i + 1}`}
+                onClick={() => setActive(i)}
+                className="group/dot flex h-3 items-center px-0.5"
+              >
+                <span
+                  className={cn(
+                    'h-1 rounded-full transition-all duration-300',
+                    i === active ? 'w-6 bg-b-yellow' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
+                  )}
+                />
+              </button>
+            ))}
+          </div>
+
           {/* Hero text overlay */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-12 text-paper bg-black/10">
 
             <Parallax offset={-15}>
-              <motion.h1
-                key={t.heroWords.join('-')}
-                className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl drop-shadow-[0_6px_20px_rgba(0,0,0,0.65)]"
-                initial="hidden"
-                animate="visible"
-                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
-              >
-                {t.heroWords.map((w, index) => (
-                  <motion.span
-                    key={index}
-                    className="inline-block mr-[0.18em] last:mr-0 will-change-transform"
-                    style={index === 1 ? { color: 'var(--color-b-yellow)' } : {}}
-                    variants={{
-                      hidden: { opacity: 0, y: 35 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] } },
-                    }}
-                  >
-                    {w}
-                  </motion.span>
-                ))}
-              </motion.h1>
+              <AnimatePresence mode="wait">
+                <motion.h1
+                  key={words.join('-')}
+                  className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl drop-shadow-[0_6px_20px_rgba(0,0,0,0.65)]"
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
+                >
+                  {words.map((w, index) => (
+                    <motion.span
+                      key={index}
+                      className="inline-block mr-[0.18em] last:mr-0 will-change-transform"
+                      style={index === 1 ? { color: 'var(--color-b-yellow)' } : {}}
+                      variants={{
+                        hidden: { opacity: 0, y: 35 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] } },
+                      }}
+                    >
+                      {w}
+                    </motion.span>
+                  ))}
+                </motion.h1>
+              </AnimatePresence>
             </Parallax>
 
             <FadeIn delay={0.35} className="mt-5 max-w-2xl mx-auto">
-              <p className="text-sm font-bold text-paper leading-relaxed sm:text-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                {t.heroSubtitle}
-              </p>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={sub}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.35 }}
+                  className="text-sm font-bold text-paper leading-relaxed sm:text-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+                >
+                  {sub}
+                </motion.p>
+              </AnimatePresence>
             </FadeIn>
 
             <FadeIn delay={0.5} className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-center">
