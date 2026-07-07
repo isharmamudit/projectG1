@@ -49,11 +49,11 @@ const CARDS = [
     pixel: PIXEL.camera,
     pixelFill: 'var(--color-b-yellow)',
     images: [
+      'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=200&q=80', // futuristic iris scanner
       'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80', // brain CT/MRI scans list
       'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=200&q=80', // doctor looking at scan screens
-      'https://images.unsplash.com/photo-1608248597481-496100c80836?auto=format&fit=crop&w=200&q=80', // dermatological check
-      'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=200&q=80', // glowing clinic xray scanner
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&q=80', // visual computer vision scanning
+      'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=200&q=80', // radiology scanners display
+      'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=200&q=80', // glowing clinical anatomy slice scanner
     ],
   },
   {
