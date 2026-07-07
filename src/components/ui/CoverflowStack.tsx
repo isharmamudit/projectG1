@@ -24,7 +24,7 @@ export function CoverflowStack({ slides, active, className }: CoverflowStackProp
   const n = slides.length
 
   return (
-    <div className={cn('relative h-full w-full bg-ink', className)} style={{ perspective: 1400 }}>
+    <div className={cn('relative h-full w-full', className)} style={{ perspective: 1400 }}>
       {slides.map((slide, i) => {
         let raw = i - active
         if (raw > n / 2) raw -= n

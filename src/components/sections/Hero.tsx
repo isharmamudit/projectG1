@@ -133,51 +133,51 @@ export function Hero() {
           <div
             onMouseEnter={() => (pausedRef.current = true)}
             onMouseLeave={() => (pausedRef.current = false)}
-            className="relative min-h-[360px] w-full flex-1 overflow-hidden rounded-3xl border border-border-strong shadow-[0_16px_40px_rgba(0,0,0,0.12)] spotlight"
+            className="relative min-h-[360px] w-full flex-1 overflow-visible"
           >
-            <Parallax offset={-25} className="absolute inset-0 h-[120%] w-full">
+            <Parallax offset={-25} className="absolute inset-0 h-full w-full">
               <CoverflowStack slides={SLIDES} active={active} />
             </Parallax>
+          </div>
 
-            {/* Slide nav: prev/next arrows + progress dots */}
-            <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
-              <button
-                type="button"
-                aria-label="Previous slide"
-                onClick={() => setActive((a) => (a - 1 + SLIDES.length) % SLIDES.length)}
-                className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
-              >
-                <ChevronLeft className="size-4" strokeWidth={2.5} />
-              </button>
+          {/* Slide nav: prev/next arrows + progress dots, below the cards */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="Previous slide"
+              onClick={() => setActive((a) => (a - 1 + SLIDES.length) % SLIDES.length)}
+              className="glass-card flex size-8 items-center justify-center rounded-full text-fg-muted transition-colors hover:text-fg"
+            >
+              <ChevronLeft className="size-4" strokeWidth={2.5} />
+            </button>
 
-              <div className="flex gap-1.5">
-                {SLIDES.map((slide, i) => (
-                  <button
-                    key={slide.img}
-                    type="button"
-                    aria-label={`Show slide ${i + 1}`}
-                    onClick={() => setActive(i)}
-                    className="group/dot flex h-3 items-center px-0.5"
-                  >
-                    <span
-                      className={cn(
-                        'h-1 rounded-full transition-all duration-300',
-                        i === active ? 'w-6 bg-tint-teal' : 'w-2.5 bg-white/50 group-hover/dot:bg-white/80',
-                      )}
-                    />
-                  </button>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                aria-label="Next slide"
-                onClick={() => setActive((a) => (a + 1) % SLIDES.length)}
-                className="glass-card flex size-7 items-center justify-center rounded-full text-paper/80 backdrop-blur-md transition-colors hover:text-paper"
-              >
-                <ChevronRight className="size-4" strokeWidth={2.5} />
-              </button>
+            <div className="flex gap-1.5">
+              {SLIDES.map((slide, i) => (
+                <button
+                  key={slide.img}
+                  type="button"
+                  aria-label={`Show slide ${i + 1}`}
+                  onClick={() => setActive(i)}
+                  className="group/dot flex h-3 items-center px-0.5"
+                >
+                  <span
+                    className={cn(
+                      'h-1 rounded-full transition-all duration-300',
+                      i === active ? 'w-6 bg-tint-teal' : 'w-2.5 bg-fg/25 group-hover/dot:bg-fg/50',
+                    )}
+                  />
+                </button>
+              ))}
             </div>
+
+            <button
+              type="button"
+              aria-label="Next slide"
+              onClick={() => setActive((a) => (a + 1) % SLIDES.length)}
+              className="glass-card flex size-8 items-center justify-center rounded-full text-fg-muted transition-colors hover:text-fg"
+            >
+              <ChevronRight className="size-4" strokeWidth={2.5} />
+            </button>
           </div>
         </div>
 
