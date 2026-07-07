@@ -15,11 +15,11 @@ const CARDS = [
     pixel: PIXEL.chat,
     pixelFill: 'var(--color-b-green)',
     images: [
-      'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1675557009875-436f09780264?auto=format&fit=crop&w=200&q=80', // chatgpt interface
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=200&q=80', // getting report document
+      'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=200&q=80', // phone chat translation
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=200&q=80', // analytics / clinical report
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=200&q=80', // ai hand assistant
     ],
   },
   {
@@ -32,11 +32,11 @@ const CARDS = [
     pixel: PIXEL.mic,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1484755560693-a4074577af3a?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=200&q=80', // voice agent speaking
+      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=200&q=80', // talk to voice doctor
+      'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=200&q=80', // smart speaker / audio circle
+      'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=200&q=80', // medical voice checkup
+      'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=200&q=80', // audio sound waves
     ],
   },
   {
@@ -49,11 +49,11 @@ const CARDS = [
     pixel: PIXEL.camera,
     pixelFill: 'var(--color-b-yellow)',
     images: [
-      'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1608248597481-496100c80836?auto=format&fit=crop&w=200&q=80', // skin rash check
+      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&q=80', // computer vision scan lines
+      'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=200&q=80', // clinical scan x-ray
+      'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=200&q=80', // scanner camera lens
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', // cv bounding boxes
     ],
   },
   {
@@ -66,11 +66,11 @@ const CARDS = [
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=200&q=80', // laser dots / pose estimation
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // coordinates skeletal network
+      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=200&q=80', // yoga stretch tracking
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&q=80', // body joints grid
+      'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=200&q=80', // alignment pose
     ],
   },
   {
@@ -83,11 +83,11 @@ const CARDS = [
     pixel: PIXEL.bolt,
     pixelFill: 'var(--color-b-red)',
     images: [
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1601524909162-be87252be298?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1555421689-491a97ff2040?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=200&q=80', // poor village healthcare outreach
+      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80', // remote place (no signal)
+      'https://images.unsplash.com/photo-1548345680-f5475ea5df84?auto=format&fit=crop&w=200&q=80', // disconnected map symbol
+      'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=200&q=80', // rural India fields
+      'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80', // local storage lock
     ],
   },
   {
@@ -100,14 +100,15 @@ const CARDS = [
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-b-yellow)',
     images: [
-      'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=200&q=80',
-      'https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=200&q=80', // calendar timeline logs
+      'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=200&q=80', // llm reports saved folders
+      'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=200&q=80', // timeline records
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&q=80', // database memory connections
+      'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=200&q=80', // digitized notes saved
     ],
   },
 ]
+
 
 
 /** Units.-style horizontal scroll: vertical scroll drives translateX strip */
