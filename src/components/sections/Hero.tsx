@@ -67,11 +67,6 @@ export function Hero() {
               <span>English</span>
               <span className="opacity-60">🌐</span>
             </button>
-            <div className="flex justify-center gap-4 text-[10px] font-bold text-fg-muted uppercase tracking-wider">
-              <a href="https://instagram.com" className="hover:text-fg">Instagram</a>
-              <span>•</span>
-              <a href="https://tiktok.com" className="hover:text-fg">TikTok</a>
-            </div>
           </div>
         </motion.div>
 
@@ -80,9 +75,9 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=1200&q=80"
               alt="Vernacular G1 AI Health consultation"
-              className="w-full h-full object-cover select-none brightness-[0.78]"
+              className="w-full h-full object-cover select-none brightness-[0.74]"
             />
           </Parallax>
 
