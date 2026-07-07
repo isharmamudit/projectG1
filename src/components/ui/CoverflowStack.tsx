@@ -42,8 +42,8 @@ export function CoverflowStack({ slides, active, className }: CoverflowStackProp
               y: '-50%',
               scale: raw === 0 ? 1 : 0.86,
               rotateY: raw * -18,
-              opacity: hidden ? 0 : raw === 0 ? 1 : 0.6,
-              filter: raw === 0 ? 'brightness(0.92) blur(0px)' : 'brightness(0.5) blur(1px)',
+              opacity: hidden ? 0 : 1,
+              filter: raw === 0 ? 'brightness(1)' : 'brightness(0.88)',
             }}
             transition={{ type: 'spring', stiffness: 220, damping: 28 }}
           >

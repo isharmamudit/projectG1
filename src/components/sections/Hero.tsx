@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight, HeartPulse } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { Parallax } from '@/components/ui/Parallax'
@@ -18,44 +18,31 @@ const TILES = [
   { n: '06', label: 'Scan', href: '#problems', bg: 'bg-tint-rose/12 border border-tint-rose/25', brief: 'Photo your symptoms' },
 ]
 
-// One slide per sidebar tile — image + a short caption that surfaces only
-// while that slide is centered in the carousel.
+// One slide per sidebar tile.
 const SLIDES = [
   {
     img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80',
     alt: 'Doctor holding a phone during a consultation',
-    title: 'Chat',
-    caption: 'Ask in your dialect, get clinical answers back.',
   },
   {
     img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person on a video consultation call',
-    title: 'Voice',
-    caption: 'Speak your symptoms — G1 turns it into a doctor report.',
   },
   {
     img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person practicing yoga at sunrise',
-    title: 'Yoga',
-    caption: 'Real-time posture coaching, right from your camera.',
   },
   {
     img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person using a phone in a rural setting',
-    title: 'Offline',
-    caption: 'Blood group, allergies and medicines, even with no signal.',
   },
   {
     img: 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?auto=format&fit=crop&w=1400&q=80',
     alt: 'Notebook and records laid out on a desk',
-    title: 'Memory',
-    caption: 'Every report and visit connected across years.',
   },
   {
     img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&w=1400&q=80',
     alt: 'Person taking a photo with a smartphone',
-    title: 'Scan',
-    caption: 'Photograph a rash or prescription — instant answers.',
   },
 ]
 
@@ -71,7 +58,7 @@ function handleScrollTo(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
 }
 
 export function Hero() {
-  const { t, code } = useLanguage()
+  const { t } = useLanguage()
   const [active, setActive] = useState(0)
   const pausedRef = useRef(false)
 
@@ -185,8 +172,6 @@ export function Hero() {
               <CoverflowStack slides={SLIDES} active={active} />
             </Parallax>
 
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
             {/* Slide nav: prev/next arrows + progress dots */}
             <div className="absolute top-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
               <button
@@ -226,25 +211,6 @@ export function Hero() {
                 <ChevronRight className="size-4" strokeWidth={2.5} />
               </button>
             </div>
-
-            {/* Per-slide caption: only the active feature's copy is shown */}
-            {code === 'en' && (
-              <div className="absolute inset-x-4 bottom-4 z-10 flex justify-center sm:inset-x-8 sm:bottom-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="glass-card max-w-md rounded-2xl px-5 py-3 text-center backdrop-blur-xl"
-                  >
-                    <p className="font-display text-xs font-black uppercase tracking-widest text-tint-amber">{SLIDES[active].title}</p>
-                    <p className="mt-1 text-xs font-semibold text-paper sm:text-sm">{SLIDES[active].caption}</p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            )}
           </div>
         </div>
 
