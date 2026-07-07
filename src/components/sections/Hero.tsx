@@ -33,7 +33,7 @@ export function Hero() {
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="hidden md:flex flex-col justify-between w-[250px] bg-paper border border-border-strong rounded-3xl p-5 shrink-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+          className="hidden md:flex flex-col justify-between w-[220px] py-1 shrink-0"
         >
           {/* Logo */}
           <div className="flex flex-col gap-0.5">
@@ -48,20 +48,20 @@ export function Hero() {
             </span>
           </div>
 
-          {/* Navigation Tiles List (Grid style matching the units. cards layout) */}
-          <div className="grid grid-cols-2 gap-2 my-5">
+          {/* Navigation Tiles List (Single-column vertical stack matching units.) */}
+          <div className="flex flex-col gap-2 my-4">
             {TILES.map((t) => (
               <a
                 key={t.n}
                 href={t.href}
                 onClick={(e) => handleScrollTo(e, t.href)}
-                className={`group flex flex-col justify-between p-3.5 h-24 rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.04] text-ink ${t.bg}`}
+                className={`group flex flex-col justify-between p-3.5 h-[68px] rounded-2xl border border-ink/5 transition-all duration-300 hover:scale-[1.03] text-ink ${t.bg}`}
               >
                 <div className="flex justify-between items-start w-full">
                   <span className="font-display text-[10px] font-black opacity-55">{t.n}</span>
                   <ArrowUpRight className="size-3.5 opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
                 </div>
-                <span className="text-xs font-black tracking-tight leading-none text-left mb-1">{t.label}</span>
+                <span className="text-xs font-black tracking-tight leading-none text-left mb-0.5">{t.label}</span>
               </a>
             ))}
           </div>
@@ -87,21 +87,21 @@ export function Hero() {
           {/* Parallax Background Image */}
           <Parallax offset={-25} className="absolute inset-0 w-full h-[120%]">
             <img
-              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80"
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80"
               alt="Vernacular G1 AI Health consultation"
-              className="w-full h-full object-cover select-none brightness-[0.74]"
+              className="w-full h-full object-cover select-none brightness-[0.88]"
             />
           </Parallax>
 
           {/* Premium overlay gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/5 pointer-events-none" />
 
           {/* Hero text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-12 text-paper bg-black/20">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 sm:p-12 text-paper bg-black/10">
 
             <Parallax offset={-15}>
               <motion.h1
-                className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl"
+                className="font-display text-[clamp(2.8rem,7.5vw,5.5rem)] leading-[0.9] tracking-tighter uppercase font-black max-w-4xl drop-shadow-[0_6px_20px_rgba(0,0,0,0.65)]"
                 initial="hidden"
                 animate="visible"
                 variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }}
@@ -123,7 +123,7 @@ export function Hero() {
             </Parallax>
 
             <FadeIn delay={0.35} className="mt-5 max-w-2xl mx-auto">
-              <p className="text-sm font-semibold text-paper/90 leading-relaxed sm:text-lg">
+              <p className="text-sm font-bold text-paper leading-relaxed sm:text-lg drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 Ask in your dialect. Speak your symptoms. Photo a prescription. G1 translates clinical complexity into native Indian tongues instantly.
               </p>
             </FadeIn>
