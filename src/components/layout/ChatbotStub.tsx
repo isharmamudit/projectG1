@@ -4,11 +4,33 @@ import { Globe2, HeartPulse, MessageCircle, Mic, Paperclip, Send, Smile, ThumbsD
 import { COPY, LANGUAGES } from '@/lib/languages'
 import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
+import { speechLocaleFor } from '@/lib/speechLocales'
+import { compressImageFile } from '@/lib/image'
 
 interface ChatMessage {
   id: number
   role: 'user' | 'ai'
   text: string
+  image?: string
+}
+
+interface PendingImage {
+  dataUrl: string
+  mimeType: string
+}
+
+// Minimal shape of the bits of the Web Speech API we actually use — the
+// standard lib.dom types don't (yet) include SpeechRecognition everywhere,
+// and it's only ever reached via the vendor-prefixed constructor anyway.
+interface SpeechRecognitionLike extends EventTarget {
+  lang: string
+  continuous: boolean
+  interimResults: boolean
+  start(): void
+  stop(): void
+  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null
+  onend: (() => void) | null
+  onerror: (() => void) | null
 }
 
 let nextId = 0
@@ -32,8 +54,8 @@ function Avatar({ size }: { size: number }) {
 /**
  * The real chat widget: a floating trigger that expands into a glass panel.
  * First interaction is always a language pick (reuses the site-wide language
- * context, so choosing here also switches the whole page) — then a mocked
- * conversation with canned replies, no backend yet.
+ * context, so choosing here also switches the whole page) — then a live
+ * conversation backed by api/chat.ts.
  */
 export function ChatbotStub() {
   const { code, setCode, t } = useLanguage()
@@ -44,11 +66,75 @@ export function ChatbotStub() {
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [ratings, setRatings] = useState<Record<number, 'up' | 'down'>>({})
+  const [isListening, setIsListening] = useState(false)
+  const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })
-  }, [messages, isTyping, showQuickReplies])
+  }, [messages, isTyping, showQuickReplies, pendingImage])
+
+  // Stop any in-flight recognition session on unmount so it doesn't keep
+  // listening after the widget (or the whole page) goes away.
+  useEffect(() => {
+    return () => recognitionRef.current?.stop()
+  }, [])
+
+  const speechLocale = speechLocaleFor(code)
+  const speechSupported =
+    Boolean(speechLocale) &&
+    typeof window !== 'undefined' &&
+    Boolean((window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition ||
+      (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition)
+
+  function toggleListening() {
+    if (!speechSupported || !speechLocale) return
+
+    if (isListening) {
+      recognitionRef.current?.stop()
+      return
+    }
+
+    const w = window as unknown as {
+      SpeechRecognition?: new () => SpeechRecognitionLike
+      webkitSpeechRecognition?: new () => SpeechRecognitionLike
+    }
+    const RecognitionCtor = w.SpeechRecognition ?? w.webkitSpeechRecognition
+    if (!RecognitionCtor) return
+
+    const recognition = new RecognitionCtor()
+    recognition.lang = speechLocale
+    recognition.continuous = false
+    recognition.interimResults = true
+
+    recognition.onresult = (event) => {
+      let transcript = ''
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      setInput(transcript)
+    }
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => setIsListening(false)
+
+    recognitionRef.current = recognition
+    setIsListening(true)
+    recognition.start()
+  }
+
+  async function handleFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const compressed = await compressImageFile(file)
+      setPendingImage(compressed)
+    } catch {
+      // Silently ignore — this is a nice-to-have attachment, not critical path.
+    }
+  }
 
   function selectLanguage(langCode: string) {
     setCode(langCode)
@@ -56,23 +142,42 @@ export function ChatbotStub() {
     setMessages([{ id: nextId++, role: 'ai', text: copy.chatbot.greeting }])
     setRatings({})
     setShowQuickReplies(true)
+    setPendingImage(null)
     setView('chat')
   }
 
-  function send(text?: string) {
+  async function send(text?: string) {
     const value = (text ?? input).trim()
-    if (!value) return
-    setMessages((prev) => [...prev, { id: nextId++, role: 'user', text: value }])
+    const image = pendingImage
+    if (!value && !image) return
+
+    const historyForRequest = messages.map((m) => ({ role: m.role, text: m.text }))
+    setMessages((prev) => [...prev, { id: nextId++, role: 'user', text: value, image: image?.dataUrl }])
     setInput('')
+    setPendingImage(null)
     setShowQuickReplies(false)
     setIsTyping(true)
-    window.setTimeout(
-      () => {
-        setIsTyping(false)
-        setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.mockReply }])
-      },
-      850 + Math.random() * 400,
-    )
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: value,
+          history: historyForRequest,
+          languageCode: code,
+          image: image ? { dataUrl: image.dataUrl, mimeType: image.mimeType } : undefined,
+        }),
+      })
+      if (!res.ok) throw new Error('Request failed')
+      const data: { reply?: string } = await res.json()
+      if (!data.reply) throw new Error('Empty reply')
+      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: data.reply as string }])
+    } catch {
+      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.errorFallback }])
+    } finally {
+      setIsTyping(false)
+    }
   }
 
   const currentLang = LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0]
@@ -243,8 +348,11 @@ export function ChatbotStub() {
                           </div>
                         ) : (
                           <div className="flex justify-end">
-                            <div className="max-w-[80%] rounded-tr-[4px] rounded-tl-2xl rounded-b-2xl bg-ink px-3 py-2 text-[12.5px] leading-relaxed text-paper">
-                              {m.text}
+                            <div className="max-w-[80%] space-y-1.5 rounded-tr-[4px] rounded-tl-2xl rounded-b-2xl bg-ink px-3 py-2 text-[12.5px] leading-relaxed text-paper">
+                              {m.image && (
+                                <img src={m.image} alt="Attachment" className="max-h-40 w-full rounded-xl object-cover" />
+                              )}
+                              {m.text && <p>{m.text}</p>}
                             </div>
                           </div>
                         )}
@@ -284,6 +392,20 @@ export function ChatbotStub() {
                 </div>
 
                 <div className="border-t border-border bg-surface/40 p-3">
+                  {pendingImage && (
+                    <div className="mb-2 flex items-center gap-2 rounded-xl border border-border bg-surface px-2 py-1.5">
+                      <img src={pendingImage.dataUrl} alt="Pending attachment" className="size-9 rounded-lg object-cover" />
+                      <span className="flex-1 text-[11px] font-semibold text-fg-muted">Photo ready to send</span>
+                      <button
+                        type="button"
+                        onClick={() => setPendingImage(null)}
+                        aria-label="Remove attachment"
+                        className="flex size-6 shrink-0 items-center justify-center rounded-full text-fg-muted hover:text-fg"
+                      >
+                        <X className="size-3.5" strokeWidth={2.5} />
+                      </button>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1 rounded-full border border-border bg-surface pr-1 pl-3.5">
                     <input
                       value={input}
@@ -291,16 +413,38 @@ export function ChatbotStub() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') send()
                       }}
-                      placeholder={t.chatbot.placeholder}
+                      placeholder={isListening ? t.chatbot.listening : t.chatbot.placeholder}
                       className="min-w-0 flex-1 bg-transparent py-2.5 text-[12.5px] text-fg placeholder:text-fg-muted focus:outline-none"
                     />
                     <button type="button" title="Emoji (coming soon)" className="flex size-7 shrink-0 items-center justify-center rounded-full text-fg-muted hover:text-fg">
                       <Smile className="size-3.5" strokeWidth={2} />
                     </button>
-                    <button type="button" title="Attach a photo (coming soon)" className="flex size-7 shrink-0 items-center justify-center rounded-full text-fg-muted hover:text-fg">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelected}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      title="Attach a photo"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex size-7 shrink-0 items-center justify-center rounded-full text-fg-muted hover:text-fg"
+                    >
                       <Paperclip className="size-3.5" strokeWidth={2} />
                     </button>
-                    <button type="button" title="Voice input (coming soon)" className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fg/8 text-fg-muted hover:text-fg">
+                    <button
+                      type="button"
+                      title={speechSupported ? 'Voice input' : 'Voice input not available for this language'}
+                      disabled={!speechSupported}
+                      onClick={toggleListening}
+                      className={cn(
+                        'flex size-7 shrink-0 items-center justify-center rounded-full transition-colors',
+                        !speechSupported && 'cursor-not-allowed opacity-40',
+                        isListening ? 'bg-tint-rose/25 text-fg' : 'bg-fg/8 text-fg-muted hover:text-fg',
+                      )}
+                    >
                       <Mic className="size-3.5" strokeWidth={2} />
                     </button>
                     <button
