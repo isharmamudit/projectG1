@@ -77,9 +77,14 @@ export function LanguageSwitcher({ className, variant = 'full', drop = 'up' }: L
             exit={{ opacity: 0, y: drop === 'up' ? 8 : -8, scale: 0.97 }}
             transition={{ duration: 0.16, ease: [0.25, 0.1, 0.25, 1] }}
             className={cn(
-              'glass absolute z-30 w-[min(280px,85vw)] rounded-2xl p-2 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.45)]',
+              'glass absolute z-30 w-[min(280px,85vw)] rounded-2xl border border-border-strong p-2 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.45)]',
               drop === 'up' ? 'bottom-full left-0 mb-2' : 'top-full right-0 mt-2',
             )}
+            style={{
+              backgroundColor: 'color-mix(in srgb, var(--color-surface) 96%, transparent)',
+              backdropFilter: 'blur(40px)',
+              WebkitBackdropFilter: 'blur(40px)',
+            }}
           >
             <p className="px-2.5 pt-1 pb-2 text-[10px] font-black tracking-widest text-fg-muted uppercase">{t.chooseLanguage}</p>
             <ul
