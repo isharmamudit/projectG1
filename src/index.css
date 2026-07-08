@@ -202,12 +202,15 @@
   */
   .glass-card {
     position: relative;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow:
-      0 24px 48px -28px rgba(0, 0, 0, 0.25),
-      inset 0 1px 0 var(--color-glass-highlight),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 50px 25px rgba(255, 255, 255, 2.5);
   }
 
   /* Crisp top-edge highlight line, like light catching the top rim of glass. */
@@ -219,7 +222,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      var(--color-glass-highlight),
+      rgba(255, 255, 255, 0.8),
       transparent
     );
     pointer-events: none;
@@ -233,10 +236,38 @@
     width: 1px;
     background: linear-gradient(
       180deg,
-      var(--color-glass-highlight),
-      transparent 60%
+      rgba(255, 255, 255, 0.8),
+      transparent,
+      rgba(255, 255, 255, 0.3)
     );
     pointer-events: none;
+  }
+
+  /* Highly-refractive, premium glossy glassmorphism styling with diagonal reflection line */
+  .glass-premium {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 0 25px rgba(255, 255, 255, 0.15);
+  }
+
+  .glass-premium::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.04) 45%,
+      transparent 45.1%
+    );
+    pointer-events: none;
+    z-index: 1;
   }
 }
 

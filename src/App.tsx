@@ -9,6 +9,7 @@ import { Marquee } from '@/components/ui/Marquee'
 import { HorizontalScroll } from '@/components/ui/HorizontalScroll'
 import { Hero } from '@/components/sections/Hero'
 import { Problems } from '@/components/sections/Problems'
+import { Testimonials } from '@/components/sections/Testimonials'
 import { VoiceGrid } from '@/components/sections/VoiceGrid'
 import { India } from '@/components/sections/India'
 import { Trust } from '@/components/sections/Trust'
@@ -57,7 +58,10 @@ function App() {
           {/* 6. Trust */}
           <Trust />
 
-          {/* 7. CTA */}
+          {/* 7. Testimonials — infinite flip card scroll */}
+          <Testimonials />
+
+          {/* 8. CTA */}
           <CTA />
         </main>
         <Footer />
