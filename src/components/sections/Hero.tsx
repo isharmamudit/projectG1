@@ -120,32 +120,39 @@ export function Hero() {
           ))}
         </motion.h1>
 
-        {/* Floating badges flanking the figure */}
-        {badges.map((b, i) => (
-          <motion.div
-            key={b.label}
-            initial={{ opacity: 0, scale: 0.3, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              type: 'spring',
-              stiffness: 90,
-              damping: 10,
-              delay: 0.15 + i * 0.22,
-            }}
-            className={`absolute ${b.top} ${b.offsetClass} z-20 hidden xl:block`}
-          >
-            <div className="glass-card flex items-center gap-3.5 rounded-full border border-white/25 bg-surface/60 px-6 py-3.5 shadow-[0_12px_36px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:scale-105">
-              <span className={`flex size-9 items-center justify-center rounded-full ${b.color}`}>
-                <ArrowUpRight className="size-5 text-fg" strokeWidth={3} />
-              </span>
-              <span className="text-xs font-black tracking-wider uppercase whitespace-nowrap text-fg">{b.label}</span>
-            </div>
-          </motion.div>
-        ))}
+        {/* Central visual assets area: stateful dynamic triptych carousel.
+            Badges are anchored to this fixed-height, full-width wrapper
+            rather than the outer card, so their vertical position never
+            collides with the headline above — whose line count varies
+            with viewport width and translation. The image triptych itself
+            sits in a narrower centered sub-wrapper so the badges (using
+            the full width for left/right offset) clear the side images. */}
+        <div className="relative z-10 mt-4 sm:-mt-6 h-[300px] sm:h-[380px] w-full">
+          {/* Floating badges flanking the figure */}
+          {badges.map((b, i) => (
+            <motion.div
+              key={b.label}
+              initial={{ opacity: 0, scale: 0.3, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                type: 'spring',
+                stiffness: 90,
+                damping: 10,
+                delay: 0.15 + i * 0.22,
+              }}
+              className={`absolute ${b.top} ${b.offsetClass} z-20 hidden xl:block`}
+            >
+              <div className="glass-card flex items-center gap-3.5 rounded-full border border-white/25 bg-surface/60 px-6 py-3.5 shadow-[0_12px_36px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-300 hover:scale-105">
+                <span className={`flex size-9 items-center justify-center rounded-full ${b.color}`}>
+                  <ArrowUpRight className="size-5 text-fg" strokeWidth={3} />
+                </span>
+                <span className="text-xs font-black tracking-wider uppercase whitespace-nowrap text-fg">{b.label}</span>
+              </div>
+            </motion.div>
+          ))}
 
-        {/* Central visual assets area: stateful dynamic triptych carousel */}
-        <div className="relative z-10 mx-auto mt-4 flex items-end justify-center sm:-mt-6 h-[300px] sm:h-[380px] w-full max-w-[680px]">
+          <div className="mx-auto flex h-full max-w-[680px] items-end justify-center">
           {images.map((img, i) => {
             const isCenter = i === mainIndex
             const isLeft = i === (mainIndex + 1) % 3
@@ -194,6 +201,7 @@ export function Hero() {
               </motion.div>
             )
           })}
+          </div>
         </div>
 
         {/* Bottom caption + CTA */}

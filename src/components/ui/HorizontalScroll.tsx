@@ -125,9 +125,19 @@ export function HorizontalScroll() {
 
   const x = useTransform(scrollYProgress, [0, 1], [0, -distance])
 
+  // Trackpad/mouse horizontal swipes (shift+wheel or a genuine deltaX) feel
+  // natural here but don't drive this section at all by default, since the
+  // whole effect is scroll-jacked off vertical scroll — translate a
+  // horizontal gesture into the equivalent vertical scroll so it still works.
+  function handleWheel(e: React.WheelEvent) {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      window.scrollBy(0, e.deltaX)
+    }
+  }
+
   return (
-    <div ref={containerRef} className="relative" style={{ height: `${CARDS.length * 110}vh` }}>
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+    <div ref={containerRef} className="relative" style={{ height: `${CARDS.length * 70}vh` }}>
+      <div onWheel={handleWheel} className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
 
         {/* Section label */}
         <div className="absolute top-8 left-4 sm:left-8 z-20 flex items-center gap-4">
