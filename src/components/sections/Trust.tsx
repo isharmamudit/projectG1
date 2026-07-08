@@ -7,32 +7,16 @@ import { PixelIcon, PIXEL } from '@/components/ui/PixelIcon'
 import { TrustFolder } from '@/components/ui/TrustFolder'
 import { useLanguage } from '@/lib/language'
 
-const FOLDERS = [
-  {
-    color: 'var(--color-tint-amber)',
-    title: 'Privacy',
-    sub: 'Your data stays yours',
-    rows: ['Encrypted health records', 'Never sold, ever', 'You control every share', 'Delete anytime'],
-    initial: { top: '12%', left: '10%', rotate: -4 },
-  },
-  {
-    color: 'var(--color-tint-sage)',
-    title: 'Honesty',
-    sub: 'Every answer, explained',
-    rows: ['Reasoning shown, not hidden', 'Sources you can check', 'Clear "see a doctor" flags', 'Reviewed against clinical guidance'],
-    initial: { top: '38%', left: '42%', rotate: 3 },
-  },
-  {
-    color: 'var(--color-tint-teal)',
-    title: 'Readiness',
-    sub: 'There in an emergency',
-    rows: ['Allergies & blood group offline', 'Medicines list offline', 'Works without a signal', 'One-tap emergency card'],
-    initial: { top: '10%', left: '72%', rotate: 5 },
-  },
+// title/sub/rows come from t.trust.folders[i]; only color/position are fixed here.
+const FOLDER_META = [
+  { color: 'var(--color-tint-amber)', initial: { top: '12%', left: '10%', rotate: -4 } },
+  { color: 'var(--color-tint-sage)', initial: { top: '38%', left: '42%', rotate: 3 } },
+  { color: 'var(--color-tint-teal)', initial: { top: '10%', left: '72%', rotate: 5 } },
 ]
 
 export function Trust() {
   const { t } = useLanguage()
+  const FOLDERS = FOLDER_META.map((meta, i) => ({ ...meta, ...t.trust.folders[i] }))
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
 
@@ -51,7 +35,7 @@ export function Trust() {
 
         <FadeIn delay={0.15} className="mt-4">
           <p className="text-center text-xs font-medium text-fg-muted lg:text-left">
-            Drag the folders around, or click one open.
+            {t.trust.caption}
           </p>
         </FadeIn>
 

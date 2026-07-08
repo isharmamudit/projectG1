@@ -3,15 +3,13 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { PixelIcon, PIXEL } from '@/components/ui/PixelIcon'
 import { CursorImageTrail } from '@/components/ui/CursorImageTrail'
+import { useLanguage } from '@/lib/language'
 
-const CARDS = [
+// tag/title/sub/body come from t.horizontalScroll.cards[i]; only layout/images/pixel are fixed here.
+const CARD_META = [
   {
     n: '01',
     bg: 'bg-tint-blue/12 border border-tint-blue/25',
-    title: 'Chat',
-    sub: 'In your language, your dialect',
-    body: 'Hindi, Bhojpuri, Tamil, Hinglish — ask G1 anything in the language you think in. Expands from the bottom right corner.',
-    tag: 'Language',
     pixel: PIXEL.chat,
     pixelFill: 'var(--color-tint-blue)',
     images: [
@@ -25,10 +23,6 @@ const CARDS = [
   {
     n: '02',
     bg: 'bg-tint-amber/12 border border-tint-amber/25',
-    title: 'Voice',
-    sub: 'Talk — get a doctor report',
-    body: 'Speak your symptoms out loud. G1 asks 10 clinical questions, generates a structured report, and sends it to your doctor.',
-    tag: 'Consultation',
     pixel: PIXEL.mic,
     pixelFill: 'var(--color-tint-rose)',
     images: [
@@ -42,10 +36,6 @@ const CARDS = [
   {
     n: '03',
     bg: 'bg-tint-sage/12 border border-tint-sage/25',
-    title: 'Scan',
-    sub: 'Photo your symptoms',
-    body: 'Photograph a rash, burn, hair issue or upload an X-ray. G1 reads it and flags what needs attention.',
-    tag: 'Visual AI',
     pixel: PIXEL.camera,
     pixelFill: 'var(--color-tint-teal)',
     images: [
@@ -59,10 +49,6 @@ const CARDS = [
   {
     n: '04',
     bg: 'bg-tint-violet/12 border border-tint-violet/25',
-    title: 'Yoga',
-    sub: 'Real-time posture coaching',
-    body: 'Hold a pose in front of your camera. G1 watches your form in real time and tells you when to move to the next.',
-    tag: 'Movement',
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-tint-rose)',
     images: [
@@ -76,10 +62,6 @@ const CARDS = [
   {
     n: '05',
     bg: 'bg-tint-teal/12 border border-tint-teal/25',
-    title: 'Offline',
-    sub: 'Works without internet',
-    body: 'Blood group, allergies, current medications — all instantly accessible even without a signal, on any phone.',
-    tag: 'Access',
     pixel: PIXEL.bolt,
     pixelFill: 'var(--color-tint-rose)',
     images: [
@@ -93,10 +75,6 @@ const CARDS = [
   {
     n: '06',
     bg: 'bg-tint-rose/12 border border-tint-rose/25',
-    title: 'Memory',
-    sub: 'Your health, remembered',
-    body: 'Every report, symptom, medicine and doctor visit — linked across time so your full story is ready at every appointment.',
-    tag: 'Record',
     pixel: PIXEL.heart,
     pixelFill: 'var(--color-tint-amber)',
     images: [
@@ -114,6 +92,8 @@ const CARDS = [
 
 /** Units.-style horizontal scroll: vertical scroll drives translateX strip */
 export function HorizontalScroll() {
+  const { t } = useLanguage()
+  const CARDS = CARD_META.map((meta, i) => ({ ...meta, ...t.horizontalScroll.cards[i] }))
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const [distance, setDistance] = useState(0)
@@ -152,7 +132,7 @@ export function HorizontalScroll() {
         {/* Section label */}
         <div className="absolute top-8 left-4 sm:left-8 z-20 flex items-center gap-4">
           <p className="text-xs font-semibold tracking-[0.25em] text-fg-muted uppercase sm:text-sm">
-            What G1 does
+            {t.horizontalScroll.eyebrow}
           </p>
           <span className="hidden sm:block h-px w-16 bg-border-strong" />
         </div>
@@ -217,7 +197,7 @@ export function HorizontalScroll() {
 
                 {/* Number tag */}
                 <span className="self-end font-display text-xs font-black opacity-40 uppercase tracking-widest">
-                  Feature {n}
+                  {t.horizontalScroll.featureWord} {n}
                 </span>
               </motion.div>
             </CursorImageTrail>
@@ -232,13 +212,13 @@ export function HorizontalScroll() {
             'p-8 text-center',
           )}>
             <p className="font-display text-2xl uppercase tracking-tight text-fg leading-tight">
-              More<br />coming<br />soon.
+              {t.horizontalScroll.closingTitle}
             </p>
             <a
               href="#voice"
               className="rounded-full bg-ink px-6 py-3 text-sm font-bold text-paper transition-transform hover:scale-105"
             >
-              See Voice AI ↓
+              {t.horizontalScroll.closingCta}
             </a>
           </div>
         </motion.div>
@@ -251,7 +231,7 @@ export function HorizontalScroll() {
               style={{ scaleX: scrollYProgress }}
             />
           </div>
-          <span className="text-xs font-medium text-fg-muted">Scroll to explore features</span>
+          <span className="text-xs font-medium text-fg-muted">{t.horizontalScroll.scrollHint}</span>
         </div>
       </div>
     </div>

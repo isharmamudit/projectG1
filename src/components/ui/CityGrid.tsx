@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLanguage } from '@/lib/language'
 
-/* ─── city data (8 cities, arranged around the 3×3 grid) ─── */
-const CITIES = [
-  { name: 'Delhi',     lang: 'Hindi · Punjabi',    users: '2.1M+', feature: 'Chat in 20+ dialects',    color: '#1d6ff2', txt: '#fff',     col: 0, row: 0 },
-  { name: 'Mumbai',    lang: 'Marathi · Hindi',     users: '1.8M+', feature: 'Doctor reports daily',    color: '#ff8a00', txt: '#1a1a1a',  col: 1, row: 0 },
-  { name: 'Bengaluru', lang: 'Kannada · English',   users: '1.2M+', feature: 'Image scan active',       color: '#12a150', txt: '#fff',     col: 2, row: 0 },
-  { name: 'Chennai',   lang: 'Tamil · Telugu',      users: '780K+', feature: 'Yoga coaching live',      color: '#e8452c', txt: '#fff',     col: 0, row: 1 },
+/* ─── city data (8 cities, arranged around the 3×3 grid) — names/langs stay as-is (proper nouns),
+     the one-line "feature" per city comes from t.cityGrid.features[i] ─── */
+const CITY_META = [
+  { name: 'Delhi',     lang: 'Hindi · Punjabi',    users: '2.1M+', color: '#1d6ff2', txt: '#fff',     col: 0, row: 0 },
+  { name: 'Mumbai',    lang: 'Marathi · Hindi',     users: '1.8M+', color: '#ff8a00', txt: '#1a1a1a',  col: 1, row: 0 },
+  { name: 'Bengaluru', lang: 'Kannada · English',   users: '1.2M+', color: '#12a150', txt: '#fff',     col: 2, row: 0 },
+  { name: 'Chennai',   lang: 'Tamil · Telugu',      users: '780K+', color: '#e8452c', txt: '#fff',     col: 0, row: 1 },
   // G1 hub → col:1 row:1 (center)
-  { name: 'Kolkata',   lang: 'Bengali · Hindi',     users: '900K+', feature: 'Voice consults growing',  color: '#a06cf8', txt: '#fff',     col: 2, row: 1 },
-  { name: 'Hyderabad', lang: 'Telugu · Urdu',       users: '650K+', feature: 'Offline records used',    color: '#ffc21a', txt: '#1a1a1a',  col: 0, row: 2 },
-  { name: 'Pune',      lang: 'Marathi · Hindi',     users: '540K+', feature: 'Reports sent to doctors', color: '#1d6ff2', txt: '#fff',     col: 1, row: 2 },
-  { name: 'Ahmedabad', lang: 'Gujarati · Hindi',    users: '480K+', feature: 'Works on 2G',             color: '#ff8a00', txt: '#1a1a1a',  col: 2, row: 2 },
+  { name: 'Kolkata',   lang: 'Bengali · Hindi',     users: '900K+', color: '#a06cf8', txt: '#fff',     col: 2, row: 1 },
+  { name: 'Hyderabad', lang: 'Telugu · Urdu',       users: '650K+', color: '#ffc21a', txt: '#1a1a1a',  col: 0, row: 2 },
+  { name: 'Pune',      lang: 'Marathi · Hindi',     users: '540K+', color: '#1d6ff2', txt: '#fff',     col: 1, row: 2 },
+  { name: 'Ahmedabad', lang: 'Gujarati · Hindi',    users: '480K+', color: '#ff8a00', txt: '#1a1a1a',  col: 2, row: 2 },
 ]
 
 /**
@@ -25,8 +27,10 @@ function cellCentre(col: number, row: number) {
 
 const G1 = { x: 150, y: 150 } // centre cell
 
+type City = (typeof CITY_META)[number] & { feature: string }
+
 /** Animated dot that travels from G1 → city */
-function Pulse({ city, color, delay }: { city: typeof CITIES[0]; color: string; delay: number }) {
+function Pulse({ city, color, delay }: { city: City; color: string; delay: number }) {
   const to = cellCentre(city.col, city.row)
   return (
     <motion.circle
@@ -45,11 +49,13 @@ function Pulse({ city, color, delay }: { city: typeof CITIES[0]; color: string; 
 }
 
 export function CityGrid() {
+  const { t } = useLanguage()
+  const CITIES: City[] = CITY_META.map((meta, i) => ({ ...meta, feature: t.cityGrid.features[i] }))
   const [hovered, setHovered] = useState<string | null>(null)
   const activeCity = CITIES.find(c => c.name === hovered)
 
   /* build a 3×3 slot array (null = G1 hub) */
-  const slots: (typeof CITIES[0] | null)[] = Array(9).fill(null)
+  const slots: (City | null)[] = Array(9).fill(null)
   CITIES.forEach(c => { slots[c.row * 3 + c.col] = c })
   // slot index 4 (col:1 row:1) stays null → G1 hub
 
@@ -112,7 +118,7 @@ export function CityGrid() {
                     transition={{ duration: 0.4 }}
                   >
                     <span className="font-display text-[10px] font-black uppercase tracking-widest leading-none">
-                      Project
+                      {t.cityGrid.hubLabel}
                     </span>
                     <span className="font-display text-base font-black uppercase leading-none">
                       G1

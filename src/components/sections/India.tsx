@@ -21,14 +21,16 @@ const LANGUAGES = [
   'ENGLISH',
 ]
 
-const STATS = [
-  { value: '12+', label: 'Languages & dialects', bg: 'bg-tint-violet/12 border border-tint-violet/25' },
-  { value: '2G/3G', label: 'Runs on slower networks', bg: 'bg-tint-teal/12 border border-tint-teal/25' },
-  { value: '28', label: 'States, one companion', bg: 'bg-tint-sage/12 border border-tint-sage/25' },
+// Labels come from t.india.statsLabels; only values/styling are fixed here.
+const STAT_META = [
+  { value: '12+', bg: 'bg-tint-violet/12 border border-tint-violet/25' },
+  { value: '2G/3G', bg: 'bg-tint-teal/12 border border-tint-teal/25' },
+  { value: '28', bg: 'bg-tint-sage/12 border border-tint-sage/25' },
 ]
 
 export function India() {
   const { t } = useLanguage()
+  const STATS = STAT_META.map((meta, i) => ({ ...meta, label: t.india.statsLabels[i] }))
 
   return (
     <section id="india" className="overflow-hidden px-4 py-24 sm:px-8 sm:py-32">
