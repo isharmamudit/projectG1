@@ -158,7 +158,7 @@ export function Hero() {
             </motion.div>
           ))}
 
-          <div className="mx-auto flex h-full max-w-[680px] items-end justify-center">
+          <div className="relative mx-auto flex h-full max-w-[680px] items-end justify-center">
           {images.map((img, i) => {
             const isCenter = i === mainIndex
             const isLeft = i === (mainIndex + 1) % 3
