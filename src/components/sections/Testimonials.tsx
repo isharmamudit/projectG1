@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import DotField from '@/components/ui/DotField'
+import { useLanguage } from '@/lib/language'
 
 const TESTIMONIALS = [
   {
@@ -166,6 +167,7 @@ function TestimonialCard({ item, anyHovered, isHovered, onMouseEnter, onMouseLea
 }
 
 export function Testimonials() {
+  const { t } = useLanguage()
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [isPaused, setIsPaused] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -194,16 +196,16 @@ export function Testimonials() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-fg-muted mb-4">
-              Real Stories
+              {t.testimonials.eyebrow}
             </p>
             <h2 className="font-display text-[clamp(2rem,5vw,3.2rem)] font-black uppercase leading-[0.92] tracking-tight">
-              Heard across
+              {t.testimonials.heading}
               <br />
-              <span className="text-tint-teal">every state.</span>
+              <span className="text-tint-teal">{t.testimonials.headingAccent}</span>
             </h2>
           </div>
           <p className="text-xs sm:text-sm font-semibold opacity-60 max-w-xs leading-relaxed">
-            From grandmothers in Varanasi to doctors in Mumbai — G1 speaks your language.
+            {t.testimonials.subhead}
           </p>
         </div>
       </div>

@@ -15,11 +15,12 @@ const NAV_ITEMS = [
 ]
 
 // The four bento cards below the hero banner — solid theme-invariant pastels, like MediCare's colored tile row.
-const TILES = [
-  { n: '01', title: 'Instant Chat Consults', brief: 'Reply within 60 secs', href: '#problems', bg: 'bg-pastel-amber/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: MessageCircle },
-  { n: '02', title: 'Voice & Reports', brief: 'Speak, we transcribe', href: '#voice', bg: 'bg-pastel-sage/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: Mic },
-  { n: '03', title: 'Yoga & Posture', brief: 'Guided daily coaching', href: '#problems', bg: 'bg-pastel-rose/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: PersonStanding },
-  { n: '04', title: 'Works Offline', brief: 'No signal, no problem', href: '#problems', bg: 'bg-pastel-blue/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: WifiOff },
+// Titles/briefs come from t.heroTiles; only the layout/styling/icon/href are fixed here.
+const TILE_META = [
+  { href: '#problems', bg: 'bg-pastel-amber/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: MessageCircle },
+  { href: '#voice', bg: 'bg-pastel-sage/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: Mic },
+  { href: '#problems', bg: 'bg-pastel-rose/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: PersonStanding },
+  { href: '#problems', bg: 'bg-pastel-blue/45 border border-white/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.6)]', icon: WifiOff },
 ]
 
 
@@ -42,9 +43,11 @@ export function Hero() {
     { src: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80', alt: 'Digital health report screens' },
   ]
 
+  const TILES = TILE_META.map((meta, i) => ({ ...meta, n: String(i + 1).padStart(2, '0'), title: t.heroTiles[i].title, brief: t.heroTiles[i].brief }))
+
   const badges = [
-    { label: 'Ask in your dialect', side: 'left' as const, top: 'top-[20%]', offsetClass: 'left-16', color: 'bg-tint-rose/25' },
-    { label: 'No clinic visit needed', side: 'right' as const, top: 'top-[20%]', offsetClass: 'right-16', color: 'bg-tint-sage/25' },
+    { label: t.heroBadges[0], side: 'left' as const, top: 'top-[20%]', offsetClass: 'left-16', color: 'bg-tint-rose/25' },
+    { label: t.heroBadges[1], side: 'right' as const, top: 'top-[20%]', offsetClass: 'right-16', color: 'bg-tint-sage/25' },
     { label: t.problems.solutions[0].headline, side: 'left' as const, top: 'top-[36%]', offsetClass: 'left-6', color: 'bg-tint-blue/25' },
     { label: t.problems.solutions[1].headline, side: 'right' as const, top: 'top-[36%]', offsetClass: 'right-6', color: 'bg-tint-amber/25' },
     { label: t.problems.solutions[2].headline, side: 'left' as const, top: 'top-[52%]', offsetClass: 'left-8', color: 'bg-tint-violet/25' },
@@ -58,7 +61,7 @@ export function Hero() {
 
       {/* In-page navbar: desktop only — the global Navbar already stays permanently visible on mobile,
           but auto-hides until scroll on desktop, so the hero needs its own static one there. */}
-      <FadeIn className="mb-6 hidden w-full items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
+      <FadeIn className="relative z-30 mb-6 hidden w-full items-center justify-between rounded-2xl border border-border bg-surface/70 px-5 py-3 backdrop-blur-xl md:flex">
         <a
           href="#top"
           onClick={(e) => handleScrollTo(e, '#top')}

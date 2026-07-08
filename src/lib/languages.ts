@@ -40,6 +40,26 @@ export interface Copy {
   chooseLanguage: string
   /** Keyed by the English label used in Navbar.tsx's NAV_ITEMS. */
   navItems: Record<string, string>
+  /** The four bento cards below the hero banner. */
+  heroTiles: [
+    { title: string; brief: string },
+    { title: string; brief: string },
+    { title: string; brief: string },
+    { title: string; brief: string },
+  ]
+  /** The two static floating badges flanking the hero figure (the rest come from problems.solutions). */
+  heroBadges: [string, string]
+  voiceGrid: {
+    eyebrow: string
+    heading: string
+    headingAccent: string
+  }
+  testimonials: {
+    eyebrow: string
+    heading: string
+    headingAccent: string
+    subhead: string
+  }
   problems: {
     eyebrow: string
     tabProblems: string
@@ -81,6 +101,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'Tap to explore features',
     chooseLanguage: 'Choose your language',
     navItems: { 'Why G1': 'Why G1', Features: 'Features', India: 'India', Trust: 'Trust' },
+    heroTiles: [
+      { title: 'Instant Chat Consults', brief: 'Reply within 60 secs' },
+      { title: 'Voice & Reports', brief: 'Speak, we transcribe' },
+      { title: 'Yoga & Posture', brief: 'Guided daily coaching' },
+      { title: 'Works Offline', brief: 'No signal, no problem' },
+    ],
+    heroBadges: ['Ask in your dialect', 'No clinic visit needed'],
+    voiceGrid: { eyebrow: 'Interactive Capabilities', heading: 'Deep dive into', headingAccent: 'G1.' },
+    testimonials: {
+      eyebrow: 'Real Stories',
+      heading: 'Heard across',
+      headingAccent: 'every state.',
+      subhead: 'From grandmothers in Varanasi to doctors in Mumbai — G1 speaks your language.',
+    },
     problems: {
       eyebrow: "Explore what's",
       tabProblems: 'Competitor Gaps',
@@ -130,6 +164,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'सुविधाएं देखने के लिए टैप करें',
     chooseLanguage: 'अपनी भाषा चुनें',
     navItems: { 'Why G1': 'क्यों G1', Features: 'सुविधाएं', India: 'भारत', Trust: 'भरोसा' },
+    heroTiles: [
+      { title: 'तुरंत चैट परामर्श', brief: '60 सेकंड में जवाब' },
+      { title: 'आवाज़ और रिपोर्ट', brief: 'बोलें, हम लिखेंगे' },
+      { title: 'योग और मुद्रा', brief: 'रोज़ाना मार्गदर्शन' },
+      { title: 'ऑफलाइन काम करता है', brief: 'सिग्नल न हो तो भी कोई समस्या नहीं' },
+    ],
+    heroBadges: ['अपनी भाषा में पूछें', 'क्लिनिक जाने की ज़रूरत नहीं'],
+    voiceGrid: { eyebrow: 'इंटरएक्टिव सुविधाएं', heading: 'गहराई से जानें', headingAccent: 'G1 को.' },
+    testimonials: {
+      eyebrow: 'सच्ची कहानियां',
+      heading: 'हर राज्य में',
+      headingAccent: 'सुनी गई।',
+      subhead: 'वाराणसी की दादी-नानी से लेकर मुंबई के डॉक्टरों तक — G1 आपकी भाषा बोलता है।',
+    },
     problems: {
       eyebrow: 'देखें',
       tabProblems: 'दूसरों की कमियां',
@@ -178,6 +226,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'বৈশিষ্ট্য দেখতে ট্যাপ করুন',
     chooseLanguage: 'আপনার ভাষা বেছে নিন',
     navItems: { 'Why G1': 'কেন G1', Features: 'বৈশিষ্ট্য', India: 'ভারত', Trust: 'বিশ্বাস' },
+    heroTiles: [
+      { title: 'তাৎক্ষণিক চ্যাট পরামর্শ', brief: '৬০ সেকেন্ডে উত্তর' },
+      { title: 'ভয়েস ও রিপোর্ট', brief: 'বলুন, আমরা লিখব' },
+      { title: 'যোগ ও ভঙ্গিমা', brief: 'দৈনিক নির্দেশনা' },
+      { title: 'অফলাইনে কাজ করে', brief: 'সিগন্যাল না থাকলেও সমস্যা নেই' },
+    ],
+    heroBadges: ['নিজের ভাষায় জিজ্ঞাসা করুন', 'ক্লিনিকে যাওয়ার প্রয়োজন নেই'],
+    voiceGrid: { eyebrow: 'ইন্টারঅ্যাক্টিভ বৈশিষ্ট্য', heading: 'গভীরে জানুন', headingAccent: 'G1-কে.' },
+    testimonials: {
+      eyebrow: 'সত্যি গল্প',
+      heading: 'প্রতিটি রাজ্যে',
+      headingAccent: 'শোনা গেছে।',
+      subhead: 'বারাণসীর ঠাকুমা থেকে মুম্বাইয়ের ডাক্তার — G1 আপনার ভাষায় কথা বলে।',
+    },
     problems: {
       eyebrow: 'দেখুন',
       tabProblems: 'প্রতিযোগীদের ঘাটতি',
@@ -226,6 +288,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'அம்சங்களைப் பார்க்க தட்டவும்',
     chooseLanguage: 'உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்',
     navItems: { 'Why G1': 'ஏன் G1', Features: 'அம்சங்கள்', India: 'இந்தியா', Trust: 'நம்பிக்கை' },
+    heroTiles: [
+      { title: 'உடனடி அரட்டை ஆலோசனை', brief: '60 வினாடிகளில் பதில்' },
+      { title: 'குரல் & அறிக்கைகள்', brief: 'பேசுங்கள், நாங்கள் எழுதுவோம்' },
+      { title: 'யோகா & தோரணை', brief: 'தினசரி வழிகாட்டுதல்' },
+      { title: 'இணையமில்லாமல் வேலை செய்யும்', brief: 'சிக்னல் இல்லாவிட்டாலும் பிரச்சனை இல்லை' },
+    ],
+    heroBadges: ['உங்கள் மொழியில் கேளுங்கள்', 'கிளினிக் செல்ல தேவையில்லை'],
+    voiceGrid: { eyebrow: 'ஊடாடும் திறன்கள்', heading: 'ஆழமாக அறிய', headingAccent: 'G1.' },
+    testimonials: {
+      eyebrow: 'உண்மைக் கதைகள்',
+      heading: 'ஒவ்வொரு மாநிலத்திலும்',
+      headingAccent: 'கேட்கப்பட்டது.',
+      subhead: 'வாரணாசியின் பாட்டிகள் முதல் மும்பையின் மருத்துவர்கள் வரை — G1 உங்கள் மொழியில் பேசுகிறது.',
+    },
     problems: {
       eyebrow: 'பாருங்கள்',
       tabProblems: 'போட்டியாளர் குறைபாடுகள்',
@@ -274,6 +350,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'ఫీచర్లను చూడటానికి నొక్కండి',
     chooseLanguage: 'మీ భాషను ఎంచుకోండి',
     navItems: { 'Why G1': 'ఎందుకు G1', Features: 'ఫీచర్లు', India: 'భారత్', Trust: 'నమ్మకం' },
+    heroTiles: [
+      { title: 'తక్షణ చాట్ సంప్రదింపులు', brief: '60 సెకన్లలో సమాధానం' },
+      { title: 'వాయిస్ & నివేదికలు', brief: 'మాట్లాడండి, మేము రాస్తాం' },
+      { title: 'యోగా & భంగిమ', brief: 'రోజువారీ మార్గదర్శకత్వం' },
+      { title: 'ఆఫ్‌లైన్‌లో పనిచేస్తుంది', brief: 'సిగ్నల్ లేకపోయినా సమస్య లేదు' },
+    ],
+    heroBadges: ['మీ భాషలో అడగండి', 'క్లినిక్‌కి వెళ్లాల్సిన అవసరం లేదు'],
+    voiceGrid: { eyebrow: 'ఇంటరాక్టివ్ సామర్థ్యాలు', heading: 'లోతుగా తెలుసుకోండి', headingAccent: 'G1ని.' },
+    testimonials: {
+      eyebrow: 'నిజమైన కథలు',
+      heading: 'ప్రతి రాష్ట్రంలో',
+      headingAccent: 'వినిపించింది.',
+      subhead: 'వారణాసిలోని అమ్మమ్మల నుండి ముంబైలోని వైద్యుల వరకు — G1 మీ భాషలో మాట్లాడుతుంది.',
+    },
     problems: {
       eyebrow: 'చూడండి',
       tabProblems: 'పోటీదారుల లోపాలు',
@@ -322,6 +412,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'वैशिष्ट्ये पाहण्यासाठी टॅप करा',
     chooseLanguage: 'तुमची भाषा निवडा',
     navItems: { 'Why G1': 'का G1', Features: 'वैशिष्ट्ये', India: 'भारत', Trust: 'विश्वास' },
+    heroTiles: [
+      { title: 'त्वरित चॅट सल्ला', brief: '60 सेकंदात उत्तर' },
+      { title: 'व्हॉइस आणि अहवाल', brief: 'बोला, आम्ही लिहू' },
+      { title: 'योग आणि पवित्रा', brief: 'दररोज मार्गदर्शन' },
+      { title: 'ऑफलाइन काम करते', brief: 'सिग्नल नसला तरी अडचण नाही' },
+    ],
+    heroBadges: ['तुमच्या भाषेत विचारा', 'दवाखान्यात जाण्याची गरज नाही'],
+    voiceGrid: { eyebrow: 'इंटरॲक्टिव्ह वैशिष्ट्ये', heading: 'सखोल जाणून घ्या', headingAccent: 'G1 बद्दल.' },
+    testimonials: {
+      eyebrow: 'खऱ्या कहाण्या',
+      heading: 'प्रत्येक राज्यात',
+      headingAccent: 'ऐकलं गेलं.',
+      subhead: 'वाराणसीतील आजींपासून मुंबईतील डॉक्टरांपर्यंत — G1 तुमच्या भाषेत बोलतो.',
+    },
     problems: {
       eyebrow: 'पहा',
       tabProblems: 'स्पर्धकांच्या त्रुटी',
@@ -370,6 +474,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'સુવિધાઓ જોવા ટૅપ કરો',
     chooseLanguage: 'તમારી ભાષા પસંદ કરો',
     navItems: { 'Why G1': 'શા માટે G1', Features: 'સુવિધાઓ', India: 'ભારત', Trust: 'ભરોસો' },
+    heroTiles: [
+      { title: 'ત્વરિત ચેટ પરામર્શ', brief: '60 સેકન્ડમાં જવાબ' },
+      { title: 'વૉઇસ અને રિપોર્ટ', brief: 'બોલો, અમે લખીશું' },
+      { title: 'યોગ અને મુદ્રા', brief: 'રોજિંદુ માર્ગદર્શન' },
+      { title: 'ઓફલાઇન કામ કરે છે', brief: 'સિગ્નલ ન હોય તો પણ વાંધો નહીં' },
+    ],
+    heroBadges: ['તમારી ભાષામાં પૂછો', 'ક્લિનિક જવાની જરૂર નથી'],
+    voiceGrid: { eyebrow: 'ઇન્ટરેક્ટિવ ક્ષમતાઓ', heading: 'ઊંડાણમાં જાણો', headingAccent: 'G1 ને.' },
+    testimonials: {
+      eyebrow: 'સાચી વાર્તાઓ',
+      heading: 'દરેક રાજ્યમાં',
+      headingAccent: 'સંભળાયું.',
+      subhead: 'વારાણસીની દાદીઓથી લઈને મુંબઈના ડોક્ટરો સુધી — G1 તમારી ભાષામાં વાત કરે છે.',
+    },
     problems: {
       eyebrow: 'જુઓ',
       tabProblems: 'હરીફોની ખામીઓ',
@@ -418,6 +536,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ನೋಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ',
     chooseLanguage: 'ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆರಿಸಿ',
     navItems: { 'Why G1': 'ಏಕೆ G1', Features: 'ವೈಶಿಷ್ಟ್ಯಗಳು', India: 'ಭಾರತ', Trust: 'ನಂಬಿಕೆ' },
+    heroTiles: [
+      { title: 'ತಕ್ಷಣ ಚಾಟ್ ಸಮಾಲೋಚನೆ', brief: '60 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಉತ್ತರ' },
+      { title: 'ಧ್ವನಿ ಮತ್ತು ವರದಿಗಳು', brief: 'ಮಾತನಾಡಿ, ನಾವು ಬರೆಯುತ್ತೇವೆ' },
+      { title: 'ಯೋಗ ಮತ್ತು ಭಂಗಿ', brief: 'ದೈನಂದಿನ ಮಾರ್ಗದರ್ಶನ' },
+      { title: 'ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತದೆ', brief: 'ಸಿಗ್ನಲ್ ಇಲ್ಲದಿದ್ದರೂ ಸಮಸ್ಯೆ ಇಲ್ಲ' },
+    ],
+    heroBadges: ['ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ', 'ಕ್ಲಿನಿಕ್‌ಗೆ ಹೋಗುವ ಅಗತ್ಯವಿಲ್ಲ'],
+    voiceGrid: { eyebrow: 'ಸಂವಾದಾತ್ಮಕ ಸಾಮರ್ಥ್ಯಗಳು', heading: 'ಆಳವಾಗಿ ತಿಳಿಯಿರಿ', headingAccent: 'G1 ಅನ್ನು.' },
+    testimonials: {
+      eyebrow: 'ನಿಜ ಕಥೆಗಳು',
+      heading: 'ಪ್ರತಿ ರಾಜ್ಯದಲ್ಲಿ',
+      headingAccent: 'ಕೇಳಿಬಂದಿದೆ.',
+      subhead: 'ವಾರಣಾಸಿಯ ಅಜ್ಜಿಯಂದಿರಿಂದ ಮುಂಬೈನ ವೈದ್ಯರವರೆಗೆ — G1 ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಮಾತನಾಡುತ್ತದೆ.',
+    },
     problems: {
       eyebrow: 'ನೋಡಿ',
       tabProblems: 'ಪ್ರತಿಸ್ಪರ್ಧಿಗಳ ಕೊರತೆಗಳು',
@@ -466,6 +598,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਵੇਖਣ ਲਈ ਟੈਪ ਕਰੋ',
     chooseLanguage: 'ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ',
     navItems: { 'Why G1': 'ਕਿਉਂ G1', Features: 'ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ', India: 'ਭਾਰਤ', Trust: 'ਭਰੋਸਾ' },
+    heroTiles: [
+      { title: 'ਤੁਰੰਤ ਚੈਟ ਸਲਾਹ', brief: '60 ਸਕਿੰਟਾਂ ਵਿੱਚ ਜਵਾਬ' },
+      { title: 'ਆਵਾਜ਼ ਅਤੇ ਰਿਪੋਰਟਾਂ', brief: 'ਬੋਲੋ, ਅਸੀਂ ਲਿਖਾਂਗੇ' },
+      { title: 'ਯੋਗ ਅਤੇ ਮੁਦਰਾ', brief: 'ਰੋਜ਼ਾਨਾ ਮਾਰਗਦਰਸ਼ਨ' },
+      { title: 'ਆਫਲਾਈਨ ਕੰਮ ਕਰਦਾ ਹੈ', brief: 'ਸਿਗਨਲ ਨਾ ਹੋਵੇ ਤਾਂ ਵੀ ਕੋਈ ਸਮੱਸਿਆ ਨਹੀਂ' },
+    ],
+    heroBadges: ['ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਪੁੱਛੋ', 'ਕਲੀਨਿਕ ਜਾਣ ਦੀ ਲੋੜ ਨਹੀਂ'],
+    voiceGrid: { eyebrow: 'ਇੰਟਰਐਕਟਿਵ ਸਮਰੱਥਾਵਾਂ', heading: 'ਡੂੰਘਾਈ ਨਾਲ ਜਾਣੋ', headingAccent: 'G1 ਨੂੰ.' },
+    testimonials: {
+      eyebrow: 'ਸੱਚੀਆਂ ਕਹਾਣੀਆਂ',
+      heading: 'ਹਰ ਰਾਜ ਵਿੱਚ',
+      headingAccent: 'ਸੁਣੀਆਂ ਗਈਆਂ।',
+      subhead: 'ਵਾਰਾਣਸੀ ਦੀਆਂ ਦਾਦੀਆਂ ਤੋਂ ਲੈ ਕੇ ਮੁੰਬਈ ਦੇ ਡਾਕਟਰਾਂ ਤੱਕ — G1 ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਬੋਲਦਾ ਹੈ।',
+    },
     problems: {
       eyebrow: 'ਵੇਖੋ',
       tabProblems: 'ਮੁਕਾਬਲੇਬਾਜ਼ਾਂ ਦੀਆਂ ਕਮੀਆਂ',
@@ -514,6 +660,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'ବିଶେଷତା ଦେଖିବାକୁ ଟ୍ୟାପ କରନ୍ତୁ',
     chooseLanguage: 'ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ',
     navItems: { 'Why G1': 'କାହିଁକି G1', Features: 'ବିଶେଷତା', India: 'ଭାରତ', Trust: 'ବିଶ୍ୱାସ' },
+    heroTiles: [
+      { title: 'ତୁରନ୍ତ ଚାଟ୍ ପରାମର୍ଶ', brief: '60 ସେକେଣ୍ଡରେ ଉତ୍ତର' },
+      { title: 'ଭଏସ୍ ଓ ରିପୋର୍ଟ', brief: 'କୁହନ୍ତୁ, ଆମେ ଲେଖିବୁ' },
+      { title: 'ଯୋଗ ଓ ମୁଦ୍ରା', brief: 'ପ୍ରତିଦିନର ମାର୍ଗଦର୍ଶନ' },
+      { title: 'ଅଫଲାଇନ୍‌ରେ କାମ କରେ', brief: 'ସିଗନାଲ୍ ନ ଥିଲେ ମଧ୍ୟ ଅସୁବିଧା ନାହିଁ' },
+    ],
+    heroBadges: ['ନିଜ ଭାଷାରେ ପଚାରନ୍ତୁ', 'କ୍ଲିନିକ୍ ଯିବାର ଆବଶ୍ୟକତା ନାହିଁ'],
+    voiceGrid: { eyebrow: 'ଇଣ୍ଟରାକ୍ଟିଭ୍ ସକ୍ଷମତା', heading: 'ଗଭୀରରୁ ଜାଣନ୍ତୁ', headingAccent: 'G1 କୁ.' },
+    testimonials: {
+      eyebrow: 'ପ୍ରକୃତ କାହାଣୀ',
+      heading: 'ପ୍ରତ୍ୟେକ ରାଜ୍ୟରେ',
+      headingAccent: 'ଶୁଣାଗଲା।',
+      subhead: 'ବାରାଣାସୀର ଆଈମାନଙ୍କଠାରୁ ମୁମ୍ବାଇର ଡାକ୍ତରଙ୍କ ପର୍ଯ୍ୟନ୍ତ — G1 ଆପଣଙ୍କ ଭାଷାରେ କଥା ହୁଏ।',
+    },
     problems: {
       eyebrow: 'ଦେଖନ୍ତୁ',
       tabProblems: 'ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀଙ୍କ ତ୍ରୁଟି',
@@ -562,6 +722,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'বৈশিষ্ট্য চাবলৈ টেপ কৰক',
     chooseLanguage: 'আপোনাৰ ভাষা বাছক',
     navItems: { 'Why G1': 'কিয় G1', Features: 'বৈশিষ্ট্য', India: 'ভাৰত', Trust: 'বিশ্বাস' },
+    heroTiles: [
+      { title: 'তাৎক্ষণিক চেট পৰামৰ্শ', brief: '৬০ ছেকেণ্ডত উত্তৰ' },
+      { title: "ভইচ আৰু ৰিপ'ৰ্ট", brief: 'কওক, আমি লিখিম' },
+      { title: 'যোগ আৰু আসন', brief: 'দৈনিক পথনিৰ্দেশ' },
+      { title: 'অফলাইনত কাম কৰে', brief: 'ছিগনেল নাথাকিলেও সমস্যা নাই' },
+    ],
+    heroBadges: ['নিজৰ ভাষাত সোধক', 'ক্লিনিকলৈ যোৱাৰ প্ৰয়োজন নাই'],
+    voiceGrid: { eyebrow: 'ইণ্টাৰেক্টিভ্ ক্ষমতা', heading: 'গভীৰভাৱে জানক', headingAccent: 'G1ক.' },
+    testimonials: {
+      eyebrow: 'সঁচা কাহিনী',
+      heading: 'প্ৰতিটো ৰাজ্যত',
+      headingAccent: 'শুনা গৈছে।',
+      subhead: 'বাৰাণাসীৰ আইতাৰ পৰা মুম্বাইৰ ডাক্তৰলৈ — G1এ আপোনাৰ ভাষাত কথা কয়।',
+    },
     problems: {
       eyebrow: 'চাওক',
       tabProblems: 'প্ৰতিদ্বন্দ্বীৰ কমী',
@@ -610,6 +784,20 @@ export const COPY: Record<string, Copy> = {
     tapToExplore: 'خصوصیات دیکھنے کے لیے ٹیپ کریں',
     chooseLanguage: 'اپنی زبان منتخب کریں',
     navItems: { 'Why G1': 'کیوں G1', Features: 'خصوصیات', India: 'بھارت', Trust: 'اعتماد' },
+    heroTiles: [
+      { title: 'فوری چیٹ مشاورت', brief: '60 سیکنڈ میں جواب' },
+      { title: 'آواز اور رپورٹس', brief: 'بولیں، ہم لکھیں گے' },
+      { title: 'یوگا اور کرنسی', brief: 'روزانہ رہنمائی' },
+      { title: 'آف لائن کام کرتا ہے', brief: 'سگنل نہ ہو تب بھی کوئی مسئلہ نہیں' },
+    ],
+    heroBadges: ['اپنی زبان میں پوچھیں', 'کلینک جانے کی ضرورت نہیں'],
+    voiceGrid: { eyebrow: 'انٹرایکٹو صلاحیتیں', heading: 'گہرائی سے جانیں', headingAccent: 'G1 کو.' },
+    testimonials: {
+      eyebrow: 'حقیقی کہانیاں',
+      heading: 'ہر ریاست میں',
+      headingAccent: 'سنی گئیں۔',
+      subhead: 'وارانسی کی دادیوں سے لے کر ممبئی کے ڈاکٹروں تک — G1 آپ کی زبان بولتا ہے۔',
+    },
     problems: {
       eyebrow: 'دیکھیں',
       tabProblems: 'حریفوں کی خامیاں',

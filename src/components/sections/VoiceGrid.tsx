@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   TrendingUp,
 } from 'lucide-react'
+import { useLanguage } from '@/lib/language'
 
 // --- Data for Feature 01: Chat ---
 const CHAT_LANGUAGES = ['Hindi', 'Bhojpuri', 'Tamil', 'Telugu', 'Marathi', 'Gujarati', 'Bengali', 'Punjabi']
@@ -138,6 +139,7 @@ const FEATURES_DEEP = [
 ]
 
 export function VoiceGrid() {
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState(1) // index in FEATURES_DEEP (default to Voice AI which is 1)
   const [activeQ, setActiveQ] = useState(2) // sequential questions active index
   const [laserPos, setLaserPos] = useState(0) // scanner laser position for Scan AI
@@ -160,10 +162,10 @@ export function VoiceGrid() {
         {/* Header */}
         <div className="text-center">
           <p className="text-xs font-semibold tracking-[0.25em] text-fg-muted uppercase sm:text-sm">
-            Interactive Capabilities
+            {t.voiceGrid.eyebrow}
           </p>
           <h2 className="mt-4 font-display text-[clamp(2rem,7vw,5rem)] leading-[0.95] tracking-tight text-fg uppercase">
-            Deep dive into <span className="text-accent">G1.</span>
+            {t.voiceGrid.heading} <span className="text-accent">{t.voiceGrid.headingAccent}</span>
           </h2>
         </div>
 
