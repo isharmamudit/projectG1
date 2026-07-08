@@ -45,15 +45,21 @@ export function Hero() {
 
   const TILES = TILE_META.map((meta, i) => ({ ...meta, n: String(i + 1).padStart(2, '0'), title: t.heroTiles[i].title, brief: t.heroTiles[i].brief }))
 
+  // Each badge is ~66px tall. The image container is pulled up under the
+  // headline by design (sm:-mt-6, so text peeks out from behind the figure),
+  // so row 1 needs a buffer past 0% to clear the headline text, not just
+  // clear of the container's own top edge. 15/40/65/90% of 380px = 57, 152,
+  // 247, 342 — ~95px gaps (> 66px badge height) and enough offset at the top
+  // to clear the headline's negative-margin overlap.
   const badges = [
-    { label: t.heroBadges[0], side: 'left' as const, top: 'top-[20%]', offsetClass: 'left-16', color: 'bg-tint-rose/25' },
-    { label: t.heroBadges[1], side: 'right' as const, top: 'top-[20%]', offsetClass: 'right-16', color: 'bg-tint-sage/25' },
-    { label: t.problems.solutions[0].headline, side: 'left' as const, top: 'top-[36%]', offsetClass: 'left-6', color: 'bg-tint-blue/25' },
-    { label: t.problems.solutions[1].headline, side: 'right' as const, top: 'top-[36%]', offsetClass: 'right-6', color: 'bg-tint-amber/25' },
-    { label: t.problems.solutions[2].headline, side: 'left' as const, top: 'top-[52%]', offsetClass: 'left-8', color: 'bg-tint-violet/25' },
-    { label: t.problems.solutions[3].headline, side: 'right' as const, top: 'top-[52%]', offsetClass: 'right-8', color: 'bg-tint-teal/25' },
-    { label: t.problems.solutions[4].headline, side: 'left' as const, top: 'top-[68%]', offsetClass: 'left-20', color: 'bg-tint-sage/25' },
-    { label: t.problems.solutions[5].headline, side: 'right' as const, top: 'top-[68%]', offsetClass: 'right-20', color: 'bg-tint-rose/25' },
+    { label: t.heroBadges[0], side: 'left' as const, top: 'top-[15%]', offsetClass: 'left-16', color: 'bg-tint-rose/25' },
+    { label: t.heroBadges[1], side: 'right' as const, top: 'top-[15%]', offsetClass: 'right-16', color: 'bg-tint-sage/25' },
+    { label: t.problems.solutions[0].headline, side: 'left' as const, top: 'top-[40%]', offsetClass: 'left-6', color: 'bg-tint-blue/25' },
+    { label: t.problems.solutions[1].headline, side: 'right' as const, top: 'top-[40%]', offsetClass: 'right-6', color: 'bg-tint-amber/25' },
+    { label: t.problems.solutions[2].headline, side: 'left' as const, top: 'top-[65%]', offsetClass: 'left-8', color: 'bg-tint-violet/25' },
+    { label: t.problems.solutions[3].headline, side: 'right' as const, top: 'top-[65%]', offsetClass: 'right-8', color: 'bg-tint-teal/25' },
+    { label: t.problems.solutions[4].headline, side: 'left' as const, top: 'top-[90%]', offsetClass: 'left-20', color: 'bg-tint-sage/25' },
+    { label: t.problems.solutions[5].headline, side: 'right' as const, top: 'top-[90%]', offsetClass: 'right-20', color: 'bg-tint-rose/25' },
   ]
 
   return (
