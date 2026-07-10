@@ -9,7 +9,8 @@ const GROQ_TTS_ENDPOINT = 'https://api.groq.com/openai/v1/audio/speech'
 // Requires one-time terms acceptance by the Groq org admin at
 // https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english
 const MODEL = 'canopylabs/orpheus-v1-english'
-const VOICE = 'tara'
+// Valid voices for this model: autumn, diana, hannah, austin, daniel, troy.
+const VOICE = 'daniel'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
