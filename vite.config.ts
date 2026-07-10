@@ -31,6 +31,10 @@ export default defineConfig({
         // itself loads with zero network once visited once.
         globPatterns: ['**/*.{js,css,html}'],
         navigateFallback: '/index.html',
+        // The on-device offline-chat chunk (WebLLM's runtime, not the model
+        // weights — those are downloaded separately by WebLLM itself and
+        // cached via the Cache API) is ~6MB, over Workbox's 2MB default.
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
       },
       devOptions: {
         // Lets us verify offline behavior against `npm run dev` too, not

@@ -1,14 +1,25 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, ChevronLeft, Phone, Search, WifiOff, X } from 'lucide-react'
+import { AlertTriangle, ChevronLeft, MessageCircle, Phone, Search, WifiOff, X } from 'lucide-react'
 import { EMERGENCY_GUIDES, searchEmergencyGuides, type EmergencyGuide } from '@/lib/emergencyGuides'
 
+// Lazy so the (fairly heavy) WebLLM library only loads once someone opens
+// this tab — it doesn't bloat the eagerly-loaded Guides page. The service
+// worker still precaches this chunk regardless, so it stays available once
+// visited even with no network afterward.
+const OfflineChat = lazy(() => import('@/components/offline/OfflineChat').then((m) => ({ default: m.OfflineChat })))
+
+type Tab = 'guides' | 'chat'
+
 /**
- * Deliberately static and AI-free — see emergencyGuides.ts for why. Cached
- * fully offline by the service worker (vite.config.ts) so this works with
- * zero network once visited once, which is the entire point of the page.
+ * Guides tab is deliberately static and AI-free — see emergencyGuides.ts
+ * for why. Chat tab is a genuine on-device LLM (OfflineChat.tsx) for
+ * broader offline conversation, clearly framed as a weaker fallback, not a
+ * replacement for the guides above it for real emergencies. Both are
+ * cached fully offline by the service worker (vite.config.ts).
  */
 export function EmergencyPage() {
+  const [tab, setTab] = useState<Tab>('guides')
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<EmergencyGuide | null>(null)
   const results = searchEmergencyGuides(query)
@@ -99,41 +110,71 @@ export function EmergencyPage() {
         </a>
       </div>
 
-      <div className="border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-2">
-          <Search className="size-3.5 shrink-0 text-fg-muted" strokeWidth={2.5} />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="What's happening? e.g. chest pain, snake bite, seizure…"
-            className="min-w-0 flex-1 bg-transparent text-[13px] text-fg placeholder:text-fg-muted focus:outline-none"
-          />
-        </div>
+      <div className="flex border-b border-border">
+        <button
+          type="button"
+          onClick={() => setTab('guides')}
+          className={`flex-1 border-b-2 py-2.5 text-[12px] font-black transition-colors ${
+            tab === 'guides' ? 'border-accent text-fg' : 'border-transparent text-fg-muted'
+          }`}
+        >
+          Guides
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab('chat')}
+          className={`flex flex-1 items-center justify-center gap-1 border-b-2 py-2.5 text-[12px] font-black transition-colors ${
+            tab === 'chat' ? 'border-accent text-fg' : 'border-transparent text-fg-muted'
+          }`}
+        >
+          <MessageCircle className="size-3" strokeWidth={2.5} />
+          Offline AI Chat
+        </button>
       </div>
 
-      <div data-lenis-prevent className="flex-1 space-y-2 overflow-y-auto p-4">
-        {results.length === 0 && (
-          <p className="py-8 text-center text-[12.5px] text-fg-muted">
-            No exact match — call 108/112 and describe the situation.
-          </p>
-        )}
-        {results.map((guide) => (
-          <button
-            key={guide.id}
-            type="button"
-            onClick={() => setSelected(guide)}
-            className="w-full rounded-2xl border border-border bg-surface p-3.5 text-left transition-colors hover:bg-surface-2"
-          >
-            <span className="text-[13.5px] font-black text-fg">{guide.title}</span>
-          </button>
-        ))}
-        {query === '' && (
-          <p className="pt-2 text-[11px] text-fg-muted">
-            Showing all {EMERGENCY_GUIDES.length} guides. This page was cached the last time you had a connection —
-            it works with no signal.
-          </p>
-        )}
-      </div>
+      {tab === 'guides' ? (
+        <>
+          <div className="border-b border-border px-4 py-3">
+            <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-2">
+              <Search className="size-3.5 shrink-0 text-fg-muted" strokeWidth={2.5} />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="What's happening? e.g. chest pain, snake bite, seizure…"
+                className="min-w-0 flex-1 bg-transparent text-[13px] text-fg placeholder:text-fg-muted focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div data-lenis-prevent className="flex-1 space-y-2 overflow-y-auto p-4">
+            {results.length === 0 && (
+              <p className="py-8 text-center text-[12.5px] text-fg-muted">
+                No exact match — call 108/112 and describe the situation.
+              </p>
+            )}
+            {results.map((guide) => (
+              <button
+                key={guide.id}
+                type="button"
+                onClick={() => setSelected(guide)}
+                className="w-full rounded-2xl border border-border bg-surface p-3.5 text-left transition-colors hover:bg-surface-2"
+              >
+                <span className="text-[13.5px] font-black text-fg">{guide.title}</span>
+              </button>
+            ))}
+            {query === '' && (
+              <p className="pt-2 text-[11px] text-fg-muted">
+                Showing all {EMERGENCY_GUIDES.length} guides. This page was cached the last time you had a connection
+                — it works with no signal.
+              </p>
+            )}
+          </div>
+        </>
+      ) : (
+        <Suspense fallback={<div className="flex flex-1 items-center justify-center text-[12px] text-fg-muted">Loading…</div>}>
+          <OfflineChat />
+        </Suspense>
+      )}
     </div>
   )
 }
