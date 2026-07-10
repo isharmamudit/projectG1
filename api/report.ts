@@ -15,6 +15,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
   or: 'Odia',
   as: 'Assamese',
   ur: 'Urdu',
+  'hi-en': 'Hinglish — a natural code-mixed blend of Hindi and English, written in Roman/Latin script, the way most urban Indians actually text each other (not formal Hindi, not formal English)',
 }
 
 interface ChatTurn {

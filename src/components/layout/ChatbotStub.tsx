@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FileText, Globe2, HeartPulse, LogOut, MessageCircle, Mic, Paperclip, Send, Smile, ThumbsDown, ThumbsUp, X } from 'lucide-react'
-import { COPY, LANGUAGES } from '@/lib/languages'
+import { COPY, HINGLISH_LANGUAGE, LANGUAGES } from '@/lib/languages'
 import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
 import { speechLocaleFor } from '@/lib/speechLocales'
@@ -59,7 +59,7 @@ function Avatar({ size }: { size: number }) {
  * conversation backed by api/chat.ts.
  */
 export function ChatbotStub() {
-  const { code, setCode, t } = useLanguage()
+  const { code, setCode } = useLanguage()
   const [open, setOpen] = useState(false)
   const [view, setView] = useState<'language' | 'chat'>('language')
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -70,6 +70,10 @@ export function ChatbotStub() {
   const [isListening, setIsListening] = useState(false)
   const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
   const [isGeneratingReport, setIsGeneratingReport] = useState(false)
+  // Hinglish is chat-only — never fed into setCode, so it can never affect
+  // the site-wide language switcher. When active, it overrides `code` for
+  // everything chat-related (API calls, greeting, speech locale, UI copy).
+  const [hinglishActive, setHinglishActive] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
@@ -84,7 +88,10 @@ export function ChatbotStub() {
     return () => recognitionRef.current?.stop()
   }, [])
 
-  const speechLocale = speechLocaleFor(code)
+  const chatLangCode = hinglishActive ? HINGLISH_LANGUAGE.code : code
+  const chatCopy = hinglishActive ? COPY.en : (COPY[code] ?? COPY.en)
+
+  const speechLocale = speechLocaleFor(chatLangCode)
   const speechSupported =
     Boolean(speechLocale) &&
     typeof window !== 'undefined' &&
@@ -139,9 +146,16 @@ export function ChatbotStub() {
   }
 
   function selectLanguage(langCode: string) {
-    setCode(langCode)
-    const copy = COPY[langCode] ?? COPY.en
-    setMessages([{ id: nextId++, role: 'ai', text: copy.chatbot.greeting }])
+    if (langCode === HINGLISH_LANGUAGE.code) {
+      // Chat-only pick — never touches the site-wide language.
+      setHinglishActive(true)
+      setMessages([{ id: nextId++, role: 'ai', text: COPY.en.chatbot.greeting }])
+    } else {
+      setHinglishActive(false)
+      setCode(langCode)
+      const copy = COPY[langCode] ?? COPY.en
+      setMessages([{ id: nextId++, role: 'ai', text: copy.chatbot.greeting }])
+    }
     setRatings({})
     setShowQuickReplies(true)
     setPendingImage(null)
@@ -167,7 +181,7 @@ export function ChatbotStub() {
         body: JSON.stringify({
           message: value,
           history: historyForRequest,
-          languageCode: code,
+          languageCode: chatLangCode,
           image: image ? { dataUrl: image.dataUrl, mimeType: image.mimeType } : undefined,
         }),
       })
@@ -176,15 +190,14 @@ export function ChatbotStub() {
       if (!data.reply) throw new Error('Empty reply')
       setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: data.reply as string }])
     } catch {
-      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.errorFallback }])
+      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: chatCopy.chatbot.errorFallback }])
     } finally {
       setIsTyping(false)
     }
   }
 
   function endChat() {
-    const copy = COPY[code] ?? COPY.en
-    setMessages([{ id: nextId++, role: 'ai', text: copy.chatbot.greeting }])
+    setMessages([{ id: nextId++, role: 'ai', text: chatCopy.chatbot.greeting }])
     setRatings({})
     setShowQuickReplies(true)
     setPendingImage(null)
@@ -200,38 +213,40 @@ export function ChatbotStub() {
       const res = await fetch('/api/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history: historyForRequest, languageCode: code }),
+        body: JSON.stringify({ history: historyForRequest, languageCode: chatLangCode }),
       })
       if (!res.ok) throw new Error('Request failed')
       const data: { ready: boolean; followUp: string; report: import('@/lib/report').DoctorReport | null } =
         await res.json()
 
       if (!data.ready || !data.report) {
-        setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: data.followUp || t.chatbot.errorFallback }])
+        setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: data.followUp || chatCopy.chatbot.errorFallback }])
         return
       }
 
       downloadDoctorReportPdf(data.report, currentLang.englishName)
       setMessages((prev) => [
         ...prev,
-        { id: nextId++, role: 'ai', text: t.chatbot.reportReady ?? 'Your report is ready — check your downloads.' },
+        { id: nextId++, role: 'ai', text: chatCopy.chatbot.reportReady ?? 'Your report is ready — check your downloads.' },
       ])
     } catch {
-      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.errorFallback }])
+      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: chatCopy.chatbot.errorFallback }])
     } finally {
       setIsGeneratingReport(false)
     }
   }
 
-  const currentLang = LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0]
+  const currentLang = hinglishActive
+    ? HINGLISH_LANGUAGE
+    : (LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0])
 
   return (
     <>
       <motion.button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        title={t.chatbot.title}
-        aria-label={open ? 'Close chat' : t.chatbot.title}
+        title={chatCopy.chatbot.title}
+        aria-label={open ? 'Close chat' : chatCopy.chatbot.title}
         initial={{ opacity: 0, scale: 0.6 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.6, type: 'spring', stiffness: 260, damping: 18 }}
@@ -282,22 +297,22 @@ export function ChatbotStub() {
                   <div className="mx-auto mb-3 flex size-[68px] items-center justify-center rounded-full bg-paper shadow-[0_8px_20px_-6px_rgba(0,0,0,0.4)]">
                     <Avatar size={54} />
                   </div>
-                  <p className="font-display text-[15px] font-black text-paper">{t.chatbot.title}</p>
-                  <p className="mt-1 text-[11.5px] text-paper/75">{t.chatbot.pickLanguage}</p>
+                  <p className="font-display text-[15px] font-black text-paper">{chatCopy.chatbot.title}</p>
+                  <p className="mt-1 text-[11.5px] text-paper/75">{chatCopy.chatbot.pickLanguage}</p>
                 </div>
 
                 <div
                   data-lenis-prevent
                   className="grid flex-1 grid-cols-2 content-start gap-2 overflow-y-auto p-4"
                 >
-                  {LANGUAGES.map((lang) => (
+                  {[LANGUAGES[0], HINGLISH_LANGUAGE, ...LANGUAGES.slice(1)].map((lang) => (
                     <button
                       key={lang.code}
                       type="button"
                       onClick={() => selectLanguage(lang.code)}
                       className={cn(
                         'flex flex-col items-start gap-0.5 rounded-2xl border px-3 py-2.5 text-left transition-colors',
-                        lang.code === code
+                        lang.code === chatLangCode
                           ? 'border-accent bg-accent/10'
                           : 'border-border bg-surface hover:bg-surface-2',
                       )}
@@ -311,10 +326,10 @@ export function ChatbotStub() {
                 <div className="border-t border-border p-4 pt-3">
                   <button
                     type="button"
-                    onClick={() => selectLanguage(code)}
+                    onClick={() => selectLanguage(chatLangCode)}
                     className="w-full rounded-full bg-accent py-2.5 text-[13px] font-black text-accent-fg transition-transform hover:scale-[1.02] active:scale-95"
                   >
-                    {t.chatbot.continueIn} {currentLang.nativeName}
+                    {chatCopy.chatbot.continueIn} {currentLang.nativeName}
                   </button>
                 </div>
               </>
@@ -323,14 +338,14 @@ export function ChatbotStub() {
                 <div className="flex items-center gap-2.5 bg-gradient-to-br from-accent via-accent/85 to-ink px-4 py-3.5">
                   <Avatar size={36} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-display text-[13px] font-black text-paper">{t.chatbot.title}</p>
+                    <p className="font-display text-[13px] font-black text-paper">{chatCopy.chatbot.title}</p>
                     <button
                       type="button"
                       onClick={() => setView('language')}
                       className="flex items-center gap-1 text-[10px] font-semibold text-paper/75 hover:text-paper"
                     >
                       <Globe2 className="size-2.5" strokeWidth={2.5} />
-                      {currentLang.nativeName} · {t.chatbot.changeLanguage}
+                      {currentLang.nativeName} · {chatCopy.chatbot.changeLanguage}
                     </button>
                   </div>
                   <button
@@ -361,7 +376,7 @@ export function ChatbotStub() {
                                 {m.text}
                               </div>
                               <div className="mt-1.5 flex items-center gap-1.5 pl-0.5">
-                                <span className="text-[10px] text-fg-muted">{t.chatbot.helpfulQuestion}</span>
+                                <span className="text-[10px] text-fg-muted">{chatCopy.chatbot.helpfulQuestion}</span>
                                 <button
                                   type="button"
                                   aria-label="Helpful"
@@ -402,7 +417,7 @@ export function ChatbotStub() {
 
                         {isLast && showQuickReplies && m.role === 'ai' && (
                           <div className="mt-2.5 flex flex-wrap gap-1.5 pl-8">
-                            {t.chatbot.quickReplies.map((qr) => (
+                            {chatCopy.chatbot.quickReplies.map((qr) => (
                               <button
                                 key={qr}
                                 type="button"
@@ -441,7 +456,7 @@ export function ChatbotStub() {
                     className="flex items-center gap-1 rounded-full px-2 py-1 text-[10.5px] font-bold text-fg-muted transition-colors hover:text-fg"
                   >
                     <LogOut className="size-3" strokeWidth={2.25} />
-                    {t.chatbot.endChat ?? 'End chat'}
+                    {chatCopy.chatbot.endChat ?? 'End chat'}
                   </button>
                   <button
                     type="button"
@@ -453,7 +468,7 @@ export function ChatbotStub() {
                     )}
                   >
                     <FileText className="size-3" strokeWidth={2.25} />
-                    {isGeneratingReport ? (t.chatbot.generatingReport ?? 'Preparing your report…') : (t.chatbot.getReport ?? 'Get doctor report')}
+                    {isGeneratingReport ? (chatCopy.chatbot.generatingReport ?? 'Preparing your report…') : (chatCopy.chatbot.getReport ?? 'Get doctor report')}
                   </button>
                 </div>
 
@@ -479,7 +494,7 @@ export function ChatbotStub() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') send()
                       }}
-                      placeholder={isListening ? t.chatbot.listening : t.chatbot.placeholder}
+                      placeholder={isListening ? chatCopy.chatbot.listening : chatCopy.chatbot.placeholder}
                       className="min-w-0 flex-1 bg-transparent py-2.5 text-[12.5px] text-fg placeholder:text-fg-muted focus:outline-none"
                     />
                     <button type="button" title="Emoji (coming soon)" className="flex size-7 shrink-0 items-center justify-center rounded-full text-fg-muted hover:text-fg">

@@ -15,6 +15,9 @@ export const SPEECH_LOCALES: Partial<Record<string, string>> = {
   kn: 'kn-IN',
   pa: 'pa-IN',
   ur: 'ur-IN',
+  // Web Speech has no Hinglish mode — hi-IN gets us spoken Hindi/Hinglish
+  // words transcribed (in Devanagari), which is the closest available.
+  'hi-en': 'hi-IN',
 }
 
 export function speechLocaleFor(languageCode: string): string | undefined {

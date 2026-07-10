@@ -20,6 +20,12 @@ export const LANGUAGES: Language[] = [
   { code: 'ur', englishName: 'Urdu', nativeName: 'اردو', rtl: true },
 ]
 
+/**
+ * Chat-only — not part of LANGUAGES/COPY, so it never touches the site-wide
+ * language switcher. Only the chat widget offers it, right next to English.
+ */
+export const HINGLISH_LANGUAGE: Language = { code: 'hi-en', englishName: 'Hinglish', nativeName: 'Hinglish' }
+
 interface Card {
   title: string
   detail: string
