@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { HeartPulse, Mic } from 'lucide-react'
+import { HeartPulse, Mic, TriangleAlert } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useLanguage } from '@/lib/language'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
@@ -100,6 +100,14 @@ export function Navbar() {
         )}
 
         <div className="flex shrink-0 items-center gap-2">
+          <Link
+            to="/emergency"
+            title="Offline emergency first-aid guide"
+            className="flex items-center gap-1.5 rounded-xl bg-tint-rose/15 px-3 py-2 text-sm font-bold text-tint-rose transition-transform hover:scale-[1.03] active:scale-95"
+          >
+            <TriangleAlert className="size-3.5" strokeWidth={2.5} />
+            <span className="hidden sm:inline">Emergency</span>
+          </Link>
           {!onVoicePage && (
             <Link
               to="/voice"
