@@ -4,11 +4,34 @@ export interface VoiceTranscriptTurn {
   timestamp: number
 }
 
+/** Keys and order must match api/voice-chat.ts's INTAKE_FIELDS. */
+export const INTAKE_FIELD_KEYS = [
+  'name',
+  'age',
+  'sex',
+  'height',
+  'weight',
+  'chiefComplaint',
+  'symptomDuration',
+  'familyHistory',
+  'currentMedications',
+  'localMedicines',
+] as const
+
+export type IntakeFieldKey = (typeof INTAKE_FIELD_KEYS)[number]
+export type IntakeState = Record<IntakeFieldKey, string | null>
+
+export function emptyIntakeState(): IntakeState {
+  return Object.fromEntries(INTAKE_FIELD_KEYS.map((k) => [k, null])) as IntakeState
+}
+
 export interface VoiceSession {
   sessionId: string
   languageCode: string
   startedAt: number
   transcript: VoiceTranscriptTurn[]
+  intake: IntakeState
+  intakeComplete: boolean
 }
 
 const STORAGE_KEY = 'projectg1-voice-session'
@@ -18,7 +41,14 @@ export function loadVoiceSession(): VoiceSession | null {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
-    return JSON.parse(raw) as VoiceSession
+    const parsed = JSON.parse(raw) as Partial<VoiceSession>
+    if (!parsed.sessionId || !Array.isArray(parsed.transcript)) return null
+    // Sessions saved before intake tracking existed won't have these fields.
+    return {
+      ...parsed,
+      intake: parsed.intake ?? emptyIntakeState(),
+      intakeComplete: parsed.intakeComplete ?? false,
+    } as VoiceSession
   } catch {
     return null
   }
@@ -45,6 +75,8 @@ export function newVoiceSession(languageCode: string): VoiceSession {
     languageCode,
     startedAt: Date.now(),
     transcript: [],
+    intake: emptyIntakeState(),
+    intakeComplete: false,
   }
 }
 

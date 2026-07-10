@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { Download, RotateCcw } from 'lucide-react'
+import { Download, Paperclip, RotateCcw, Send, X } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { VoiceOrb, type VoiceMode } from '@/components/voice/VoiceOrb'
 import { VoiceTranscriptPanel } from '@/components/voice/VoiceTranscriptPanel'
+import { compressImageFile } from '@/lib/image'
 import {
   clearVoiceSession,
   downloadVoiceTranscript,
   loadVoiceSession,
   newVoiceSession,
   saveVoiceSession,
+  INTAKE_FIELD_KEYS,
+  type IntakeState,
   type VoiceSession,
 } from '@/lib/voiceSession'
 
@@ -26,6 +29,11 @@ interface SpeechRecognitionLike extends EventTarget {
   onerror: (() => void) | null
 }
 
+interface PendingImage {
+  dataUrl: string
+  mimeType: string
+}
+
 // Phase 1 scope: English, Hindi, and Hinglish only (full 13-language matrix
 // lands in the Phase 3 UI-polish pass).
 const VOICE_LANGUAGES = [
@@ -38,9 +46,11 @@ export function VoicePage() {
   const [session, setSession] = useState<VoiceSession>(() => loadVoiceSession() ?? newVoiceSession('en'))
   const [mode, setMode] = useState<VoiceMode>('idle')
   const [pendingTranscript, setPendingTranscript] = useState<string | null>(null)
+  const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
   const [error, setError] = useState<string | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     saveVoiceSession(session)
@@ -61,6 +71,8 @@ export function VoicePage() {
       (window as unknown as { SpeechRecognition?: unknown }).SpeechRecognition ||
         (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition,
     )
+
+  const intakeAnsweredCount = INTAKE_FIELD_KEYS.filter((k) => session.intake[k]).length
 
   function startListening() {
     if (!speechSupported) {
@@ -114,9 +126,23 @@ export function VoicePage() {
     setMode('idle')
   }
 
-  async function handleConfirm(text: string) {
-    if (!text.trim()) return
+  async function handleFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const compressed = await compressImageFile(file)
+      setPendingImage(compressed)
+    } catch {
+      // Nice-to-have attachment — not worth surfacing a failure for.
+    }
+  }
+
+  async function sendTurn(text: string) {
+    const image = pendingImage
+    if (!text.trim() && !image) return
     setPendingTranscript(null)
+    setPendingImage(null)
 
     const userTurn = { role: 'user' as const, text, timestamp: Date.now() }
     const historyForRequest = session.transcript.map((t) => ({ role: t.role, text: t.text }))
@@ -132,15 +158,28 @@ export function VoicePage() {
           message: text,
           history: historyForRequest,
           languageCode: session.languageCode,
+          intakeState: session.intake,
+          image: image ? { dataUrl: image.dataUrl, mimeType: image.mimeType } : undefined,
         }),
       })
       if (!chatRes.ok) throw new Error('chat failed')
-      const chatData: { reply?: string } = await chatRes.json()
+      const chatData: { reply?: string; intakeUpdates?: Partial<IntakeState>; intakeComplete?: boolean } =
+        await chatRes.json()
       const reply = chatData.reply
       if (!reply) throw new Error('empty reply')
 
       const aiTurn = { role: 'ai' as const, text: reply, timestamp: Date.now() }
-      setSession((s) => ({ ...s, transcript: [...s.transcript, aiTurn] }))
+      // Only merge fields the model actually just learned — a null here means
+      // "not mentioned this turn," not "clear the existing value."
+      const newlyLearned = Object.fromEntries(
+        Object.entries(chatData.intakeUpdates ?? {}).filter(([, v]) => v != null && v !== ''),
+      )
+      setSession((s) => ({
+        ...s,
+        transcript: [...s.transcript, aiTurn],
+        intake: { ...s.intake, ...newlyLearned },
+        intakeComplete: s.intakeComplete || Boolean(chatData.intakeComplete),
+      }))
       setMode('speaking')
 
       const ttsRes = await fetch('/api/voice-tts', {
@@ -172,6 +211,7 @@ export function VoicePage() {
     clearVoiceSession()
     setSession(newVoiceSession(session.languageCode))
     setPendingTranscript(null)
+    setPendingImage(null)
     setMode('idle')
     setError(null)
   }
@@ -198,6 +238,20 @@ export function VoicePage() {
           ))}
         </div>
 
+        {!session.intakeComplete && (
+          <div className="flex items-center gap-2">
+            <div className="h-1.5 w-32 overflow-hidden rounded-full bg-surface-2">
+              <div
+                className="h-full rounded-full bg-accent transition-all"
+                style={{ width: `${(intakeAnsweredCount / INTAKE_FIELD_KEYS.length) * 100}%` }}
+              />
+            </div>
+            <span className="text-[10px] font-bold text-fg-muted">
+              {intakeAnsweredCount} of {INTAKE_FIELD_KEYS.length} details
+            </span>
+          </div>
+        )}
+
         <VoiceOrb mode={mode} onTap={handleOrbTap} />
 
         <p className="text-[12px] font-semibold text-fg-muted">
@@ -210,14 +264,46 @@ export function VoicePage() {
 
         {error && <p className="text-[12px] font-semibold text-tint-rose">{error}</p>}
 
+        {pendingImage && (
+          <div className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-2 py-1.5">
+            <img src={pendingImage.dataUrl} alt="Pending attachment" className="size-9 rounded-lg object-cover" />
+            <span className="text-[11px] font-semibold text-fg-muted">Photo ready</span>
+            <button
+              type="button"
+              onClick={() => sendTurn('')}
+              aria-label="Send photo"
+              className="flex size-7 items-center justify-center rounded-full bg-accent text-accent-fg"
+            >
+              <Send className="size-3.5" strokeWidth={2.5} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setPendingImage(null)}
+              aria-label="Remove attachment"
+              className="flex size-7 items-center justify-center rounded-full text-fg-muted hover:text-fg"
+            >
+              <X className="size-3.5" strokeWidth={2.5} />
+            </button>
+          </div>
+        )}
+
         <VoiceTranscriptPanel
           history={session.transcript}
           pendingTranscript={pendingTranscript}
-          onConfirm={handleConfirm}
+          onConfirm={sendTurn}
           onDismiss={handleDismiss}
         />
 
         <div className="flex items-center gap-2">
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelected} className="hidden" />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-bold text-fg-muted transition-colors hover:text-fg"
+          >
+            <Paperclip className="size-3" strokeWidth={2.5} />
+            Attach photo
+          </button>
           <button
             type="button"
             onClick={() => downloadVoiceTranscript(session)}
