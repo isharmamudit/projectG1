@@ -2,9 +2,11 @@ import { jsPDF } from 'jspdf'
 
 export interface DoctorReport {
   chiefComplaint: string
+  urgencyLevel: string
   symptoms: string[]
   duration: string
   possibleConsiderations: string[]
+  conditionToExclude: string
   suggestedNextSteps: string[]
   redFlags: string[]
   summary: string
@@ -74,7 +76,13 @@ export function downloadDoctorReportPdf(report: DoctorReport, languageLabel: str
   const generated = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
   doc.text(`Generated ${generated} · Conversation language: ${languageLabel}`, marginX, y)
   doc.setTextColor(0)
-  y += 22
+  y += 18
+  if (report.urgencyLevel) {
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(10.5)
+    doc.text(`Urgency: ${report.urgencyLevel}`, marginX, y)
+    y += 16
+  }
   doc.setDrawColor(210)
   doc.line(marginX, y, pageWidth - marginX, y)
   y += 24
@@ -90,6 +98,11 @@ export function downloadDoctorReportPdf(report: DoctorReport, languageLabel: str
 
   writeHeading('Possible Considerations')
   writeBullets(report.possibleConsiderations)
+
+  if (report.conditionToExclude) {
+    writeHeading('Important Condition to Exclude')
+    writeParagraph(report.conditionToExclude)
+  }
 
   writeHeading('Suggested Next Steps')
   writeBullets(report.suggestedNextSteps)
