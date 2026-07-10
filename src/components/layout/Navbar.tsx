@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { HeartPulse } from 'lucide-react'
+import { HeartPulse, Mic } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useLanguage } from '@/lib/language'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { cn } from '@/lib/utils'
@@ -22,11 +23,15 @@ function scrollTo(selector: string, setVisible: (v: boolean) => void) {
 
 export function Navbar() {
   const { t } = useLanguage()
-  const [visible, setVisible]   = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const onVoicePage = location.pathname === '/voice'
+  const [visible, setVisible]   = useState(onVoicePage)
   const [scrolled, setScrolled] = useState(false)
   const lastY = useRef(0)
 
   useEffect(() => {
+    if (onVoicePage) return
     const initialY = window.scrollY
     const isMobile = window.innerWidth < 768
     setVisible(isMobile || initialY > 300)
@@ -50,7 +55,7 @@ export function Navbar() {
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [onVoicePage])
 
   return (
     <motion.header
@@ -69,7 +74,7 @@ export function Navbar() {
         {/* Logo */}
         <button
           type="button"
-          onClick={() => scrollTo('#top', setVisible)}
+          onClick={() => (onVoicePage ? navigate('/') : scrollTo('#top', setVisible))}
           className="flex items-center gap-2 text-fg"
         >
           <HeartPulse className="size-5 text-accent" strokeWidth={2.5} />
@@ -79,20 +84,31 @@ export function Navbar() {
         </button>
 
         {/* Nav links */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={() => scrollTo(item.href, setVisible)}
-              className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
-            >
-              {t.navItems[item.label] ?? item.label}
-            </button>
-          ))}
-        </nav>
+        {!onVoicePage && (
+          <nav className="hidden items-center gap-1 md:flex">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => scrollTo(item.href, setVisible)}
+                className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
+              >
+                {t.navItems[item.label] ?? item.label}
+              </button>
+            ))}
+          </nav>
+        )}
 
         <div className="flex shrink-0 items-center gap-2">
+          {!onVoicePage && (
+            <Link
+              to="/voice"
+              className="flex items-center gap-1.5 rounded-xl bg-ink px-3.5 py-2 text-sm font-bold text-tint-amber transition-transform hover:scale-[1.03] active:scale-95"
+            >
+              <Mic className="size-3.5" strokeWidth={2.5} />
+              Talk to G1
+            </Link>
+          )}
           <LanguageSwitcher variant="icon" drop="down" />
         </div>
       </div>
