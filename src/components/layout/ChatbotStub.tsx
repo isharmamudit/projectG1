@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Globe2, HeartPulse, MessageCircle, Mic, Paperclip, Send, Smile, ThumbsDown, ThumbsUp, X } from 'lucide-react'
+import { FileText, Globe2, HeartPulse, LogOut, MessageCircle, Mic, Paperclip, Send, Smile, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import { COPY, LANGUAGES } from '@/lib/languages'
 import { useLanguage } from '@/lib/language'
 import { cn } from '@/lib/utils'
 import { speechLocaleFor } from '@/lib/speechLocales'
 import { compressImageFile } from '@/lib/image'
+import { downloadDoctorReportPdf } from '@/lib/report'
 
 interface ChatMessage {
   id: number
@@ -68,6 +69,7 @@ export function ChatbotStub() {
   const [ratings, setRatings] = useState<Record<number, 'up' | 'down'>>({})
   const [isListening, setIsListening] = useState(false)
   const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
@@ -177,6 +179,47 @@ export function ChatbotStub() {
       setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.errorFallback }])
     } finally {
       setIsTyping(false)
+    }
+  }
+
+  function endChat() {
+    const copy = COPY[code] ?? COPY.en
+    setMessages([{ id: nextId++, role: 'ai', text: copy.chatbot.greeting }])
+    setRatings({})
+    setShowQuickReplies(true)
+    setPendingImage(null)
+    setInput('')
+  }
+
+  async function requestReport() {
+    if (isGeneratingReport || messages.length === 0) return
+    setShowQuickReplies(false)
+    setIsGeneratingReport(true)
+    try {
+      const historyForRequest = messages.map((m) => ({ role: m.role, text: m.text }))
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: historyForRequest, languageCode: code }),
+      })
+      if (!res.ok) throw new Error('Request failed')
+      const data: { ready: boolean; followUp: string; report: import('@/lib/report').DoctorReport | null } =
+        await res.json()
+
+      if (!data.ready || !data.report) {
+        setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: data.followUp || t.chatbot.errorFallback }])
+        return
+      }
+
+      downloadDoctorReportPdf(data.report, currentLang.englishName)
+      setMessages((prev) => [
+        ...prev,
+        { id: nextId++, role: 'ai', text: t.chatbot.reportReady ?? 'Your report is ready — check your downloads.' },
+      ])
+    } catch {
+      setMessages((prev) => [...prev, { id: nextId++, role: 'ai', text: t.chatbot.errorFallback }])
+    } finally {
+      setIsGeneratingReport(false)
     }
   }
 
@@ -389,6 +432,29 @@ export function ChatbotStub() {
                       </div>
                     </div>
                   )}
+                </div>
+
+                <div className="flex items-center gap-1.5 border-t border-border bg-surface/60 px-3 py-2">
+                  <button
+                    type="button"
+                    onClick={endChat}
+                    className="flex items-center gap-1 rounded-full px-2 py-1 text-[10.5px] font-bold text-fg-muted transition-colors hover:text-fg"
+                  >
+                    <LogOut className="size-3" strokeWidth={2.25} />
+                    {t.chatbot.endChat ?? 'End chat'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={requestReport}
+                    disabled={isGeneratingReport || messages.length === 0}
+                    className={cn(
+                      'ml-auto flex items-center gap-1 rounded-full border border-accent/25 bg-accent/10 px-2.5 py-1 text-[10.5px] font-bold text-fg transition-colors hover:bg-accent/20',
+                      (isGeneratingReport || messages.length === 0) && 'cursor-not-allowed opacity-50',
+                    )}
+                  >
+                    <FileText className="size-3" strokeWidth={2.25} />
+                    {isGeneratingReport ? (t.chatbot.generatingReport ?? 'Preparing your report…') : (t.chatbot.getReport ?? 'Get doctor report')}
+                  </button>
                 </div>
 
                 <div className="border-t border-border bg-surface/40 p-3">

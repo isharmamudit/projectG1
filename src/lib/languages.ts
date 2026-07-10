@@ -124,6 +124,10 @@ export interface Copy {
     quickReplies: [string, string]
     errorFallback: string
     listening: string
+    endChat?: string
+    getReport?: string
+    generatingReport?: string
+    reportReady?: string
   }
   ctaText: string
   footer: {
@@ -243,6 +247,10 @@ export const COPY: Record<string, Copy> = {
       quickReplies: ['I have a headache', 'Skin rash'],
       errorFallback: 'Something went wrong. Please try again in a moment.',
       listening: 'Listening…',
+      endChat: 'End chat',
+      getReport: 'Get doctor report',
+      generatingReport: 'Preparing your report…',
+      reportReady: 'Your report is ready — check your downloads.',
     },
     ctaText: 'Start your health story',
     footer: { tagline: 'Made for India.', disclaimer: 'Not a substitute for professional medical advice.' },
