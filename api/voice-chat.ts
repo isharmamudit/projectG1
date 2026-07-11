@@ -1,7 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { retrieveIcmrGuidance } from './_icmrGuidelines'
 
 // Kept self-contained (see api/chat.ts) — no cross-project TS path-alias
 // dependency, since Vercel's function bundler doesn't share tsconfig.app.json.
+// (Plain relative imports of same-directory api/ siblings, like the one
+// above, bundle fine — it's only "@/*"-aliased src/* imports that break.)
 //
 // This is a deliberate fork of api/chat.ts's systemInstructionFor(), not a
 // shared import — the persona core here must be kept in sync by hand with
@@ -57,8 +60,22 @@ const MAX_HISTORY_TURNS = 15
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions'
 const MODEL = 'llama-3.3-70b-versatile'
 
-function systemInstructionFor(languageCode: string, intakeState: IntakeState, intakeComplete: boolean) {
+function systemInstructionFor(
+  languageCode: string,
+  intakeState: IntakeState,
+  intakeComplete: boolean,
+  retrievedGuidance: ReturnType<typeof retrieveIcmrGuidance>,
+) {
   const languageName = LANGUAGE_NAMES[languageCode] ?? 'English'
+  const guidanceBlock =
+    retrievedGuidance.length > 0
+      ? [
+          ``,
+          `RETRIEVED CLINICAL GUIDANCE — prefer this over your own memorized knowledge for these specific topics; it comes from official Indian government treatment workflows, not your training data:`,
+          ...retrievedGuidance.map((g) => `- ${g.title}: ${g.summary} (Source: ${g.source})`),
+          `Use this to inform red flags and reasoning where relevant, but still apply your own clinical judgment for anything this guidance doesn't cover.`,
+        ]
+      : []
 
   const knownFields = INTAKE_FIELDS.filter((f) => intakeState[f.key]).map((f) => `${f.label}: ${intakeState[f.key]}`)
   const missingFields = INTAKE_FIELDS.filter((f) => !intakeState[f.key]).map((f) => f.label)
@@ -132,6 +149,7 @@ function systemInstructionFor(languageCode: string, intakeState: IntakeState, in
     `RESPONSE FORMAT. Respond with ONLY a single JSON object, no other text: {"reply": string, "intakeUpdates": {${INTAKE_FIELDS.map((f) => `"${f.key}": string | null`).join(', ')}}, "intakeComplete": boolean}. "reply" is exactly what gets spoken aloud to the patient — natural sentences only, no JSON, no field names, no markdown. In "intakeUpdates", put the patient's own words for any of the 10 fields they just gave you in THIS turn (null for anything not just learned). Set "intakeComplete" to true once all 10 intake fields are known (from "already known" plus anything just learned).`,
     ``,
     `⚠️ FINAL CHECK before you reply, every single turn: re-read the user's latest message against the EMERGENCY OVERRIDE list at the very top of this prompt. If it matches — including when the patient calls it something harmless like "acidity" or "gas" themselves — your "reply" must be ONLY the emergency message (call 108/112 / go to the ER now), nothing else, no questions.`,
+    ...guidanceBlock,
   ].join('\n')
 }
 
@@ -166,8 +184,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? `${message || '(no caption)'}\n\n[The user also attached a photo.]`
       : message
 
+    const retrievedGuidance = retrieveIcmrGuidance(message)
     const messages = [
-      { role: 'system', content: systemInstructionFor(languageCode, intakeState, intakeComplete) },
+      { role: 'system', content: systemInstructionFor(languageCode, intakeState, intakeComplete, retrievedGuidance) },
       ...history.map((turn) => ({
         role: turn.role === 'ai' ? 'assistant' : 'user',
         content: turn.text,
