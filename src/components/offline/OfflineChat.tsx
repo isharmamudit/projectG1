@@ -90,7 +90,7 @@ export function OfflineChat() {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
         <Wifi className="size-6 text-accent" strokeWidth={2} />
-        <p className="text-[13px] font-bold text-fg">Download the offline AI (~900 MB)</p>
+        <p className="text-[13px] font-bold text-fg">Download the offline AI (~2 GB)</p>
         <p className="max-w-xs text-[12px] text-fg-muted">
           Do this once while you have Wi-Fi or good signal. After that, this chat works with zero connection,
           anywhere.
