@@ -6,8 +6,18 @@ export type VoiceMode = 'idle' | 'listening' | 'reviewing' | 'thinking' | 'speak
 
 const RING_COUNT = 3
 
-export function VoiceOrb({ mode, onTap }: { mode: VoiceMode; onTap: () => void }) {
+interface VoiceOrbProps {
+  mode: VoiceMode
+  onTap: () => void
+  /** 0-1 real-time playback amplitude while speaking, from an AnalyserNode
+   * on the TTS audio (see VoicePage.tsx). When present, the orb pulses with
+   * the actual voice instead of a canned loop. */
+  level?: number
+}
+
+export function VoiceOrb({ mode, onTap, level }: VoiceOrbProps) {
   const tappable = mode === 'idle' || mode === 'listening'
+  const speakingWithLevel = mode === 'speaking' && level !== undefined
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: 260, height: 260 }}>
@@ -20,8 +30,16 @@ export function VoiceOrb({ mode, onTap }: { mode: VoiceMode; onTap: () => void }
               mode === 'listening' ? 'bg-accent/20' : 'bg-tint-amber/20',
             )}
             style={{ width: 180, height: 180 }}
-            animate={{ scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
-            transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.5, ease: 'easeInOut' }}
+            animate={
+              speakingWithLevel
+                ? { scale: 1 + level * 0.5, opacity: 0.35 + level * 0.3 }
+                : { scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }
+            }
+            transition={
+              speakingWithLevel
+                ? { duration: 0.1 }
+                : { duration: 2.2, repeat: Infinity, delay: i * 0.5, ease: 'easeInOut' }
+            }
           />
         ))}
 
@@ -31,13 +49,19 @@ export function VoiceOrb({ mode, onTap }: { mode: VoiceMode; onTap: () => void }
         disabled={!tappable}
         aria-label={mode === 'idle' ? 'Start talking' : mode === 'listening' ? 'Stop listening' : 'G1'}
         animate={
-          mode === 'thinking'
-            ? { scale: [1, 1.04, 1] }
-            : mode === 'speaking'
-              ? { scale: [1, 1.08, 1] }
-              : { scale: 1 }
+          speakingWithLevel
+            ? { scale: 1 + level * 0.12 }
+            : mode === 'thinking'
+              ? { scale: [1, 1.04, 1] }
+              : mode === 'speaking'
+                ? { scale: [1, 1.08, 1] }
+                : { scale: 1 }
         }
-        transition={{ duration: 1.1, repeat: mode === 'thinking' || mode === 'speaking' ? Infinity : 0, ease: 'easeInOut' }}
+        transition={
+          speakingWithLevel
+            ? { duration: 0.1 }
+            : { duration: 1.1, repeat: mode === 'thinking' || mode === 'speaking' ? Infinity : 0, ease: 'easeInOut' }
+        }
         whileHover={tappable ? { scale: 1.04 } : {}}
         whileTap={tappable ? { scale: 0.96 } : {}}
         className={cn(

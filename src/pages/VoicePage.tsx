@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Download, Paperclip, RotateCcw, Send, X } from 'lucide-react'
+import { Download, FileText, Paperclip, RotateCcw, Send, X } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { VoiceOrb, type VoiceMode } from '@/components/voice/VoiceOrb'
 import { VoiceTranscriptPanel } from '@/components/voice/VoiceTranscriptPanel'
+import { VoiceReportModal } from '@/components/voice/VoiceReportModal'
 import { compressImageFile } from '@/lib/image'
+import { LANGUAGES, HINGLISH_LANGUAGE } from '@/lib/languages'
+import { speechLocaleFor } from '@/lib/speechLocales'
+import type { DoctorReport } from '@/lib/report'
 import {
   clearVoiceSession,
   downloadVoiceTranscript,
@@ -34,13 +38,15 @@ interface PendingImage {
   mimeType: string
 }
 
-// Phase 1 scope: English, Hindi, and Hinglish only (full 13-language matrix
-// lands in the Phase 3 UI-polish pass).
-const VOICE_LANGUAGES = [
-  { code: 'en', label: 'English', speechLocale: 'en-IN' },
-  { code: 'hi', label: 'हिन्दी', speechLocale: 'hi-IN' },
-  { code: 'hi-en', label: 'Hinglish', speechLocale: 'hi-IN' },
-]
+// Full 13-language matrix: the site's 12 languages plus chat-only Hinglish,
+// inserted right after English (matches ChatbotStub's picker convention).
+// Odia/Assamese have no Web Speech locale (see speechLocales.ts) — the mic
+// is disabled for those two rather than silently failing.
+const VOICE_LANGUAGES = [LANGUAGES[0], HINGLISH_LANGUAGE, ...LANGUAGES.slice(1)].map((lang) => ({
+  code: lang.code,
+  label: lang.nativeName,
+  speechLocale: speechLocaleFor(lang.code),
+}))
 
 export function VoicePage() {
   const [session, setSession] = useState<VoiceSession>(() => loadVoiceSession() ?? newVoiceSession('en'))
@@ -48,9 +54,14 @@ export function VoicePage() {
   const [pendingTranscript, setPendingTranscript] = useState<string | null>(null)
   const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [report, setReport] = useState<DoctorReport | null>(null)
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false)
+  const [audioLevel, setAudioLevel] = useState(0)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
     saveVoiceSession(session)
@@ -60,13 +71,52 @@ export function VoicePage() {
     return () => {
       recognitionRef.current?.stop()
       audioRef.current?.pause()
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      audioCtxRef.current?.close()
     }
   }, [])
+
+  // Wires a live AnalyserNode onto the just-created <audio> element so the
+  // orb can pulse with G1's actual voice instead of a canned loop. A single
+  // AudioContext is reused across turns — creating a fresh one per message
+  // is wasteful and some browsers cap how many can exist at once.
+  function visualizePlayback(audio: HTMLAudioElement) {
+    try {
+      const AudioCtx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx()
+      const ctx = audioCtxRef.current
+      void ctx.resume()
+
+      const source = ctx.createMediaElementSource(audio)
+      const analyser = ctx.createAnalyser()
+      analyser.fftSize = 256
+      source.connect(analyser)
+      analyser.connect(ctx.destination)
+
+      const data = new Uint8Array(analyser.frequencyBinCount)
+      const tick = () => {
+        analyser.getByteFrequencyData(data)
+        const avg = data.reduce((a, b) => a + b, 0) / data.length
+        setAudioLevel(Math.min(1, avg / 110))
+        rafRef.current = requestAnimationFrame(tick)
+      }
+      tick()
+    } catch {
+      // Non-critical visual enhancement — playback itself doesn't depend on it.
+    }
+  }
+
+  function stopVisualizing() {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    rafRef.current = null
+    setAudioLevel(0)
+  }
 
   const activeLanguage = VOICE_LANGUAGES.find((l) => l.code === session.languageCode) ?? VOICE_LANGUAGES[0]
 
   const speechSupported =
     typeof window !== 'undefined' &&
+    Boolean(activeLanguage.speechLocale) &&
     Boolean(
       (window as unknown as { SpeechRecognition?: unknown }).SpeechRecognition ||
         (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition,
@@ -75,6 +125,10 @@ export function VoicePage() {
   const intakeAnsweredCount = INTAKE_FIELD_KEYS.filter((k) => session.intake[k]).length
 
   function startListening() {
+    if (!activeLanguage.speechLocale) {
+      setError('Voice input is not available for this language yet — try typing instead.')
+      return
+    }
     if (!speechSupported) {
       setError('Voice input is not supported in this browser. Try Chrome.')
       return
@@ -88,7 +142,7 @@ export function VoicePage() {
     if (!RecognitionCtor) return
 
     const recognition = new RecognitionCtor()
-    recognition.lang = activeLanguage.speechLocale
+    recognition.lang = activeLanguage.speechLocale ?? 'en-IN'
     recognition.continuous = false
     recognition.interimResults = false
 
@@ -193,13 +247,16 @@ export function VoicePage() {
       const audio = new Audio(audioUrl)
       audioRef.current = audio
       audio.onended = () => {
+        stopVisualizing()
         setMode('idle')
         URL.revokeObjectURL(audioUrl)
       }
       audio.onerror = () => {
+        stopVisualizing()
         setMode('idle')
         URL.revokeObjectURL(audioUrl)
       }
+      visualizePlayback(audio)
       await audio.play()
     } catch {
       setError('Something went wrong. Please try again.')
@@ -216,22 +273,50 @@ export function VoicePage() {
     setError(null)
   }
 
+  async function requestReport() {
+    if (isGeneratingReport || session.transcript.length === 0) return
+    setIsGeneratingReport(true)
+    setError(null)
+    try {
+      const historyForRequest = session.transcript.map((t) => ({ role: t.role, text: t.text }))
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: historyForRequest, languageCode: session.languageCode }),
+      })
+      if (!res.ok) throw new Error('report failed')
+      const data: { ready: boolean; followUp: string; report: DoctorReport | null } = await res.json()
+
+      if (!data.ready || !data.report) {
+        const aiTurn = { role: 'ai' as const, text: data.followUp || 'Not quite enough detail yet — tell me a bit more first.', timestamp: Date.now() }
+        setSession((s) => ({ ...s, transcript: [...s.transcript, aiTurn] }))
+        return
+      }
+      setReport(data.report)
+    } catch {
+      setError('Could not generate the report. Please try again.')
+    } finally {
+      setIsGeneratingReport(false)
+    }
+  }
+
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden bg-gradient-to-b from-surface to-surface-2">
       <Navbar />
 
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 pt-24 pb-8">
-        <div className="flex items-center gap-2">
+        <div data-lenis-prevent className="flex max-w-full items-center gap-1.5 overflow-x-auto px-4 pb-1">
           {VOICE_LANGUAGES.map((lang) => (
             <button
               key={lang.code}
               type="button"
               onClick={() => setSession((s) => ({ ...s, languageCode: lang.code }))}
-              className={`rounded-full border px-3 py-1 text-[11px] font-bold transition-colors ${
+              title={!lang.speechLocale ? 'Voice input not yet available for this language' : undefined}
+              className={`shrink-0 rounded-full border px-3 py-1 text-[11px] font-bold transition-colors ${
                 lang.code === session.languageCode
                   ? 'border-accent bg-accent/10 text-fg'
                   : 'border-border bg-surface text-fg-muted hover:text-fg'
-              }`}
+              } ${!lang.speechLocale ? 'opacity-60' : ''}`}
             >
               {lang.label}
             </button>
@@ -252,7 +337,7 @@ export function VoicePage() {
           </div>
         )}
 
-        <VoiceOrb mode={mode} onTap={handleOrbTap} />
+        <VoiceOrb mode={mode} onTap={handleOrbTap} level={mode === 'speaking' ? audioLevel : undefined} />
 
         <p className="text-[12px] font-semibold text-fg-muted">
           {mode === 'idle' && 'Tap to talk to G1'}
@@ -315,6 +400,15 @@ export function VoicePage() {
           </button>
           <button
             type="button"
+            onClick={requestReport}
+            disabled={isGeneratingReport || session.transcript.length === 0}
+            className="flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-[11px] font-bold text-fg transition-colors hover:bg-accent/20 disabled:opacity-40"
+          >
+            <FileText className="size-3" strokeWidth={2.5} />
+            {isGeneratingReport ? 'Preparing…' : 'Get report'}
+          </button>
+          <button
+            type="button"
             onClick={handleNewConversation}
             className="flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-bold text-fg-muted transition-colors hover:text-fg"
           >
@@ -323,6 +417,10 @@ export function VoicePage() {
           </button>
         </div>
       </div>
+
+      {report && (
+        <VoiceReportModal report={report} languageLabel={activeLanguage.label} onClose={() => setReport(null)} />
+      )}
     </div>
   )
 }
