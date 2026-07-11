@@ -28,14 +28,18 @@ const LANGUAGE_NAMES: Record<string, string> = {
 // Fixed, ordered intake fields — collected once per conversation before free
 // -form triage begins. Order and keys must match src/lib/voiceSession.ts's
 // IntakeState client-side.
+// Ordered clinically-first, not alphabetically/administratively-first — a
+// real doctor asks "what's wrong" before "what's your name." Also lets the
+// model capture chiefComplaint immediately when the patient leads with it
+// (the common case), rather than ignoring it to ask for a name first.
 const INTAKE_FIELDS: { key: string; label: string }[] = [
-  { key: 'name', label: 'name' },
-  { key: 'age', label: 'age' },
-  { key: 'sex', label: 'sex/gender' },
-  { key: 'height', label: 'height' },
-  { key: 'weight', label: 'weight' },
   { key: 'chiefComplaint', label: 'main problem/complaint' },
   { key: 'symptomDuration', label: 'how long the main symptom has been going on' },
+  { key: 'age', label: 'age' },
+  { key: 'sex', label: 'sex/gender' },
+  { key: 'name', label: 'name' },
+  { key: 'height', label: 'height' },
+  { key: 'weight', label: 'weight' },
   { key: 'familyHistory', label: 'relevant family history' },
   { key: 'currentMedications', label: 'current medications' },
   { key: 'localMedicines', label: 'any locally available medicines already tried or on hand' },
@@ -85,8 +89,9 @@ function systemInstructionFor(
         `INTAKE STATUS. Intake is already complete — do not ask any of the 10 intake questions again. Proceed straight into normal symptom characterization and triage.`,
       ]
     : [
-        `INTAKE MODE. Before free-form triage, collect exactly these 10 patient details, one at a time (1-2 per turn max), in this order, never skipping ahead: name, age, sex/gender, height, weight, main problem/complaint, how long the main symptom has been going on, relevant family history, current medications, and any locally available medicines already tried or on hand.`,
-        knownFields.length > 0 ? `Already known — do NOT ask these again: ${knownFields.join('; ')}.` : `Nothing is known yet — start with name and age.`,
+        `INTAKE MODE. Before free-form triage, naturally gather these 10 patient details over the conversation (1-2 per turn max): main problem/complaint, how long the main symptom has been going on, age, sex/gender, name, height, weight, relevant family history, current medications, and any locally available medicines already tried or on hand.`,
+        `This is a priority order, not a rigid script — if the patient volunteers something out of order (e.g. they open with their symptom before you've asked), accept it gladly and don't ask for it again. ALWAYS acknowledge what they just told you in your reply before asking the next question — never ignore their message and pivot to an unrelated intake field. If they ask why you need a detail (e.g. "why do you need my name for a headache?"), briefly explain in one honest line — e.g. "so I can personalize this and note it if you download a report later" — and then move on; never just repeat the same question verbatim after they push back.`,
+        knownFields.length > 0 ? `Already known — do NOT ask these again: ${knownFields.join('; ')}.` : `Nothing is known yet — start by asking what's going on.`,
         `Still missing, in priority order: ${missingFields.join(', ')}.`,
         `Once all 10 are known, say one brief transition line (e.g. "Thanks, I have what I need — now tell me what's bothering you") and move into normal triage. The EMERGENCY OVERRIDE below always takes priority over intake — if red flags appear, escalate immediately and abandon the remaining intake questions.`,
       ]

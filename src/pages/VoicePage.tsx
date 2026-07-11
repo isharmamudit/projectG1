@@ -83,7 +83,13 @@ export function VoicePage() {
   function visualizePlayback(audio: HTMLAudioElement) {
     try {
       const AudioCtx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx()
+      // latencyHint: 'playback' asks the browser for a larger internal buffer.
+      // Routing an <audio> element through MediaElementSource for analysis
+      // (as we do below) hands its output to the Web Audio graph instead of
+      // the browser's own optimized playback path — with the default
+      // 'interactive' hint (tuned for low-latency input, not full-track
+      // playback) that handoff can crackle/pop. This is the standard fix.
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx({ latencyHint: 'playback' })
       const ctx = audioCtxRef.current
       void ctx.resume()
 
@@ -301,10 +307,14 @@ export function VoicePage() {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden bg-gradient-to-b from-surface to-surface-2">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-surface to-surface-2">
       <Navbar />
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 pt-24 pb-8">
+      {/* overflow-y-auto (not overflow-hidden) — on shorter viewports the
+          language row + progress + orb + transcript + button row can exceed
+          the visible height, and without scroll the bottom buttons (attach/
+          save/report/new-conversation) become completely unreachable. */}
+      <div data-lenis-prevent className="flex flex-1 flex-col items-center gap-6 overflow-y-auto px-4 pt-24 pb-8">
         <div data-lenis-prevent className="flex max-w-full items-center gap-1.5 overflow-x-auto px-4 pb-1">
           {VOICE_LANGUAGES.map((lang) => (
             <button

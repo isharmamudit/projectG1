@@ -6,13 +6,13 @@ export interface VoiceTranscriptTurn {
 
 /** Keys and order must match api/voice-chat.ts's INTAKE_FIELDS. */
 export const INTAKE_FIELD_KEYS = [
-  'name',
-  'age',
-  'sex',
-  'height',
-  'weight',
   'chiefComplaint',
   'symptomDuration',
+  'age',
+  'sex',
+  'name',
+  'height',
+  'weight',
   'familyHistory',
   'currentMedications',
   'localMedicines',
