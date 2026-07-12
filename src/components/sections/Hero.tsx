@@ -1,18 +1,12 @@
 import { useState } from 'react'
-import { ArrowLeft, ArrowUpRight, HeartPulse, MessageCircle, Mic, PersonStanding, WifiOff } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, HeartPulse, MessageCircle, Mic, PersonStanding, TriangleAlert, WifiOff } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { Button } from '@/components/ui/Button'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useLanguage } from '@/lib/language'
 import { ScrambleText } from '@/components/ui/ScrambleText'
-
-const NAV_ITEMS = [
-  { label: 'Why G1', href: '#problems' },
-  { label: 'Features', href: '#voice' },
-  { label: 'India', href: '#india' },
-  { label: 'Trust', href: '#trust' },
-]
 
 // The four bento cards below the hero banner — solid theme-invariant pastels, like MediCare's colored tile row.
 // Titles/briefs come from t.heroTiles; only the layout/styling/icon/href are fixed here.
@@ -79,17 +73,22 @@ export function Hero() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => handleScrollTo(e, item.href)}
-              className="rounded-xl px-4 py-2 text-sm font-semibold text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg"
-            >
-              {t.navItems[item.label] ?? item.label}
-            </a>
-          ))}
+        <nav className="hidden items-center gap-2 md:flex">
+          <Link
+            to="/emergency"
+            title="Offline emergency first-aid guide"
+            className="flex items-center gap-1.5 rounded-xl bg-tint-rose/15 px-4 py-2 text-sm font-bold text-tint-rose transition-transform hover:scale-[1.03] active:scale-95"
+          >
+            <TriangleAlert className="size-3.5" strokeWidth={2.5} />
+            Emergency
+          </Link>
+          <Link
+            to="/voice"
+            className="flex items-center gap-1.5 rounded-xl bg-ink px-4 py-2 text-sm font-bold text-tint-amber transition-transform hover:scale-[1.03] active:scale-95"
+          >
+            <Mic className="size-3.5" strokeWidth={2.5} />
+            Talk to G1
+          </Link>
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
