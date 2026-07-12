@@ -31,6 +31,18 @@ export default defineConfig({
         // itself loads with zero network once visited once.
         globPatterns: ['**/*.{js,css,html}'],
         navigateFallback: '/index.html',
+        // CRITICAL: without this, the service worker's navigateFallback
+        // intercepts navigation to EVERY route (/, /voice, etc.), not just
+        // /emergency — meaning it serves the cached index.html (referencing
+        // old hashed JS/CSS still sitting in the old precache) instead of
+        // fetching a fresh one from the network, even when the network is
+        // fully available and a new deploy has gone out. That made the
+        // entire site appear stuck on stale builds after every deploy,
+        // since the fallback isn't the same as "offline behavior" — it can
+        // shadow the network unpredictably depending on SW update timing.
+        // Only /emergency actually needs offline navigation, so every other
+        // route is excluded here and always goes straight to the network.
+        navigateFallbackDenylist: [/^\/(?!emergency)/],
         // The on-device offline-chat chunk (WebLLM's runtime, not the model
         // weights — those are downloaded separately by WebLLM itself and
         // cached via the Cache API) is ~6MB, over Workbox's 2MB default.
