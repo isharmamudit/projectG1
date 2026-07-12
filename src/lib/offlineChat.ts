@@ -37,7 +37,15 @@ let enginePromise: Promise<MLCEngineInterface> | null = null
 
 export function loadOfflineEngine(onProgress: (report: InitProgressReport) => void): Promise<MLCEngineInterface> {
   if (!enginePromise) {
-    enginePromise = CreateMLCEngine(OFFLINE_MODEL_ID, { initProgressCallback: onProgress })
+    enginePromise = CreateMLCEngine(OFFLINE_MODEL_ID, { initProgressCallback: onProgress }).catch((err) => {
+      // Without this, a failed download/compile (bad connection, out of
+      // memory, etc.) permanently wedges enginePromise on a rejected
+      // promise — every subsequent "try again" tap would return that same
+      // rejected promise forever, with no way to retry short of a full
+      // page reload. Clearing it here lets the next call start fresh.
+      enginePromise = null
+      throw err
+    })
   }
   return enginePromise
 }

@@ -57,7 +57,10 @@ interface VoiceChatRequestBody {
   history?: ChatTurn[]
   languageCode?: string
   intakeState?: IntakeState
-  image?: { dataUrl: string; mimeType: string }
+  // Just a flag, not the actual image data — the model can't see photos
+  // (see ATTACHMENTS in the system prompt), so there's no reason to upload
+  // a multi-hundred-KB base64 payload the server would only discard.
+  hasImage?: boolean
 }
 
 const MAX_HISTORY_TURNS = 15
@@ -184,7 +187,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const history = Array.isArray(body?.history) ? body.history.slice(-MAX_HISTORY_TURNS) : []
   const intakeState: IntakeState = body?.intakeState && typeof body.intakeState === 'object' ? body.intakeState : {}
   const intakeComplete = INTAKE_FIELDS.every((f) => intakeState[f.key])
-  const hasImage = typeof body?.image?.dataUrl === 'string'
+  const hasImage = body?.hasImage === true
 
   if (!message && !hasImage) {
     res.status(400).json({ error: 'Message is required' })

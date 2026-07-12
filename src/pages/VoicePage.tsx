@@ -62,6 +62,13 @@ export function VoicePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const rafRef = useRef<number | null>(null)
+  // The source/analyser graph is rebuilt every turn (a MediaElementSourceNode
+  // can only ever wrap one specific <audio> element) — without tracking and
+  // disconnecting the previous pair, each turn permanently adds another
+  // connected node graph to the shared AudioContext for the rest of the
+  // page's life, a real memory/CPU leak over a long conversation.
+  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null)
+  const analyserNodeRef = useRef<AnalyserNode | null>(null)
 
   useEffect(() => {
     saveVoiceSession(session)
@@ -72,6 +79,8 @@ export function VoicePage() {
       recognitionRef.current?.stop()
       audioRef.current?.pause()
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      sourceNodeRef.current?.disconnect()
+      analyserNodeRef.current?.disconnect()
       audioCtxRef.current?.close()
     }
   }, [])
@@ -93,11 +102,17 @@ export function VoicePage() {
       const ctx = audioCtxRef.current
       void ctx.resume()
 
+      // Tear down last turn's graph before building a new one.
+      sourceNodeRef.current?.disconnect()
+      analyserNodeRef.current?.disconnect()
+
       const source = ctx.createMediaElementSource(audio)
       const analyser = ctx.createAnalyser()
       analyser.fftSize = 256
       source.connect(analyser)
       analyser.connect(ctx.destination)
+      sourceNodeRef.current = source
+      analyserNodeRef.current = analyser
 
       const data = new Uint8Array(analyser.frequencyBinCount)
       const tick = () => {
@@ -199,6 +214,11 @@ export function VoicePage() {
   }
 
   async function sendTurn(text: string) {
+    // Guard against overlapping turns — without this, tapping Confirm/Send
+    // twice in quick succession fires two concurrent requests against the
+    // same captured history, and whichever response lands second can
+    // silently clobber intake fields the first one just learned.
+    if (mode === 'thinking' || mode === 'speaking') return
     const image = pendingImage
     if (!text.trim() && !image) return
     setPendingTranscript(null)
@@ -219,7 +239,9 @@ export function VoicePage() {
           history: historyForRequest,
           languageCode: session.languageCode,
           intakeState: session.intake,
-          image: image ? { dataUrl: image.dataUrl, mimeType: image.mimeType } : undefined,
+          // The model can't actually see photos (no vision model wired up)
+          // — send only a flag, not the multi-hundred-KB base64 payload.
+          hasImage: Boolean(image),
         }),
       })
       if (!chatRes.ok) throw new Error('chat failed')
