@@ -56,19 +56,9 @@ export function VoicePage() {
   const [error, setError] = useState<string | null>(null)
   const [report, setReport] = useState<DoctorReport | null>(null)
   const [isGeneratingReport, setIsGeneratingReport] = useState(false)
-  const [audioLevel, setAudioLevel] = useState(0)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const audioCtxRef = useRef<AudioContext | null>(null)
-  const rafRef = useRef<number | null>(null)
-  // The source/analyser graph is rebuilt every turn (a MediaElementSourceNode
-  // can only ever wrap one specific <audio> element) — without tracking and
-  // disconnecting the previous pair, each turn permanently adds another
-  // connected node graph to the shared AudioContext for the rest of the
-  // page's life, a real memory/CPU leak over a long conversation.
-  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null)
-  const analyserNodeRef = useRef<AnalyserNode | null>(null)
 
   useEffect(() => {
     saveVoiceSession(session)
@@ -78,60 +68,8 @@ export function VoicePage() {
     return () => {
       recognitionRef.current?.stop()
       audioRef.current?.pause()
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      sourceNodeRef.current?.disconnect()
-      analyserNodeRef.current?.disconnect()
-      audioCtxRef.current?.close()
     }
   }, [])
-
-  // Wires a live AnalyserNode onto the just-created <audio> element so the
-  // orb can pulse with G1's actual voice instead of a canned loop. A single
-  // AudioContext is reused across turns — creating a fresh one per message
-  // is wasteful and some browsers cap how many can exist at once.
-  function visualizePlayback(audio: HTMLAudioElement) {
-    try {
-      const AudioCtx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      // latencyHint: 'playback' asks the browser for a larger internal buffer.
-      // Routing an <audio> element through MediaElementSource for analysis
-      // (as we do below) hands its output to the Web Audio graph instead of
-      // the browser's own optimized playback path — with the default
-      // 'interactive' hint (tuned for low-latency input, not full-track
-      // playback) that handoff can crackle/pop. This is the standard fix.
-      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx({ latencyHint: 'playback' })
-      const ctx = audioCtxRef.current
-      void ctx.resume()
-
-      // Tear down last turn's graph before building a new one.
-      sourceNodeRef.current?.disconnect()
-      analyserNodeRef.current?.disconnect()
-
-      const source = ctx.createMediaElementSource(audio)
-      const analyser = ctx.createAnalyser()
-      analyser.fftSize = 256
-      source.connect(analyser)
-      analyser.connect(ctx.destination)
-      sourceNodeRef.current = source
-      analyserNodeRef.current = analyser
-
-      const data = new Uint8Array(analyser.frequencyBinCount)
-      const tick = () => {
-        analyser.getByteFrequencyData(data)
-        const avg = data.reduce((a, b) => a + b, 0) / data.length
-        setAudioLevel(Math.min(1, avg / 110))
-        rafRef.current = requestAnimationFrame(tick)
-      }
-      tick()
-    } catch {
-      // Non-critical visual enhancement — playback itself doesn't depend on it.
-    }
-  }
-
-  function stopVisualizing() {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = null
-    setAudioLevel(0)
-  }
 
   const activeLanguage = VOICE_LANGUAGES.find((l) => l.code === session.languageCode) ?? VOICE_LANGUAGES[0]
 
@@ -272,19 +210,23 @@ export function VoicePage() {
       if (!ttsRes.ok) throw new Error('tts failed')
       const audioBlob = await ttsRes.blob()
       const audioUrl = URL.createObjectURL(audioBlob)
+      // Deliberately plain — no Web Audio API routing (createMediaElementSource
+      // + AnalyserNode, as an earlier version did to pulse the orb with real
+      // playback amplitude) touches this element. That handoff was causing
+      // real, reported audio crackling; a cosmetic visualization isn't worth
+      // risking audio quality for, so the orb now uses a canned pulse during
+      // 'speaking' instead (see VoiceOrb.tsx) and this <audio> element plays
+      // through the browser's own untouched, optimized pipeline.
       const audio = new Audio(audioUrl)
       audioRef.current = audio
       audio.onended = () => {
-        stopVisualizing()
         setMode('idle')
         URL.revokeObjectURL(audioUrl)
       }
       audio.onerror = () => {
-        stopVisualizing()
         setMode('idle')
         URL.revokeObjectURL(audioUrl)
       }
-      visualizePlayback(audio)
       await audio.play()
     } catch {
       setError('Something went wrong. Please try again.')
@@ -369,7 +311,7 @@ export function VoicePage() {
           </div>
         )}
 
-        <VoiceOrb mode={mode} onTap={handleOrbTap} level={mode === 'speaking' ? audioLevel : undefined} />
+        <VoiceOrb mode={mode} onTap={handleOrbTap} />
 
         <p className="text-[12px] font-semibold text-fg-muted">
           {mode === 'idle' && 'Tap to talk to G1'}
