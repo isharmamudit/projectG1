@@ -155,9 +155,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   ].join('\n')
 
   try {
-    const upstream = await fetch(GROQ_ENDPOINT, {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'User-Agent': 'CareBuddy-App/1.0 (Health Companion AI)',
+    }
+
+    let upstream = await fetch(GROQ_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      headers,
       body: JSON.stringify({
         model: MODEL,
         messages: [
@@ -171,7 +177,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
 
     if (!upstream.ok) {
-      console.error('Groq rhythm request failed:', upstream.status, await upstream.text())
+      const errText = await upstream.text()
+      console.warn('Primary Groq rhythm model failed, retrying with fallback model:', upstream.status, errText)
+      upstream = await fetch(GROQ_ENDPOINT, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          model: 'llama-3.1-8b-instant',
+          messages: [
+            { role: 'system', content: systemPrompt(languageCode) },
+            { role: 'user', content: userBlock },
+          ],
+          temperature: 0.4,
+          max_tokens: 900,
+          response_format: { type: 'json_object' },
+        }),
+      })
+    }
+
+    if (!upstream.ok) {
+      console.error('Groq rhythm request failed on fallback:', upstream.status, await upstream.text())
       res.status(200).json(fallbackSchedule(answers))
       return
     }
