@@ -47,7 +47,22 @@ export function OfflineChat() {
       ])
     } catch (err) {
       console.error(err)
-      setLoadErrorMsg(err instanceof Error ? err.message : String(err))
+      let msg = err instanceof Error ? err.message : String(err)
+      
+      if (msg.includes('QuotaExceeded') || String(err).includes('QuotaExceeded')) {
+        try {
+          if (navigator.storage && navigator.storage.estimate) {
+            const est = await navigator.storage.estimate()
+            const quotaMB = est.quota ? Math.round(est.quota / (1024 * 1024)) : 0
+            const usageMB = est.usage ? Math.round(est.usage / (1024 * 1024)) : 0
+            msg = `QuotaExceededError. Browser limit: ${quotaMB}MB, Used: ${usageMB}MB. (Are you in Incognito mode?)`
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      setLoadErrorMsg(msg)
       setLoadState('error')
     }
   }
