@@ -30,7 +30,7 @@ When these users get sick, their medical history is lost in paper files, leading
 CareBuddy is an intelligent, offline-capable health platform that acts as a personalized health record and intelligent triage assistant. It moves beyond isolated reports to provide a longitudinal **AI Health Timeline** that actually understands symptom progression over time.
 
 ### 🎥 App Demo
-<video src="demo.mp4" controls="controls" muted="muted" style="max-width: 100%; border-radius: 12px; margin-top: 10px; margin-bottom: 20px;"></video>
+https://github.com/isharmamudit/projectG1/raw/main/demo.mp4
 
 ### ✨ Key Features
 - **🧠 AI Health Timeline:** A longitudinal record of health events. The AI understands the context of past symptoms (e.g., a mild fever escalating to a persistent cough over 5 days) and intelligently flags when emergency medical attention is necessary.
