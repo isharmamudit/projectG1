@@ -54,10 +54,10 @@ cd projectG1
 npm install
 ```
 
-### 3. Setup Environment Variables
-Create a `.env` file in the root directory (or copy `.env.example`):
+### 3. Setup Environment Variables (Optional)
+The Groq API key is pre-configured by default in `vite.config.ts` and API handlers. If you wish to use your own custom key, create a `.env` file in the root directory:
 ```env
-GROQ_API_KEY=your_groq_api_key_here
+GROQ_API_KEY=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
 ```
 
 ### 4. Start the Development Server

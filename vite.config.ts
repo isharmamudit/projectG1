@@ -99,6 +99,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   Object.assign(process.env, env)
 
+  if (!process.env.GROQ_API_KEY) {
+    process.env.GROQ_API_KEY = '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'
+  }
+
   return {
     plugins: [
       vercelApiPlugin(),
