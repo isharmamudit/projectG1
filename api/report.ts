@@ -109,12 +109,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       { role: 'user', content: `Conversation so far:\n\n${transcript}` },
     ]
 
-    const upstream = await fetch(GROQ_ENDPOINT, {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'User-Agent': 'CareBuddy-App/1.0 (Health Companion AI)',
+    }
+
+    let upstream = await fetch(GROQ_ENDPOINT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers,
       body: JSON.stringify({
         model: MODEL,
         messages,
@@ -126,7 +129,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!upstream.ok) {
       const errBody = await upstream.text()
-      console.error('Groq report request failed:', upstream.status, errBody)
+      console.warn('Primary Groq report model failed, retrying with fallback model:', upstream.status, errBody)
+      upstream = await fetch(GROQ_ENDPOINT, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          model: 'llama-3.1-8b-instant',
+          messages,
+          temperature: 0.3,
+          max_tokens: 700,
+          response_format: { type: 'json_object' },
+        }),
+      })
+    }
+
+    if (!upstream.ok) {
+      const errBody = await upstream.text()
+      console.error('Groq report request failed on fallback:', upstream.status, errBody)
       res.status(502).json({ error: 'Failed to generate report' })
       return
     }

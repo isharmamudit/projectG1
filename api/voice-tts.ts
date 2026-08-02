@@ -39,6 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
+        'User-Agent': 'CareBuddy-App/1.0 (Health Companion AI)',
       },
       body: JSON.stringify({
         model: MODEL,
