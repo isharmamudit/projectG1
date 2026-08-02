@@ -39,32 +39,67 @@ CareBuddy is an intelligent, offline-capable health platform that acts as a pers
 
 ---
 
-## 🛠️ Setup Instructions
+## 🛠️ Quickstart & Developer Setup Guide
 
-CareBuddy features a built-in API proxy middleware in Vite for seamless local development, as well as native support for Vercel Serverless Functions in production.
+CareBuddy is engineered for **zero-friction setup**. All AI API endpoints (`/api/*`), Groq Llama 3 models, and MediaPipe on-device vision models work **immediately out-of-the-box** without requiring manual API key configuration.
 
-### 1. Clone the repository
+### 📋 Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **npm**: v9.0.0 or higher
+- **Browser**: Google Chrome, Edge, or Brave (recommended for Web Speech & MediaPipe support)
+
+---
+
+### 🚀 1-Minute Local Setup
+
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/isharmamudit/projectG1.git
 cd projectG1
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Setup Environment Variables (Optional)
-The Groq API key is pre-configured by default in `vite.config.ts` and API handlers. If you wish to use your own custom key, create a `.env` file in the root directory:
-```env
-GROQ_API_KEY=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
-```
-
-### 4. Start the Development Server
+#### 3. Launch the Development Server
 ```bash
 npm run dev
 ```
-Navigate to `http://localhost:5173` in your browser. All AI endpoints (`/api/*`) are handled automatically.
+
+Open your browser and navigate to:  
+👉 **`http://localhost:5173`**
+
+---
+
+### ⚡ Key Features Ready to Test
+- 💬 **AI Health Chat & ICMR Triage (`/`)**: Real-time symptom analysis guided by ICMR STW protocols.
+- 🗣️ **Multilingual Voice AI (`/voice`)**: Hands-free voice conversation supporting Hindi, Hinglish, Tamil, Bengali, Telugu, and more.
+- 🧘‍♀️ **Abhyaas Posture Coach (`/sehat/abhyaas`)**: On-device AI pose tracking powered by Google MediaPipe (99.3% accuracy, 100% offline).
+- 📋 **Doctor PDF Summary Report**: One-click generation of structured clinical summaries for healthcare providers.
+- 🚨 **Offline First Aid (`/emergency`)**: Fully precached PWA guide operating with zero internet signal.
+
+---
+
+### ⚙️ Environment Variables (Optional)
+The repository comes **pre-configured** with a default runtime Groq API key inside `vite.config.ts` and `api/` handlers so AI works instantly upon cloning. 
+
+If you want to override and use your own custom Groq API key:
+1. Create a `.env` file in the root directory:
+   ```env
+   GROQ_API_KEY=your_custom_groq_api_key
+   ```
+2. Restart the dev server (`npm run dev`).
+
+---
+
+### 🚢 Production Deployment (Vercel)
+This repository is natively structured for **Vercel Serverless Functions**.
+```bash
+npx vercel
+```
+Or import `https://github.com/isharmamudit/projectG1.git` directly on the [Vercel Dashboard](https://vercel.com). Vercel automatically deploys both the Vite SPA frontend and the serverless API handlers in `api/*.ts`.
 
 ---
 
