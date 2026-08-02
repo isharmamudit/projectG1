@@ -15,6 +15,7 @@ type LoadState = 'idle' | 'loading' | 'ready' | 'unsupported' | 'error'
  */
 export function OfflineChat() {
   const [loadState, setLoadState] = useState<LoadState>('idle')
+  const [loadErrorMsg, setLoadErrorMsg] = useState<string>('')
   const [progress, setProgress] = useState<InitProgressReport | null>(null)
   const [messages, setMessages] = useState<OfflineChatTurn[]>([])
   const [input, setInput] = useState('')
@@ -32,6 +33,7 @@ export function OfflineChat() {
 
   async function handleLoad() {
     setLoadState('loading')
+    setLoadErrorMsg('')
     try {
       const engine = await loadOfflineEngine(setProgress)
       engineRef.current = engine
@@ -43,7 +45,9 @@ export function OfflineChat() {
             "I'm CareBuddy Offline — a simpler, on-device version of CareBuddy that works with no internet. I'm not as capable as the full assistant, so for anything serious, call 108/112 or check the Emergency Guide. What's going on?",
         },
       ])
-    } catch {
+    } catch (err) {
+      console.error(err)
+      setLoadErrorMsg(err instanceof Error ? err.message : String(err))
       setLoadState('error')
     }
   }
@@ -103,14 +107,19 @@ export function OfflineChat() {
             <p className="mt-1.5 text-[10.5px] text-fg-muted">{progress.text}</p>
           </div>
         )}
-        {loadState === 'error' && <p className="text-[12px] font-bold text-tint-rose">Download failed. Check your connection and try again.</p>}
+        {loadState === 'error' && (
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-[12px] font-bold text-tint-rose">Download failed. Check your connection and try again.</p>
+            {loadErrorMsg && <p className="text-[10px] text-tint-rose/70 max-w-xs break-all">{loadErrorMsg}</p>}
+          </div>
+        )}
         <button
           type="button"
           onClick={handleLoad}
           disabled={loadState === 'loading'}
-          className="rounded-full bg-accent px-4 py-2 text-[12.5px] font-black text-accent-fg disabled:opacity-50"
+          className="mt-2 rounded-full bg-accent px-6 py-2.5 text-[13px] font-bold text-white shadow-sm transition-colors hover:bg-accent-light active:bg-accent-dark disabled:opacity-50"
         >
-          {loadState === 'loading' ? 'Downloading…' : 'Download & start'}
+          {loadState === 'error' ? 'Try again' : 'Download & start'}
         </button>
       </div>
     )

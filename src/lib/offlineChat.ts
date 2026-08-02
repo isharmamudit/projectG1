@@ -1,4 +1,4 @@
-import { CreateMLCEngine, type MLCEngineInterface, type InitProgressReport } from '@mlc-ai/web-llm'
+import { CreateWebWorkerMLCEngine, type MLCEngineInterface, type InitProgressReport } from '@mlc-ai/web-llm'
 
 // The 1B variant was tried first for its smaller download, but in real
 // testing it was unusable — it would lose the thread of the conversation
@@ -37,7 +37,8 @@ let enginePromise: Promise<MLCEngineInterface> | null = null
 
 export function loadOfflineEngine(onProgress: (report: InitProgressReport) => void): Promise<MLCEngineInterface> {
   if (!enginePromise) {
-    enginePromise = CreateMLCEngine(OFFLINE_MODEL_ID, { initProgressCallback: onProgress }).catch((err) => {
+    const worker = new Worker(new URL('./offlineWorker.ts', import.meta.url), { type: 'module' })
+    enginePromise = CreateWebWorkerMLCEngine(worker, OFFLINE_MODEL_ID, { initProgressCallback: onProgress }).catch((err) => {
       // Without this, a failed download/compile (bad connection, out of
       // memory, etc.) permanently wedges enginePromise on a rejected
       // promise — every subsequent "try again" tap would return that same
